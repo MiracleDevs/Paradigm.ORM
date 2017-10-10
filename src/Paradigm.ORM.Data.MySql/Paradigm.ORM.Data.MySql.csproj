@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
     <Copyright>Miracle Devs</Copyright>
@@ -12,6 +12,7 @@
     <RepositoryType>git</RepositoryType>
     <Authors>Miracle Devs</Authors>
     <Company>Miracle Devs</Company>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
