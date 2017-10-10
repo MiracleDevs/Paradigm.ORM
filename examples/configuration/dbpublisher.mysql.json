@@ -1,0 +1,51 @@
+﻿{
+  /**************************************************************
+ * This example shows how to configure a database project
+ * to public changes directly to the database, and also
+ * produce a publish script.
+ ****************************************************************/
+  "databaseType": "mysql",
+  "connectionString": "SERVER=localhost;UID=root;PASSWORD=********;Allow User Variables=True;",
+  "generateScript": true,
+  "executeScript": true,
+  "outputFileName": "./dist/publish.sql",
+  "files": [
+    /*************************************************************
+     * PRE-DEPLOYMENT
+     *************************************************************/
+    "scripts/predeployment/create_database.sql",
+
+    /*************************************************************
+     * TABLES
+     *************************************************************/
+    "tables/shared/address.sql",
+    "tables/shared/client.sql",
+    "tables/shared/project.sql",
+
+    /*************************************************************
+     * Table Upgrades
+     *************************************************************/
+    "upgrades/00001.add_zipcode_to_address.sql",
+    "upgrades/00002.add_logo_to_client.sql",
+    "upgrades/00003.add_notes_to_project.sql",
+
+    /*************************************************************
+     * Views
+     *************************************************************/
+     "tables/shared/address_view.sql",
+     "tables/shared/client_view.sql",
+     "tables/shared/project_view.sql",
+
+    /*************************************************************
+     * STORED PROCEDURES
+     *************************************************************/
+    "routines/shared/search_clients.sql",
+
+    /*************************************************************
+     * POST-DEPLOYMENT
+     *************************************************************/
+    "scripts/postdeployment/client_data.sql",
+    "scripts/postdeployment/project_data.sql",
+    "scripts/postdeployment/address_data.sql"
+  ]
+}

@@ -1,0 +1,84 @@
+﻿{
+  /**************************************************************
+ * This example shows how to configure dbfirst to generate
+ * a model definition file (json) that will be passed to codegen
+ * to generate domain classes, repositories, etc.
+ ****************************************************************/
+  "databaseType": "mysql",
+  "databaseName": "ExampleDatabase",
+  "connectionString": "Server=localhost;Database=ExampleDatabase;UserId=root;Password=********;Pooling=true",
+  "outputFileName": ".cfg/mysql.models.dbf",
+  "storedProcedures": [
+    {
+      "name": "SearchClient",
+      "type": "Reader",
+      "resultTypes": [
+        "ClientSummaryView"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "name": "client",
+      "newName": "Client"
+    },
+    {
+      "name": "project",
+      "newName": "Project",
+      "columnsToRemove": [
+        "Client"
+      ]
+    },
+    {
+      "name": "address",
+      "newName": "Address",
+      "columnsToRemove": [
+        "Clients"
+      ]
+    }
+  ],
+  "views": [
+    {
+      "name": "client_view",
+      "newName": "ClientView",
+      "constraintsToAdd": [
+        {
+          "type": "PrimaryKey",
+          "fromColumnName": "Id"
+        },
+        {
+          "type": "ForeignKey",
+          "fromColumnName": "AddressId",
+          "toColumnName": "Id",
+          "toTableName": "address_view"
+        }
+      ]
+    },
+    {
+      "name": "project_view",
+      "newName": "ProjectView",
+      "constraintsToAdd": [
+        {
+          "type": "PrimaryKey",
+          "fromColumnName": "Id"
+        },
+        {
+          "type": "ForeignKey",
+          "fromColumnName": "ClientId",
+          "toColumnName": "Id",
+          "toTableName": "client_view"
+        }
+      ]
+    },
+    {
+      "name": "address_view",
+      "newName": "AddressView",
+      "constraintsToAdd": [
+        {
+          "type": "PrimaryKey",
+          "fromColumnName": "Id"
+        }
+      ]
+    }
+  ]
+}

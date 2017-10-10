@@ -1,0 +1,24 @@
+﻿{
+  /***************************************************************
+ * This example shows how to migrate data from a sql server
+ * database to a mysql database directly.
+ ****************************************************************/
+  "sourceDatabase": {
+    "databaseType": "SqlServer",
+    "databaseName": "SourceDatabase",
+    "connectionString": "data source=localhost;Database=SourceDatabase;uid=sa;pwd=********;Connection Timeout=3600"
+  },
+  "tableNames": [
+    "Address",
+    "File",
+    "Client",
+    "Project",
+    "Task"
+  ],
+  "exportType": "Database",
+  "destinationDatabase": {
+    "databaseType": "MySql",
+    "databaseName": "DestinationDatabase",
+    "connectionString": "data source=localhost;Database=DestinationDatabase;uid=root;pwd=********;connection timeout=3600"
+  }
+}
