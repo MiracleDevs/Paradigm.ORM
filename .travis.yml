@@ -2,7 +2,6 @@ language: csharp
 dist: trusty
 dotnet: 2.0.0
 install:
-- dotnet restore ./src/Paradigm.CodeGen.sln
+- dotnet restore ./src/Paradigm.ORM.sln
 script:
-- dotnet build ./src/Paradigm.CodeGen.sln
-- dotnet test ./src/Paradigm.CodeGen.Tests/Paradigm.CodeGen.Tests.csproj
+- dotnet build ./src/Paradigm.ORM.sln
