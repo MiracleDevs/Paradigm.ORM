@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <Description>Paradigm ORM Posgre Connector library.</Description>
+    <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
+    <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
+    <Authors>Miracle Devs</Authors>
+    <Company>Miracle Devs</Company>
+    <Copyright>Miracle Devs</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="npgsql" Version="3.2.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
+  </ItemGroup>
+</Project>

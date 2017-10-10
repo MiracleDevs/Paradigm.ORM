@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Paradigm.ORM.DataExport": {
+      "commandName": "Project",
+      "commandLineArgs": "-f .cfg/mysql.json -v"
+    }
+  }
+}

@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\MySql\**" />
+    <Compile Remove="Tests\PostgreSql\**" />
+    <Compile Remove="Tests\Sql\**" />
+    <EmbeddedResource Remove="Tests\MySql\**" />
+    <EmbeddedResource Remove="Tests\PostgreSql\**" />
+    <EmbeddedResource Remove="Tests\Sql\**" />
+    <None Remove="Tests\MySql\**" />
+    <None Remove="Tests\PostgreSql\**" />
+    <None Remove="Tests\Sql\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Paradigm.Core.Mapping" Version="1.0.1" />
+    <PackageReference Include="NUnit" Version="3.8.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paradigm.ORM.Data.MySql\Paradigm.ORM.Data.MySql.csproj" />
+    <ProjectReference Include="..\Paradigm.ORM.Data.PostgreSql\Paradigm.ORM.Data.PostgreSql.csproj" />
+    <ProjectReference Include="..\Paradigm.ORM.Data.SqlServer\Paradigm.ORM.Data.SqlServer.csproj" />
+    <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Mocks\Data\image.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Mocks\Data\image.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Mocks\Data\large_image.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Mocks\Data\small_image.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

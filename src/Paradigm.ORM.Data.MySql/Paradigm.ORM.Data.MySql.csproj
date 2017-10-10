@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
+    <Copyright>Miracle Devs</Copyright>
+    <Description>Paradigm ORM MySql Connector library.</Description>
+    <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
+    <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Miracle Devs</Authors>
+    <Company>Miracle Devs</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySqlConnector" Version="0.28.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
+  </ItemGroup>
+
+</Project>
