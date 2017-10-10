@@ -18,8 +18,8 @@
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Paradigm.CodeGen.Input.Json.Models" Version="1.0.0" />
-    <PackageReference Include="Paradigm.Core.Extensions" Version="1.0.1" />
-    <PackageReference Include="Paradigm.Core.Mapping" Version="1.0.1" />
+    <PackageReference Include="Paradigm.Core.Extensions" Version="2.0.0" />
+    <PackageReference Include="Paradigm.Core.Mapping" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
