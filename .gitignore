@@ -15,5 +15,5 @@ TestResults
 .vscode
 .deploy
 .nuget
-.build
+nuget.exe
 node_modules

@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Paradigm.ORM.DbFirst": {
-      "commandName": "Project",
-      "commandLineArgs": "-f \".cfg/mysql.json\"  -f \".cfg/tsql.json\"  -f \".cfg/psql.json\" -v"
+      "commandName": "Project"
     }
   }
 }

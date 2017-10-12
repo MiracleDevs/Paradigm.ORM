@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Paradigm.ORM.DbPublisher": {
-      "commandName": "Project",
-      "commandLineArgs": "-c \"c:\\Repositories\\gitlab\\Paradigm.Core.TimeTracker\\src\\database\\publish.json\" -v"
+      "commandName": "Project"
     }
   }
 }
