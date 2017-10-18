@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.Exceptions
     {
         public const string DefaultMessage = "The class or interface does not have routine mapping information.";
 
-        public OrmMissingRoutineMappingException() : this((string) DefaultMessage)
+        public OrmMissingRoutineMappingException() : this(DefaultMessage)
         {           
         }
 

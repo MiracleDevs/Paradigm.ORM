@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.Exceptions
     {
         public const string DefaultMessage = "The class or interface does not have table mapping information.";
 
-        public OrmMissingTableMappingException() : this((string) DefaultMessage)
+        public OrmMissingTableMappingException() : this(DefaultMessage)
         {           
         }
 

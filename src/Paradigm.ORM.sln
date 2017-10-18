@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Tools", "01.Tools", "{11
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Tests", "02.Tests", "{7FE04582-1753-47B9-8AC2-7EA8BF5FB88D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paradigm.ORM.Data.Cassandra", "Paradigm.ORM.Data.Cassandra\Paradigm.ORM.Data.Cassandra.csproj", "{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{98D10B41-4E98-4869-8255-F9E784C9CCFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98D10B41-4E98-4869-8255-F9E784C9CCFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98D10B41-4E98-4869-8255-F9E784C9CCFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +82,7 @@ Global
 		{BB36CAE9-EFED-4176-8045-211F7BE5D23D} = {1158448F-9938-4DB6-95E6-710B4A5BCAA1}
 		{A5EC2D4E-3F56-4889-BAA1-5E2268BC0F3F} = {1158448F-9938-4DB6-95E6-710B4A5BCAA1}
 		{98D10B41-4E98-4869-8255-F9E784C9CCFC} = {1158448F-9938-4DB6-95E6-710B4A5BCAA1}
+		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E} = {D1D4C68F-B57A-4401-9883-3BA3D47337E4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65C1B0E6-490B-429F-BA7D-CD0A7B63C943}

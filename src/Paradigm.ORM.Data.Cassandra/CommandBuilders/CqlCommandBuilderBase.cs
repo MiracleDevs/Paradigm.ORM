@@ -3,21 +3,21 @@ using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 
-namespace Paradigm.ORM.Data.MySql.CommandBuilders
+namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
 {
     /// <summary>
     /// Provide base methods and functionality for all the command builders.
     /// </summary>
-    public abstract class MySqlCommandBuilderBase: CommandBuilderBase
+    public abstract class CqlCommandBuilderBase: CommandBuilderBase
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MySqlCommandBuilderBase"/> class.
+        /// Initializes a new instance of the <see cref="CqlCommandBuilderBase"/> class.
         /// </summary>
         /// <param name="connector">A database connector.</param>
         /// <param name="descriptor">A table type descriptor.</param>
-        protected MySqlCommandBuilderBase(IDatabaseConnector connector, ITableDescriptor descriptor) : base(connector, descriptor)
+        protected CqlCommandBuilderBase(IDatabaseConnector connector, ITableDescriptor descriptor) : base(connector, descriptor)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Paradigm.ORM.Data.MySql.CommandBuilders
         {
             ////////////////////////////////////////////////////////////////////////////////////////
             // overrides the base method to prevent the schema info to be rendered.
-            // MySql database does not have 3 level entities, only schema (catalog) and tables.
+            // Cql database does not have 3 level entities, only schema (catalog) and tables.
             ////////////////////////////////////////////////////////////////////////////////////////
             
             var builder = new StringBuilder();

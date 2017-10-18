@@ -90,7 +90,7 @@ namespace Paradigm.ORM.Data.MySql.Converters
                     return "decimal";
 
                 case TypeCode.DateTime:
-                    return "DateTime";
+                    return "datetime";
 
                 case TypeCode.Char:
                 case TypeCode.String:
