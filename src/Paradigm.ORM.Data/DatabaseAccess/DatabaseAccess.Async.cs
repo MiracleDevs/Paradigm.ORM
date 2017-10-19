@@ -116,7 +116,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 2. Save the main entities, and batch the queries.
             this.BatchManager.Reset();
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
             // don't use the async move next because the class provider
             // is not really async right now.
@@ -196,7 +196,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 2. Save the main entities, and batch the queries.
             this.BatchManager.Reset();
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
             while (valueProvider.MoveNext())
             {
@@ -256,7 +256,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             foreach (var x in this.NavigationDatabaseAccesses)
                 await x.DeleteBeforeAsync(entityList);
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
             await this.Connector.ExecuteNonQueryAsync(this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider));
 
             foreach (var x in this.NavigationDatabaseAccesses)

@@ -20,8 +20,8 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
         [Column(Type = "decimal")]
         public decimal Amount { get; set; }
 
-        [Column(Type = "date")]
-        public DateTimeOffset? CreatedDate { get; set; }
+        [Column(Type = "timestamp")]
+        public DateTime? CreatedDate { get; set; }
 
         [Navigation(typeof(SingleKeyChildTable), nameof(Id), nameof(SingleKeyChildTable.ParentId))]
         public List<SingleKeyChildTable> Childs { get; set; }

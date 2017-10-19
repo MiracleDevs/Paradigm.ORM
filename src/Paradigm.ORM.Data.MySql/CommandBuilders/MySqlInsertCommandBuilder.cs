@@ -41,7 +41,7 @@ namespace Paradigm.ORM.Data.MySql.CommandBuilders
         {
             for (var i = 0; i < this.Descriptor.SimpleColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.SimpleColumns[i]) ?? DBNull.Value;
+                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.SimpleColumns[i]);
             }
 
             return this.Command;

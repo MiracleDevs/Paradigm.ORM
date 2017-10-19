@@ -148,7 +148,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
-            var valueProvider = new ClassValueProvider(new List<object> { fixture.Entity1 });
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.Entity1 });
             valueProvider.MoveNext();
 
             using (var insertCommand = commandBuilderFactory.CreateInsertCommandBuilder(tableDescription))
@@ -175,7 +175,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
             var entitiesToDelete = new[] { fixture.Entity1 };
-            var valueProvider = new ClassValueProvider(entitiesToDelete.Cast<object>().ToList());
+            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
             using (var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription))
             {
@@ -193,7 +193,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
             var entitiesToDelete = new[] { fixture.Entity1, fixture.Entity2 };
-            var valueProvider = new ClassValueProvider(entitiesToDelete.Cast<object>().ToList());
+            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
             using (var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription))
             {
@@ -215,7 +215,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             entityToUpdate.Name = "John Doe Junior";
             entityToUpdate.Amount = 7200m;
 
-            var valueProvider = new ClassValueProvider(new List<object>{entityToUpdate});
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object>{entityToUpdate});
             valueProvider.MoveNext();
 
             using (var updateCommand = commandBuilderFactory.CreateUpdateCommandBuilder(tableDescription))

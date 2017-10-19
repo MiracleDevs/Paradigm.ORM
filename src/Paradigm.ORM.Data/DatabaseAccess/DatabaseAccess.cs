@@ -249,7 +249,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 2. Save the main entities, and batch the queries.
             this.BatchManager.Reset();
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
             while(valueProvider.MoveNext())
             {
@@ -325,7 +325,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 2. Save the main entities, and batch the queries.
             this.BatchManager.Reset();
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
             while (valueProvider.MoveNext())
             {
@@ -383,7 +383,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             foreach (var x in this.NavigationDatabaseAccesses)
                 x.DeleteBefore(entityList);
 
-            var valueProvider = new ClassValueProvider(entityList);
+            var valueProvider = new ClassValueProvider(this.Connector, entityList);
             this.Connector.ExecuteNonQuery(this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider));
 
             foreach (var x in this.NavigationDatabaseAccesses)

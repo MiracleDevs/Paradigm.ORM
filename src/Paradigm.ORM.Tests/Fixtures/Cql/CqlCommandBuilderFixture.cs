@@ -1,4 +1,5 @@
-﻿using Cassandra;
+﻿using System;
+using Cassandra;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.PostgreSql;
 using Paradigm.ORM.Tests.Mocks;
@@ -41,7 +42,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
             Name = "John Doe",
             IsActive = true,
             Amount = 3600,
-            CreatedDate = new LocalDate(2017, 5, 23)
+            CreatedDate = new DateTime(2017, 5, 23)
         };
 
         public override ISimpleTable Entity2 => new SimpleTable
@@ -50,7 +51,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
             Name = "Jane Doe",
             IsActive = false,
             Amount = 1800,
-            CreatedDate = new LocalDate(2015, 9, 12)
+            CreatedDate = new DateTime(2015, 9, 12)
         };
 
     }

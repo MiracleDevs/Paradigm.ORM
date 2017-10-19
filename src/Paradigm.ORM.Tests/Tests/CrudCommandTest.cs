@@ -67,7 +67,7 @@ namespace Paradigm.ORM.Tests.Tests
                 entityToInsert.Should().NotBeNull();
                 insertCommandBuilder.Should().NotBeNull();
 
-                var valueProvider = new ClassValueProvider(new List<object> { entityToInsert });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { entityToInsert });
                 valueProvider.MoveNext();
 
                 var insertCommand = insertCommandBuilder.GetCommand(valueProvider);
@@ -97,7 +97,7 @@ namespace Paradigm.ORM.Tests.Tests
             fixture.CreateParentTable();
             fixture.CreateChildTable();
 
-            var valueProvider = new ClassValueProvider(new List<object> { fixture.CreateNewEntity() });
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.CreateNewEntity() });
             valueProvider.MoveNext();
 
             using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
@@ -138,7 +138,7 @@ namespace Paradigm.ORM.Tests.Tests
             fixture.CreateParentTable();
             fixture.CreateChildTable();
 
-            var valueProvider = new ClassValueProvider(new List<object> { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
 
             using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
             {
@@ -187,7 +187,7 @@ namespace Paradigm.ORM.Tests.Tests
             var first = fixture.CreateNewEntity();
             var second = fixture.CreateNewEntity();
 
-            var valueProvider = new ClassValueProvider(new List<object> { first, second });
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
 
             using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
@@ -238,7 +238,7 @@ namespace Paradigm.ORM.Tests.Tests
       
             using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
             {
-                var valueProvider = new ClassValueProvider(new List<object> { first, second });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
                 valueProvider.MoveNext();
                 insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
@@ -250,7 +250,7 @@ namespace Paradigm.ORM.Tests.Tests
             using (var deleteCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateDeleteCommandBuilder(fixture.GetParentDescriptor()))
             {
                 fixture.SetEntityId(first, second);
-                var valueProvider = new ClassValueProvider(new List<object> { first, second });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
                 deleteCommandBuilder.Should().NotBeNull();
                 var deleteCommand = deleteCommandBuilder.GetCommand(valueProvider);
@@ -294,7 +294,7 @@ namespace Paradigm.ORM.Tests.Tests
 
             using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
             {
-                var valueProvider = new ClassValueProvider(new List<object> { first, second });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
                 valueProvider.MoveNext();
                 insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
@@ -320,7 +320,7 @@ namespace Paradigm.ORM.Tests.Tests
             using (var updateCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateUpdateCommandBuilder(fixture.GetParentDescriptor()))
             {
                 fixture.Update(first, second);
-                var valueProvider = new ClassValueProvider(new List<object> { first, second });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
                 updateCommandBuilder.Should().NotBeNull();
 

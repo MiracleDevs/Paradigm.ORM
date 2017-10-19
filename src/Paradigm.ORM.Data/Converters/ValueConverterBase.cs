@@ -31,10 +31,22 @@ namespace Paradigm.ORM.Data.Converters
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="value">The value to convert.</param>
-        /// <returns></returns>
+        /// <returns>Converted value.</returns>
         public virtual T ConvertTo<T>(object value)
         {
             return (T) this.ConvertTo(value, typeof(T));
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Converts from a .net type to a database type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dbType">The type.</param>
+        /// <returns>Converted value.</returns>
+        public virtual object ConvertFrom(object value, string dbType)
+        {
+            return value ?? DBNull.Value;
         }
     }
 }

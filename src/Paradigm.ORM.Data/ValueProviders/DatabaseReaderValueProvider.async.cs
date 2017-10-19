@@ -4,6 +4,7 @@ namespace Paradigm.ORM.Data.ValueProviders
 {
     public partial class DatabaseReaderValueProvider
     {
+        /// <inheritdoc />
         /// <summary>
         /// Moves the reading cursor to the next entity or row.
         /// </summary>

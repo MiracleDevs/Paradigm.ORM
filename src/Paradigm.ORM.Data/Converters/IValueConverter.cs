@@ -23,7 +23,15 @@ namespace Paradigm.ORM.Data.Converters
         /// </summary>
         /// <typeparam name="T">The type to convert to.</typeparam>
         /// <param name="value">The value to convert.</param>
-        /// <returns></returns>
+        /// <returns>Converted value.</returns>
         T ConvertTo<T>(object value);
+
+        /// <summary>
+        /// Converts from a .net type to a database type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dbType">The type.</param>
+        /// <returns>Converted value.</returns>
+        object ConvertFrom(object value, string dbType);
     }
 }

@@ -63,7 +63,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         {
             for (var i = 0; i < this.PopulableColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.PopulableColumns[i]) ?? DBNull.Value;
+                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.PopulableColumns[i]);
             }
 
             return this.Command;

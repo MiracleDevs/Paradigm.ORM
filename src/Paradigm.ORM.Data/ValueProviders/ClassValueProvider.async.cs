@@ -6,6 +6,7 @@ namespace Paradigm.ORM.Data.ValueProviders
     {
         #region Public Methods
 
+        /// <inheritdoc />
         /// <summary>
         /// Moves the reading cursor to the next entity or row.
         /// </summary>

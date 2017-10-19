@@ -22,7 +22,7 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
         [Column(Type = "decimal")]
         public decimal Amount { get; set; }
 
-        [Column(Type = "datetime")]
-        public DateTimeOffset? CreatedDate { get; set; }
+        [Column(Type = "timestamp")]
+        public DateTime? CreatedDate { get; set; }
     }
 }

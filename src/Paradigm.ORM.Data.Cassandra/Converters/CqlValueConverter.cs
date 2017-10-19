@@ -86,7 +86,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
             if (type == typeof(TimeSpan))
             {
                 if (value is LocalTime localTime)
-                    return new TimeSpan(localTime.Hour, localTime.Minute, localTime.Second);
+                    return new TimeSpan(localTime.Hour, localTime.Minute, localTime.Second, localTime.Nanoseconds / 1000000);
 
                 throw new NotSupportedException();
             }
@@ -97,6 +97,47 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
             }
 
             return value;
+        }
+
+        /// <summary>
+        /// Converts from a .net type to a database type.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="dbType">The type.</param>
+        /// <returns>
+        /// Converted value.
+        /// </returns>
+        /// <exception cref="NotSupportedException">
+        /// </exception>
+        /// <inheritdoc />
+        public override object ConvertFrom(object value, string dbType)
+        {
+            if (value == DBNull.Value || value == null)
+                return null;
+
+            switch (dbType.ToLower())
+            {
+                case "date":
+                    if (value is DateTime date)
+                        return new LocalDate(date.Year, date.Month, date.Day);
+
+                    return value;
+
+                case "time":
+                    if (value is TimeSpan time)
+                        return new LocalTime(time.Hours, time.Minutes, time.Seconds, time.Milliseconds * 1000000);
+
+                    return value;
+
+                case "timestamp":
+                    if (value is DateTime dateTime)
+                        return new DateTimeOffset(dateTime);
+
+                    return value;
+
+                default:
+                    return value;
+            }
         }
     }
 }

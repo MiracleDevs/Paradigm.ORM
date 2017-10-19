@@ -42,7 +42,7 @@ namespace Paradigm.ORM.DataExport.Export
         {
             for (var i = 0; i < this.Descriptor.AllColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]) ?? DBNull.Value;
+                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]);
             }
 
             return this.Command;

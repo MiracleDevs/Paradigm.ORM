@@ -21,8 +21,8 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
         [Column(Type = "decimal")]
         public decimal Amount { get; set; }
 
-        [Column(Type = "date")]
-        public LocalDate CreatedDate { get; set; }
+        [Column(Type = "timestamp")]
+        public DateTime CreatedDate { get; set; }
 
     }
 }

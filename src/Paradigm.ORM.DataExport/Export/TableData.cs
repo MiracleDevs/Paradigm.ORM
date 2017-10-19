@@ -50,7 +50,7 @@ namespace Paradigm.ORM.DataExport.Export
         {
             this.Reader?.Dispose();
             this.Reader = this.SelectCommandBuilder.GetCommand().ExecuteReader();
-            return new DatabaseReaderValueProvider(this.Reader);
+            return new DatabaseReaderValueProvider(this.Connector, this.Reader);
         }
 
         #endregion

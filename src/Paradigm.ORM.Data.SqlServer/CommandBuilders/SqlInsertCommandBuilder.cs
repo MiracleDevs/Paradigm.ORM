@@ -55,7 +55,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         {
             for (var i = 0; i < this.InsertableColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.InsertableColumns[i]) ?? DBNull.Value;
+                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.InsertableColumns[i]);
             }
 
             return this.Command;

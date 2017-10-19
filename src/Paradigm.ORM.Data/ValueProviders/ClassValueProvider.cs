@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Paradigm.ORM.Data.Converters;
+using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 
 namespace Paradigm.ORM.Data.ValueProviders
@@ -13,9 +15,19 @@ namespace Paradigm.ORM.Data.ValueProviders
         #region Properties
 
         /// <summary>
+        /// Gets the database connector.
+        /// </summary>
+        private IDatabaseConnector Connector { get; }
+
+        /// <summary>
+        /// Gets the database value converter.
+        /// </summary>
+        private IValueConverter ValueConverter { get; }
+
+        /// <summary>
         /// Gets the entities.
         /// </summary>
-        public List<object> Entities { get; private set; }
+        public List<object> Entities { get; }
 
         /// <summary>
         /// Gets or sets the current reading index.
@@ -34,11 +46,14 @@ namespace Paradigm.ORM.Data.ValueProviders
         /// <summary>
         /// Initializes a new instance of the <see cref="ClassValueProvider"/> class.
         /// </summary>
+        /// <param name="connector">A reference to a database connector.</param>
         /// <param name="entities">The entities.</param>
         /// <exception cref="ArgumentNullException">entities</exception>
-        public ClassValueProvider(List<object> entities)
+        public ClassValueProvider(IDatabaseConnector connector, List<object> entities)
         {
+            this.Connector = connector ?? throw new ArgumentNullException(nameof(connector));
             this.Entities = entities ?? throw new ArgumentNullException(nameof(entities));
+            this.ValueConverter = this.Connector.GetValueConverter();
             this.CurrentIndex = -1;
         }
 
@@ -46,6 +61,7 @@ namespace Paradigm.ORM.Data.ValueProviders
 
         #region Public Methods
 
+        /// <inheritdoc />
         /// <summary>
         /// Moves the reading cursor to the next entity or row.
         /// </summary>
@@ -64,6 +80,7 @@ namespace Paradigm.ORM.Data.ValueProviders
             return false;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Gets the value related to the descriptor.
         /// </summary>
@@ -73,7 +90,9 @@ namespace Paradigm.ORM.Data.ValueProviders
         /// </returns>
         public object GetValue(IColumnDescriptor descriptor)
         {
-            return this.CurrentEntity == null ? null : (descriptor as IColumnPropertyDescriptor)?.PropertyInfo.GetValue(this.CurrentEntity);
+            return this.CurrentEntity == null 
+                ? null 
+                : this.ValueConverter.ConvertFrom((descriptor as IColumnPropertyDescriptor)?.PropertyInfo.GetValue(this.CurrentEntity), descriptor.DataType);
         }
 
         #endregion
