@@ -73,7 +73,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
                 builder.Append(" WHERE ");
 
             foreach (var primaryKey in this.Descriptor.PrimaryKeyColumns)
-                builder.AppendFormat("{0}=@{1} AND", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), primaryKey.ColumnName);
+                builder.AppendFormat("{0}=:{1} AND", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), primaryKey.ColumnName);
 
             this.Command = this.Connector.CreateCommand(builder.Remove(builder.Length - 4, 4).ToString());
             this.PopulateParameters(this.Descriptor.PrimaryKeyColumns);

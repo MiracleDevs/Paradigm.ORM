@@ -20,6 +20,10 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override string SelectOneStatement => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`singlekeyparenttable` WHERE `Id`=@Id";
 
+        public override string DeleteStatement => @"DELETE FROM `test`.`singlekeyparenttable` WHERE `Id` IN (1,2)";
+
+        public override string UpdateStatement => @"UPDATE `test`.`singlekeyparenttable` SET `Id`=@Id,`Name`=@Name,`IsActive`=@IsActive,`Amount`=@Amount,`CreatedDate`=@CreatedDate WHERE `Id`=@Id";
+
         protected override IDatabaseConnector CreateConnector()
         {
             return new MySqlDatabaseConnector(this.ConnectionString);
@@ -98,6 +102,27 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return new TableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override void SetEntityId(object first, object second)
+        {
+            ((SingleKeyParentTable)first).Id = 1;
+            ((SingleKeyParentTable)second).Id = 2;
+        }
+
+        public override void Update(object first, object second)
+        {
+            ((SingleKeyParentTable)first).Name = "Updated Parent " + Guid.NewGuid();
+            ((SingleKeyParentTable)second).Name = "Updated Parent " + Guid.NewGuid();
+        }
+
+        public override void CheckUpdate(object first, object second)
+        {
+            if (!((SingleKeyParentTable)first).Name.StartsWith("Updated Parent") ||
+                !((SingleKeyParentTable)second).Name.StartsWith("Updated Parent"))
+            {
+                throw new Exception("Entities not updated.");
+            }
         }
     }
 }

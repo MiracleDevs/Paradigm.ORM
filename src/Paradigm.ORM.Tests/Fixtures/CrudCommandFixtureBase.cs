@@ -16,8 +16,12 @@ namespace Paradigm.ORM.Tests.Fixtures
 
         public abstract string SelectOneStatement { get; }
 
-        public IDatabaseConnector Connector { get; }
+        public abstract string DeleteStatement { get; }
 
+        public abstract string UpdateStatement { get; }
+
+        public IDatabaseConnector Connector { get; }
+        
         protected CrudCommandFixtureBase()
         {
             this.Connector = this.CreateConnector();
@@ -43,5 +47,11 @@ namespace Paradigm.ORM.Tests.Fixtures
         public abstract object CreateNewEntity();
 
         public abstract ITableTypeDescriptor GetParentDescriptor();
+
+        public abstract void SetEntityId(object first, object second);
+
+        public abstract void Update(object first, object second);
+
+        public abstract void CheckUpdate(object first, object second);
     }
 }

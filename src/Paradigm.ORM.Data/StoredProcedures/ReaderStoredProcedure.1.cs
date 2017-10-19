@@ -95,7 +95,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         protected override void AfterInitialize()
         {
             base.AfterInitialize();
-            this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(new TableTypeDescriptor(typeof(TResult))));
+            this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector, new TableTypeDescriptor(typeof(TResult))));
 
             if (this.Mapper == null)
                 throw new OrmException("The mapper can not be null.");

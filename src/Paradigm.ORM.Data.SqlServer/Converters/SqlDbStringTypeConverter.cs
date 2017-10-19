@@ -4,10 +4,11 @@ using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.SqlServer.Converters
 {
+    /// <inheritdoc />
     /// <summary>
     /// Provides an interface to convert from database types or database schema tables to .net types.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
+    /// <seealso cref="T:Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
     public class SqlDbStringTypeConverter : IDbStringTypeConverter
     {
         /// <summary>

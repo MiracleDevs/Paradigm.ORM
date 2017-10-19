@@ -82,6 +82,14 @@ namespace Paradigm.ORM.Data.PostgreSql
         private Lazy<IDbStringTypeConverter> DbStringTypeConverter { get; set; }
 
         /// <summary>
+        /// Gets or sets the value converter.
+        /// </summary>
+        /// <value>
+        /// The value converter.
+        /// </value>
+        private Lazy<IValueConverter> ValueConverter { get; set; }
+
+        /// <summary>
         /// Gets or sets the value provider.
         /// </summary>
         /// <value>
@@ -134,7 +142,7 @@ namespace Paradigm.ORM.Data.PostgreSql
 
             if (this.Transactions != null)
             {
-                foreach (var transaction in this.Transactions)
+                foreach (var transaction in this.Transactions.ToList())
                     transaction?.Dispose();
 
                 Transactions.Clear();
@@ -146,6 +154,7 @@ namespace Paradigm.ORM.Data.PostgreSql
             this.SchemaProvider = null;
             this.CommandBuilderFactory = null;
             this.DbStringTypeConverter = null;
+            this.ValueConverter = null;
             this.ValueProvider = null;
         }
 
@@ -170,6 +179,7 @@ namespace Paradigm.ORM.Data.PostgreSql
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new PostgreSqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new PostgreSqlCommandBuilderFactory(this), true);
             this.DbStringTypeConverter = new Lazy<IDbStringTypeConverter>(() => new PostgreSqlDbStringTypeConverter(), true);
+            this.ValueConverter = new Lazy<IValueConverter>(() => new PostgreSqlValueConverter(), true);
             this.ValueProvider = new Lazy<PostgreSqlDbTypeValueRangeProvider>(() => new PostgreSqlDbTypeValueRangeProvider(), true);
             this.Transactions = new Stack<PostgreSqlDatabaseTransaction>();
 
@@ -325,6 +335,22 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             this.ThrowIfNull();
             return this.DbStringTypeConverter.Value;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the value converter.
+        /// </summary>
+        /// <returns>
+        /// A value converter.
+        /// </returns>
+        /// <remarks>
+        /// This converter can convert from database objects to specific .net types.
+        /// </remarks>
+        public IValueConverter GetValueConverter()
+        {
+            this.ThrowIfNull();
+            return this.ValueConverter.Value;
         }
 
         /// <summary>

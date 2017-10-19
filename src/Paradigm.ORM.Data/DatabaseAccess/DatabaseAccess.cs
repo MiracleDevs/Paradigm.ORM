@@ -446,7 +446,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         private void InitializeComponents()
         {
             // Table to entity mapper which knows how to map from a DataReader to an entity.
-            this.Mapper = this.ServiceProvider.GetServiceIfAvailable(typeof(IDatabaseReaderMapper<>).MakeGenericType(this.Descriptor.Type), () => new DatabaseReaderMapper(this.Descriptor)) as IDatabaseReaderMapper;
+            this.Mapper = this.ServiceProvider.GetServiceIfAvailable(typeof(IDatabaseReaderMapper<>).MakeGenericType(this.Descriptor.Type), () => new DatabaseReaderMapper(this.Connector, this.Descriptor)) as IDatabaseReaderMapper;
 
             // Sets the command builder manager.
             this.CommandBuilderManager = new CommandBuilderManager(this.ServiceProvider, this.Connector, this.Descriptor);

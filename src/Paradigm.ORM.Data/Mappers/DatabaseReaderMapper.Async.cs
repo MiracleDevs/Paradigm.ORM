@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Mappers
@@ -45,7 +44,7 @@ namespace Paradigm.ORM.Data.Mappers
             foreach (var property in this.Descriptor.AllProperties)
             {
                 var value = reader.GetValue(property.ColumnName);
-                property.PropertyInfo.SetValue(entity, NativeTypeConverter.ConvertTo(value, property.NotNullablePropertyType));
+                property.PropertyInfo.SetValue(entity, this.ValueConverter.ConvertTo(value, property.NotNullablePropertyType));
             }
 
             return Task.FromResult(entity);

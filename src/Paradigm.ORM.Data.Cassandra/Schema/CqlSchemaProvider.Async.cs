@@ -46,7 +46,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public Task<List<IStoredProcedure>> GetStoredProceduresAsync(string database, params string[] filter)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public Task<List<IConstraint>> GetConstraintsAsync(string database, string tableName)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public Task<List<IParameter>> GetParametersAsync(string database, string routineName)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         #endregion

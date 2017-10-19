@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
@@ -41,7 +42,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         {
             for (var i = 0; i < this.Descriptor.AllColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]) ?? DBNull.Value;
+                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]);
             }
 
             return this.Command;
@@ -56,8 +57,11 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// </summary>
         private void Initialize()
         {
-            var properties = this.Descriptor.AllColumns;
-            this.Command = this.Connector.CreateCommand($"UPDATE {this.GetTableName()} SET {this.GetDbParameterNamesAndValues(properties)} WHERE {this.GetDbParameterNamesAndValues(this.Descriptor.PrimaryKeyColumns, " AND ")}");
+            var properties = this.Descriptor.AllColumns.ToList();
+            var withoutPrimary = properties.ToList();
+            withoutPrimary.RemoveAll(x => this.Descriptor.PrimaryKeyColumns.Contains(x));
+
+            this.Command = this.Connector.CreateCommand($"UPDATE {this.GetTableName()} SET {this.GetDbParameterNamesAndValues(withoutPrimary)} WHERE {this.GetDbParameterNamesAndValues(this.Descriptor.PrimaryKeyColumns, " AND ")}");
             this.PopulateParameters(properties);
         }
 

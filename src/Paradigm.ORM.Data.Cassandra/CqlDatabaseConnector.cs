@@ -82,6 +82,14 @@ namespace Paradigm.ORM.Data.Cassandra
         private Lazy<IDbStringTypeConverter> DbStringTypeConverter { get; set; }
 
         /// <summary>
+        /// Gets or sets the value converter.
+        /// </summary>
+        /// <value>
+        /// The value converter.
+        /// </value>
+        private Lazy<IValueConverter> ValueConverter { get; set; }
+
+        /// <summary>
         /// Gets or sets the value provider.
         /// </summary>
         /// <value>
@@ -134,7 +142,7 @@ namespace Paradigm.ORM.Data.Cassandra
 
             if (this.Transactions != null)
             {
-                foreach (var transaction in this.Transactions)
+                foreach (var transaction in this.Transactions.ToList())
                     transaction?.Dispose();
 
                 this.Transactions.Clear();
@@ -146,6 +154,7 @@ namespace Paradigm.ORM.Data.Cassandra
             this.SchemaProvider = null;
             this.CommandBuilderFactory = null;
             this.DbStringTypeConverter = null;
+            this.ValueConverter = null;
             this.ValueProvider = null;
         }
 
@@ -170,6 +179,7 @@ namespace Paradigm.ORM.Data.Cassandra
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new CqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new CqlCommandBuilderFactory(this), true);
             this.DbStringTypeConverter = new Lazy<IDbStringTypeConverter>(() => new CqlDbStringTypeConverter(), true);
+            this.ValueConverter = new Lazy<IValueConverter>(() => new CqlValueConverter(), true);
             this.ValueProvider = new Lazy<CqlDbTypeValueRangeProvider>(() => new CqlDbTypeValueRangeProvider(), true);
             this.Transactions = new Stack<CqlDatabaseTransaction>();
 
@@ -325,6 +335,22 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             this.ThrowIfNull();
             return this.DbStringTypeConverter.Value;
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the value converter.
+        /// </summary>
+        /// <returns>
+        /// A value converter.
+        /// </returns>
+        /// <remarks>
+        /// This converter can convert from database objects to specific .net types.
+        /// </remarks>
+        public IValueConverter GetValueConverter()
+        {
+            this.ThrowIfNull();
+            return this.ValueConverter.Value;
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <summary>
         /// Gets the database connector.
         /// </summary>
-        private IDatabaseConnector Connector { get; set; }
+        protected IDatabaseConnector Connector { get; set; }
 
         /// <summary>
         /// Gets the table type descriptor.

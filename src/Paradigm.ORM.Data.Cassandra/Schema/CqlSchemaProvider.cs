@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Cassandra.Schema.Structure;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
@@ -43,6 +44,12 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         private Query<CqlColumn> ColumnQuery { get; set; }
 
         /// <summary>
+        /// Gets or sets the constraint query.
+        /// </summary>
+        private Query<CqlConstraint> ConstraintQuery { get; set; }
+
+
+        /// <summary>
         /// Gets or sets the view query.
         /// </summary>
         private Query<CqlView> ViewQuery { get; set; }
@@ -64,6 +71,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         {
             this.FormatProvider = connector.GetCommandFormatProvider();
 
+            this.ConstraintQuery = new Query<CqlConstraint>(connector);
             this.ColumnQuery = new Query<CqlColumn>(connector);
             this.ViewQuery = new Query<CqlView>(connector);
             this.TableQuery = new Query<CqlTable>(connector);
@@ -78,10 +86,12 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </summary>
         public void Dispose()
         {
+            this.ConstraintQuery?.Dispose();
             this.ColumnQuery?.Dispose();
             this.ViewQuery?.Dispose();
             this.TableQuery?.Dispose();
 
+            this.ConstraintQuery = null;
             this.ColumnQuery = null;
             this.ViewQuery = null;
             this.TableQuery = null;
@@ -123,7 +133,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IStoredProcedure> GetStoredProcedures(string database, params string[] filter)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -136,7 +146,14 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IColumn> GetColumns(string database, string tableName)
         {
-            return this.ColumnQuery.Execute($"`keyspace_name`='{database}' AND `columnfamily_name`='{tableName}'").Cast<IColumn>().ToList();
+            var columns = this.ColumnQuery.Execute($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'").ToList();
+
+            foreach(var column in columns)
+            {
+                column.DataType = CqlDbStringTypeConverter.ValidatorToDbType(column.DataType);
+            }
+
+            return columns.Cast<IColumn>().ToList();
         }
 
         /// <summary>
@@ -149,7 +166,15 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IConstraint> GetConstraints(string database, string tableName)
         {
-            throw new NotImplementedException();
+            var constraints = this.ConstraintQuery
+                .Execute($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'")
+                .Where(x => x.ColumnType == "partition_key")
+                .ToList();
+
+            foreach (var constraint in constraints)
+                constraint.Type = ConstraintType.PrimaryKey;
+
+            return constraints.Cast<IConstraint>().ToList();
         }
 
         /// <summary>
@@ -162,7 +187,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IParameter> GetParameters(string database, string routineName)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         #endregion
@@ -189,11 +214,11 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         private string GetTableWhere(string database, string type, string[] filter)
         {
             var builder = new StringBuilder();
-            builder.AppendFormat("`type`={0} AND ", this.FormatProvider.GetColumnValue(type.ToUpper(), typeof(string)));
-            builder.AppendFormat("`keyspace_name`={0}", this.FormatProvider.GetColumnValue(database, typeof(string)));
+            builder.AppendFormat("\"type\"={0} AND ", this.FormatProvider.GetColumnValue(type.ToUpper(), typeof(string)));
+            builder.AppendFormat("\"keyspace_name\"={0}", this.FormatProvider.GetColumnValue(database, typeof(string)));
 
             if (filter != null && filter.Any())
-                builder.AppendFormat(" AND `columnfamily_name` IN ({0})", this.GetStringInGroup(filter));
+                builder.AppendFormat(" AND \"columnfamily_name\" IN ({0})", this.GetStringInGroup(filter));
 
             return builder.ToString();
         }

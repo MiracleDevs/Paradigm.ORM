@@ -105,6 +105,15 @@ namespace Paradigm.ORM.Data.Database
         IDbStringTypeConverter GetDbStringTypeConverter();
 
         /// <summary>
+        /// Gets the value converter.
+        /// </summary>
+        /// <remarks>
+        /// This converter can convert from database objects to specific .net types.
+        /// </remarks>
+        /// <returns>A value converter.</returns>
+        IValueConverter GetValueConverter();
+
+        /// <summary>
         /// Gets the database type size provider.
         /// </summary>
         /// <remarks>

@@ -1,4 +1,5 @@
 ﻿using System;
+using Cassandra;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database.Schema.Structure;
 
@@ -180,9 +181,6 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                 case TypeCode.Decimal:
                     return "decimal";
 
-                case TypeCode.DateTime:
-                    return "date";
-
                 case TypeCode.Char:
                 case TypeCode.String:
                     return "text";
@@ -197,9 +195,15 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
             if (type == typeof(byte[]))
                 return "blob";
 
-            if (type == typeof(TimeSpan))
+            if (type == typeof(LocalTime))
                 return "time";
 
+            if (type == typeof(LocalDate))
+                return "date";
+
+            if (type == typeof(DateTimeOffset))
+                return "timestamp";
+                       
             return null;
         }
 
@@ -240,13 +244,13 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(decimal);
 
                 case "date":
-                    return typeof(DateTime);
+                    return typeof(LocalDate);
 
                 case "time":
-                    return typeof(TimeSpan);
+                    return typeof(LocalTime);
 
                 case "timestamp":
-                    return typeof(TimeSpan);
+                    return typeof(DateTimeOffset);
 
                 case "timeuuid":
                     throw new NotImplementedException();

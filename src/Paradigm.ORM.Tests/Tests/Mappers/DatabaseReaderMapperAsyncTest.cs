@@ -39,7 +39,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {
                  // Test mapping here
-                 var results = new DatabaseReaderMapper(mappedType).Map(reader);
+                 var results = new DatabaseReaderMapper(fixture.Connector, mappedType).Map(reader);
 
                  results.Should().HaveCount(1);
                  var retrievedEntity = results.First();
@@ -87,7 +87,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
 
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {
-                 var results = new DatabaseReaderMapper(mappedType).Map(reader);
+                 var results = new DatabaseReaderMapper(fixture.Connector, mappedType).Map(reader);
                  results.Should().HaveCount(2);
              });
         }
@@ -105,7 +105,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
 
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {
-                 var results = new DatabaseReaderMapper(mappedType).Map(reader);
+                 var results = new DatabaseReaderMapper(fixture.Connector, mappedType).Map(reader);
                  results.Should().HaveCount(0);
              });
         }
@@ -123,7 +123,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
 
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {
-                 Action map = () => new DatabaseReaderMapper(mappedType).Map(null);
+                 Action map = () => new DatabaseReaderMapper(fixture.Connector, mappedType).Map(null);
                  map.ShouldThrow<ArgumentNullException>();
              });
         }

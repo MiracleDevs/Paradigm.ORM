@@ -19,6 +19,15 @@ namespace Paradigm.ORM.Data.Mappers
         /// </summary>
         protected IColumnPropertyDescriptorCollection Descriptor { get; }
 
+        /// <summary>
+        /// Gets the database connector.
+        /// </summary>
+        protected IDatabaseConnector Connector { get; }
+
+        /// <summary>
+        /// Gets the value converter.
+        /// </summary>
+        protected IValueConverter ValueConverter { get; }
         #endregion
 
         #region Constructor
@@ -26,20 +35,24 @@ namespace Paradigm.ORM.Data.Mappers
         /// <summary>
         ///  Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
         /// </summary>
+        /// <param name="connector">A reference to a database connector.</param>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
         /// <exception cref="ArgumentNullException">descriptor can not be null.</exception>
-        public DatabaseReaderMapper(Type type): this(new CustomTypeDescriptor(type))
+        public DatabaseReaderMapper(IDatabaseConnector connector, Type type): this(connector, new CustomTypeDescriptor(type))
         {
         }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
         /// </summary>
+        /// <param name="connector">A reference to a database connector.</param>
         /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
         /// <exception cref="ArgumentNullException">descriptor can not be null.</exception>
-        public DatabaseReaderMapper(IColumnPropertyDescriptorCollection descriptor)
+        public DatabaseReaderMapper(IDatabaseConnector connector, IColumnPropertyDescriptorCollection descriptor)
         {
+            this.Connector = connector?? throw new ArgumentNullException(nameof(connector), $"{nameof(connector)} can not be null.");
             this.Descriptor = descriptor ?? throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
+            this.ValueConverter = this.Connector.GetValueConverter();
         }
 
         #endregion
@@ -98,7 +111,7 @@ namespace Paradigm.ORM.Data.Mappers
             foreach (var property in this.Descriptor.AllProperties)
             {
                 var value = reader.GetValue(property.ColumnName);
-                property.PropertyInfo.SetValue(entity, NativeTypeConverter.ConvertTo(value, property.NotNullablePropertyType));
+                property.PropertyInfo.SetValue(entity, this.ValueConverter.ConvertTo(value, property.NotNullablePropertyType));
             }
 
             return entity;

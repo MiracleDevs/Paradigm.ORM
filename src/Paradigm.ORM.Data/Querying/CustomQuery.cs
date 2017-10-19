@@ -83,7 +83,7 @@ namespace Paradigm.ORM.Data.Querying
             this.CommandText = query;
             this.Command = connector.CreateCommand();
             this.Command.CommandText = query;
-            this.Mapper = new DatabaseReaderMapper<TResultType>(descriptor);
+            this.Mapper = new DatabaseReaderMapper<TResultType>(connector, descriptor);
         }
 
         #endregion

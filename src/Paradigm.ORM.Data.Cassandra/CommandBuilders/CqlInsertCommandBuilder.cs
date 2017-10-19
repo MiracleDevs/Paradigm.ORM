@@ -1,4 +1,4 @@
-using System;
+using Cassandra.Data;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
@@ -41,7 +41,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         {
             for (var i = 0; i < this.Descriptor.SimpleColumns.Count; i++)
             {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.SimpleColumns[i]) ?? DBNull.Value;
+                ((CqlParameter) this.Command.GetParameter(i)).Value = valueProvider.GetValue(this.Descriptor.SimpleColumns[i]);
             }
 
             return this.Command;

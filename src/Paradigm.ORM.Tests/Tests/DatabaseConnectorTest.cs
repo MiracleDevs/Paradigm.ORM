@@ -6,6 +6,7 @@ using Paradigm.ORM.Data.PostgreSql;
 using Paradigm.ORM.Data.SqlServer;
 using NUnit.Framework;
 using Paradigm.ORM.Data.MySql;
+using Paradigm.ORM.Data.Cassandra;
 
 namespace Paradigm.ORM.Tests.Tests
 {
@@ -18,10 +19,13 @@ namespace Paradigm.ORM.Tests.Tests
 
         private const string SqlConnectionString = "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
 
+        private const string CqlConnectionString = "Contact Points=192.168.2.240;Port=9042";
+
         [Order(1)]
         [TestCase(typeof(MySqlDatabaseConnector))]
         [TestCase(typeof(PostgreSqlDatabaseConnector))]
         [TestCase(typeof(SqlDatabaseConnector))]
+        [TestCase(typeof(CqlDatabaseConnector))]
         public void ShouldCreateWithConnectionString(Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
@@ -34,6 +38,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(typeof(MySqlDatabaseConnector))]
         [TestCase(typeof(PostgreSqlDatabaseConnector))]
         [TestCase(typeof(SqlDatabaseConnector))]
+        [TestCase(typeof(CqlDatabaseConnector))]
         public void ShouldCreateWithConnectionStringAndBeInitialized(Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
@@ -44,6 +49,7 @@ namespace Paradigm.ORM.Tests.Tests
                 connector.GetDbStringTypeConverter().Should().NotBeNull();
                 connector.GetCommandFormatProvider().Should().NotBeNull();
                 connector.GetDbTypeValueRangeProvider().Should().NotBeNull();
+                connector.GetValueConverter().Should().NotBeNull();
                 connector.GetSchemaProvider().Should().NotBeNull();
             }
         }
@@ -52,6 +58,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(typeof(MySqlDatabaseConnector))]
         [TestCase(typeof(PostgreSqlDatabaseConnector))]
         [TestCase(typeof(SqlDatabaseConnector))]
+        [TestCase(typeof(CqlDatabaseConnector))]
         public void ShouldCreateWithoutConnectionString(Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType) as IDatabaseConnector)
@@ -63,6 +70,7 @@ namespace Paradigm.ORM.Tests.Tests
                 connector.Invoking(x => x.GetDbStringTypeConverter()).ShouldNotThrow<OrmConnectorNotInitializedException>();
                 connector.Invoking(x => x.GetCommandFormatProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
                 connector.Invoking(x => x.GetDbTypeValueRangeProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetValueConverter()).ShouldNotThrow<OrmConnectorNotInitializedException>();
                 connector.Invoking(x => x.GetSchemaProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
                 connector.Invoking(x => x.CreateCommand()).ShouldNotThrow<OrmConnectorNotInitializedException>();
                 connector.Invoking(x => x.CreateTransaction()).ShouldNotThrow<OrmConnectorNotInitializedException>();
@@ -74,6 +82,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(typeof(MySqlDatabaseConnector))]
         [TestCase(typeof(PostgreSqlDatabaseConnector))]
         [TestCase(typeof(SqlDatabaseConnector))]
+        [TestCase(typeof(CqlDatabaseConnector))]
         public void ShouldInitialize(Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType) as IDatabaseConnector)
@@ -87,6 +96,7 @@ namespace Paradigm.ORM.Tests.Tests
                 connector.GetDbStringTypeConverter().Should().NotBeNull();
                 connector.GetCommandFormatProvider().Should().NotBeNull();
                 connector.GetDbTypeValueRangeProvider().Should().NotBeNull();
+                connector.GetValueConverter().Should().NotBeNull();
                 connector.GetSchemaProvider().Should().NotBeNull();
             }
         }
@@ -95,6 +105,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(typeof(MySqlDatabaseConnector))]
         [TestCase(typeof(PostgreSqlDatabaseConnector))]
         [TestCase(typeof(SqlDatabaseConnector))]
+        [TestCase(typeof(CqlDatabaseConnector))]
         public void ShouldThrowIfConnectionIsntPossible(Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
@@ -110,6 +121,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
         [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
         [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
+        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
         public void ShouldConnectAndClose(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)
@@ -128,6 +140,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
         [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
         [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
+        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
         public void ShouldCreateACommand(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)
@@ -149,6 +162,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
         [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
         [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
+        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
         public void ShouldCreateATransaction(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)

@@ -184,14 +184,14 @@ namespace Paradigm.ORM.Data.StoredProcedures
         {
             base.AfterInitialize();
 
-            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(new TableTypeDescriptor(typeof(TResult1))));
-            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(new TableTypeDescriptor(typeof(TResult2))));
-            this.Mapper3 = this.Mapper3 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(new TableTypeDescriptor(typeof(TResult3))));
-            this.Mapper4 = this.Mapper4 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(new TableTypeDescriptor(typeof(TResult4))));
-            this.Mapper5 = this.Mapper5 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(new TableTypeDescriptor(typeof(TResult5))));
-            this.Mapper6 = this.Mapper6 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult6>>(() => new DatabaseReaderMapper<TResult6>(new TableTypeDescriptor(typeof(TResult6))));
-            this.Mapper7 = this.Mapper7 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult7>>(() => new DatabaseReaderMapper<TResult7>(new TableTypeDescriptor(typeof(TResult7))));
-            this.Mapper8 = this.Mapper8 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult8>>(() => new DatabaseReaderMapper<TResult8>(new TableTypeDescriptor(typeof(TResult8))));
+            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector, new TableTypeDescriptor(typeof(TResult1))));
+            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector, new TableTypeDescriptor(typeof(TResult2))));
+            this.Mapper3 = this.Mapper3 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(this.Connector, new TableTypeDescriptor(typeof(TResult3))));
+            this.Mapper4 = this.Mapper4 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(this.Connector, new TableTypeDescriptor(typeof(TResult4))));
+            this.Mapper5 = this.Mapper5 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(this.Connector, new TableTypeDescriptor(typeof(TResult5))));
+            this.Mapper6 = this.Mapper6 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult6>>(() => new DatabaseReaderMapper<TResult6>(this.Connector, new TableTypeDescriptor(typeof(TResult6))));
+            this.Mapper7 = this.Mapper7 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult7>>(() => new DatabaseReaderMapper<TResult7>(this.Connector, new TableTypeDescriptor(typeof(TResult7))));
+            this.Mapper8 = this.Mapper8 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult8>>(() => new DatabaseReaderMapper<TResult8>(this.Connector, new TableTypeDescriptor(typeof(TResult8))));
 
             if (this.Mapper1 == null)
                 throw new OrmException("The first mapper can not be null.");

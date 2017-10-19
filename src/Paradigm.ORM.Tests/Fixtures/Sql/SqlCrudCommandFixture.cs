@@ -20,6 +20,10 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 
         public override string SelectOneStatement => "SELECT [Id],[Name],[IsActive],[Amount],[CreatedDate] FROM [Test].[dbo].[SingleKeyParentTable] WHERE [Id]=@Id";
 
+        public override string DeleteStatement => @"DELETE FROM [Test].[dbo].[SingleKeyParentTable] WHERE [Id] IN (1,2)";
+
+        public override string UpdateStatement => @"UPDATE [Test].[dbo].[SingleKeyParentTable] SET [Name]=@Name,[IsActive]=@IsActive,[Amount]=@Amount,[CreatedDate]=@CreatedDate WHERE [Id]=@Id";
+
         protected override IDatabaseConnector CreateConnector()
         {
             return new SqlDatabaseConnector(this.ConnectionString);
@@ -107,6 +111,27 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return new TableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override void SetEntityId(object first, object second)
+        {
+            ((SingleKeyParentTable)first).Id = 1;
+            ((SingleKeyParentTable)second).Id = 2;
+        }
+
+        public override void Update(object first, object second)
+        {
+            ((SingleKeyParentTable)first).Name = "Updated Parent " + Guid.NewGuid();
+            ((SingleKeyParentTable)second).Name = "Updated Parent " + Guid.NewGuid();
+        }
+
+        public override void CheckUpdate(object first, object second)
+        {
+            if (!((SingleKeyParentTable)first).Name.StartsWith("Updated Parent") ||
+                !((SingleKeyParentTable)second).Name.StartsWith("Updated Parent"))
+            {
+                throw new Exception("Entities not updated.");
+            }
         }
     }
 }

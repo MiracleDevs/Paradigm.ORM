@@ -68,8 +68,8 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
                 {
                     var parameter = parameters[index];
                     var type = parameter == null ? typeof(object) : parameter.GetType();
-                    var commandParameter = this.Command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
-                    commandParameter.Value = parameter ?? DBNull.Value;
+                    var commandParameter = this.Command.AddParameter($":{index + 1}", DbTypeConverter.FromType(type));
+                    commandParameter.Value = parameter;
                 }
             }
 

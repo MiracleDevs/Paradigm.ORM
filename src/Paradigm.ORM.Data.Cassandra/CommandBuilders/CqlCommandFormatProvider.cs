@@ -32,7 +32,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         public string GetColumnValue(object value, Type type)
         {
             if (value == null)
-                return "NULL";
+                return "null";
 
             if (value is byte[] bytes)
                 value = Convert.ToBase64String(bytes);
@@ -75,7 +75,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         public string GetColumnValue(object value, string dataType)
         {
             if (value == null)
-                return "NULL";
+                return "null";
 
             if (value is byte[] bytes)
                 value = Convert.ToBase64String(bytes);
@@ -88,13 +88,12 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
                 case "boolean":
                 case "tinyint":
                 case "smallint":
-                case "mediumint":
                 case "int":
+                case "varint":
                 case "bigint":
                 case "float":
                 case "double":
                 case "decimal":
-                case "year":
                     return value.ToString();
 
                 default:

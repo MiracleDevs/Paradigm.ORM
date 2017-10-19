@@ -105,8 +105,9 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public IDatabaseReader ExecuteReader()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            this.Command.Prepare();
+            if (this.Connector.ActiveTransaction != null)
+                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+
             return new CqlDatabaseReader(this.Command.ExecuteReader() as CqlReader);
         }
 
@@ -119,7 +120,9 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public int ExecuteNonQuery()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+            if (this.Connector.ActiveTransaction != null)
+                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+
             return this.Command.ExecuteNonQuery();
         }
 
@@ -133,7 +136,9 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public object ExecuteScalar()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+            if (this.Connector.ActiveTransaction != null)
+                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+
             return this.Command.ExecuteScalar();
         }
 
@@ -242,7 +247,7 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type)
         {
-            var parameter = new CqlParameter { ParameterName = name, DbType = type, Value = DBNull.Value };
+            var parameter = new CqlParameter { ParameterName = name, DbType = type, Value = null };
             parameter.DbType = type;
 
             return parameter;
