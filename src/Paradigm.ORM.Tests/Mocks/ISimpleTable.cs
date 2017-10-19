@@ -11,7 +11,5 @@ namespace Paradigm.ORM.Tests.Mocks
         bool IsActive { get; set; }
 
         decimal Amount { get; set; }
-
-        DateTime CreatedDate { get; set; }
     }
 }
