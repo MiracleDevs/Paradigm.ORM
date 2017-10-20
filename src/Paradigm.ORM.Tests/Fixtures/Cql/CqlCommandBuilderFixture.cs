@@ -1,5 +1,4 @@
 ﻿using System;
-using Cassandra;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.PostgreSql;
 using Paradigm.ORM.Tests.Mocks;

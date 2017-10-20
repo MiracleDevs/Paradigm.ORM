@@ -1,5 +1,4 @@
 ﻿using System;
-using Cassandra;
 using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.Cql

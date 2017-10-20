@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Paradigm.ORM.Tests.Mocks
+﻿namespace Paradigm.ORM.Tests.Mocks
 {
     public interface ISimpleTable
     {

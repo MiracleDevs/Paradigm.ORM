@@ -5,13 +5,19 @@ using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.CommandBuilders
 {
+    /// <inheritdoc />
     /// <summary>
     /// Provides all the standard command builders for a given table type descriptor.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ICommandBuilderManager" />
+    /// <seealso cref="T:Paradigm.ORM.Data.CommandBuilders.ICommandBuilderManager" />
     public class CommandBuilderManager : ICommandBuilderManager
     {
         #region Properties
+
+        /// <summary>
+        /// Gets the command builder factory.
+        /// </summary>
+        private ICommandBuilderFactory Factory { get; }
 
         /// <summary>
         /// Gets the select one command builder.
@@ -19,7 +25,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The select one command builder.
         /// </value>
-        public ISelectOneCommandBuilder SelectOneCommandBuilder { get; private set; }
+        private Lazy<ISelectOneCommandBuilder> _selectOneCommandBuilder;
 
         /// <summary>
         /// Gets the select command builder.
@@ -27,7 +33,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The select command builder.
         /// </value>
-        public ISelectCommandBuilder SelectCommandBuilder { get; private set; }
+        private Lazy<ISelectCommandBuilder> _selectCommandBuilder;
 
         /// <summary>
         /// Gets the insert command builder.
@@ -35,7 +41,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The insert command builder.
         /// </value>
-        public IInsertCommandBuilder InsertCommandBuilder { get; private set; }
+        private Lazy<IInsertCommandBuilder> _insertCommandBuilder;
 
         /// <summary>
         /// Gets the update command builder.
@@ -43,7 +49,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The update command builder.
         /// </value>
-        public IUpdateCommandBuilder UpdateCommandBuilder { get; private set; }
+        private Lazy<IUpdateCommandBuilder> _updateCommandBuilder;
 
         /// <summary>
         /// Gets the delete command builder.
@@ -51,7 +57,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The delete command builder.
         /// </value>
-        public IDeleteCommandBuilder DeleteCommandBuilder { get; private set; }
+        private Lazy<IDeleteCommandBuilder> _deleteCommandBuilder;
 
         /// <summary>
         /// Gets the last insert identifier command builder.
@@ -59,7 +65,61 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The last insert identifier command builder.
         /// </value>
-        public ILastInsertIdCommandBuilder LastInsertIdCommandBuilder { get; private set; }
+        private Lazy<ILastInsertIdCommandBuilder> _lastInsertIdCommandBuilder;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the select one command builder.
+        /// </summary>
+        /// <value>
+        /// The select one command builder.
+        /// </value>
+        public ISelectOneCommandBuilder SelectOneCommandBuilder => this._selectOneCommandBuilder.Value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the select command builder.
+        /// </summary>
+        /// <value>
+        /// The select command builder.
+        /// </value>
+        public ISelectCommandBuilder SelectCommandBuilder => this._selectCommandBuilder.Value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the insert command builder.
+        /// </summary>
+        /// <value>
+        /// The insert command builder.
+        /// </value>
+        public IInsertCommandBuilder InsertCommandBuilder => this._insertCommandBuilder.Value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the update command builder.
+        /// </summary>
+        /// <value>
+        /// The update command builder.
+        /// </value>
+        public IUpdateCommandBuilder UpdateCommandBuilder => this._updateCommandBuilder.Value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the delete command builder.
+        /// </summary>
+        /// <value>
+        /// The delete command builder.
+        /// </value>
+        public IDeleteCommandBuilder DeleteCommandBuilder => this._deleteCommandBuilder.Value;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Gets the last insert identifier command builder.
+        /// </summary>
+        /// <value>
+        /// The last insert identifier command builder.
+        /// </value>
+        public ILastInsertIdCommandBuilder LastInsertIdCommandBuilder => this._lastInsertIdCommandBuilder.Value;
 
         #endregion
 
@@ -74,18 +134,19 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <exception cref="System.Exception">Couldn't create a Command Builder Factory.</exception>
         public CommandBuilderManager(IServiceProvider serviceProvider, IDatabaseConnector connector, ITableTypeDescriptor descriptor)
         {
-            var factory = serviceProvider.GetServiceIfAvailable(connector.GetCommandBuilderFactory) ?? throw new Exception("Couldn't create a Command Builder Factory.");
+            this.Factory = serviceProvider.GetServiceIfAvailable(connector.GetCommandBuilderFactory) ?? throw new Exception("Couldn't create a Command Builder Factory.");
 
-            this.SelectOneCommandBuilder = factory.CreateSelectOneCommandBuilder(descriptor);
-            this.SelectCommandBuilder = factory.CreateSelectCommandBuilder(descriptor);
-            this.InsertCommandBuilder = factory.CreateInsertCommandBuilder(descriptor);
-            this.UpdateCommandBuilder = factory.CreateUpdateCommandBuilder(descriptor);
-            this.DeleteCommandBuilder = factory.CreateDeleteCommandBuilder(descriptor);
-            this.LastInsertIdCommandBuilder = factory.CreateLastInsertIdCommandBuilder();
+            this._selectOneCommandBuilder    = new Lazy<ISelectOneCommandBuilder>(()=> this.Factory.CreateSelectOneCommandBuilder(descriptor), true);
+            this._selectCommandBuilder       = new Lazy<ISelectCommandBuilder>(()=> this.Factory.CreateSelectCommandBuilder(descriptor), true);
+            this._insertCommandBuilder       = new Lazy<IInsertCommandBuilder>(()=> this.Factory.CreateInsertCommandBuilder(descriptor), true);
+            this._updateCommandBuilder       = new Lazy<IUpdateCommandBuilder>(()=> this.Factory.CreateUpdateCommandBuilder(descriptor), true);
+            this._deleteCommandBuilder       = new Lazy<IDeleteCommandBuilder>(()=> this.Factory.CreateDeleteCommandBuilder(descriptor), true);
+            this._lastInsertIdCommandBuilder = new Lazy<ILastInsertIdCommandBuilder>(()=> this.Factory.CreateLastInsertIdCommandBuilder(), true);
         }
 
         #endregion
 
+        /// <inheritdoc />
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
@@ -98,12 +159,12 @@ namespace Paradigm.ORM.Data.CommandBuilders
             this.DeleteCommandBuilder?.Dispose();
             this.LastInsertIdCommandBuilder?.Dispose();
 
-            this.SelectOneCommandBuilder = null;
-            this.SelectCommandBuilder = null;
-            this.InsertCommandBuilder = null;
-            this.UpdateCommandBuilder = null;
-            this.DeleteCommandBuilder = null;
-            this.LastInsertIdCommandBuilder = null;
+            this._selectOneCommandBuilder = null;
+            this._selectCommandBuilder = null;
+            this._insertCommandBuilder = null;
+            this._updateCommandBuilder = null;
+            this._deleteCommandBuilder = null;
+            this._lastInsertIdCommandBuilder = null;
         }
     }
 }

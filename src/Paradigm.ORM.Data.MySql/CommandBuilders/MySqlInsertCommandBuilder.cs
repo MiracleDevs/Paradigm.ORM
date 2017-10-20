@@ -1,4 +1,3 @@
-using System;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;

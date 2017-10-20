@@ -1,3 +1,4 @@
+using System;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
@@ -79,7 +80,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <returns></returns>
         public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder()
         {
-            return new CqlLastInsertIdCommandBuilder(this.Connector);
+            throw new NotSupportedException();
         }
     }
 }

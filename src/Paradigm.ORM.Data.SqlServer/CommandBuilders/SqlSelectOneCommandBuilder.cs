@@ -40,6 +40,8 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         /// </returns>
         public IDatabaseCommand GetCommand(params object[] ids)
         {
+            var valueConverter = this.Connector.GetValueConverter();
+
             if (ids == null)
                 throw new ArgumentNullException(nameof(ids), "You should at least provide one Id.");
 
@@ -50,7 +52,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
 
             for (var i = 0; i < primaryKeysCount; i++)
             {
-                this.Command.GetParameter(i).Value = ids[i];
+                this.Command.GetParameter(i).Value = valueConverter.ConvertFrom(ids[i], this.Descriptor.PrimaryKeyColumns[i].DataType);
             }
 
             return this.Command;
