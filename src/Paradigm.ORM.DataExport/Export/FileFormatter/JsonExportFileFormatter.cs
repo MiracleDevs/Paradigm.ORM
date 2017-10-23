@@ -61,11 +61,13 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
             if (value.GetType().IsNumeric())
                 return value.ToString();
 
-            if (value is DateTime)
-                return $"\"{(DateTime)value:yyyy-MM-dd hh:mm:ss}\"";
-
-            if (value is bool)
-                return (bool)value ? "1" : "0";
+            switch (value)
+            {
+                case DateTime time:
+                    return $"\"{time:yyyy-MM-dd hh:mm:ss}\"";
+                case bool b:
+                    return b ? "1" : "0";
+            }
 
             var strValue = value.ToString() ?? string.Empty;
 

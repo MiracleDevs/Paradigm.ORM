@@ -4,6 +4,7 @@ using Paradigm.ORM.Data.MySql;
 using Paradigm.ORM.Data.PostgreSql;
 using Paradigm.ORM.Data.SqlServer;
 using Paradigm.ORM.DataExport.Configuration;
+using Paradigm.ORM.Data.Cassandra;
 
 namespace Paradigm.ORM.DataExport
 {
@@ -21,6 +22,9 @@ namespace Paradigm.ORM.DataExport
 
                 case Database.SqlServer:
                     return new SqlDatabaseConnector();
+
+                case Database.Cassandra:
+                    return new CqlDatabaseConnector();
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(database), database, null);

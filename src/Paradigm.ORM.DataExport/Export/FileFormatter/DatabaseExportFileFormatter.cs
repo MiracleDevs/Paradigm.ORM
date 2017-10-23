@@ -71,6 +71,9 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
                 case ExportFileType.PostgreSql:
                     return Database.PostgreSql;
 
+                case ExportFileType.Cassandra:
+                    return Database.Cassandra;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(this.Configuration.DestinationFile.FileType), this.Configuration.DestinationFile.FileType, null);
             }

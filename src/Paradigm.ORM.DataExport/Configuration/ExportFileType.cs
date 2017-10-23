@@ -6,6 +6,7 @@ namespace Paradigm.ORM.DataExport.Configuration
         Json,
         SqlServer,
         MySql,
-        PostgreSql
+        PostgreSql,
+        Cassandra
     }
 }

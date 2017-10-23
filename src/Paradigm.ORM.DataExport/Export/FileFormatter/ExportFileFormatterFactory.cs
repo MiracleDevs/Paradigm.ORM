@@ -6,11 +6,14 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
     {
         public static IExportFileFormatter Create(Configuration.Configuration configuration)
         {
-            if (configuration.DestinationFile.FileType == ExportFileType.Csv)
-                return new CsvExportFileFormatter(configuration);
+            switch (configuration.DestinationFile.FileType)
+            {
+                case ExportFileType.Csv:
+                    return new CsvExportFileFormatter(configuration);
 
-            if (configuration.DestinationFile.FileType == ExportFileType.Json)
-                return new JsonExportFileFormatter(configuration);
+                case ExportFileType.Json:
+                    return new JsonExportFileFormatter(configuration);
+            }
 
             return new DatabaseExportFileFormatter(configuration);
         }

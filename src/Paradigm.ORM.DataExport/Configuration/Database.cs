@@ -4,6 +4,7 @@ namespace Paradigm.ORM.DataExport.Configuration
     {
         SqlServer,
         MySql,
-        PostgreSql
+        PostgreSql,
+        Cassandra
     }
 }
