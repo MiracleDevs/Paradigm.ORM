@@ -1,21 +1,25 @@
 using System;
+using Paradigm.ORM.DbFirst.Configuration;
 
 namespace Paradigm.ORM.DbFirst.Export
 {
     internal static class DbFirstExporterFactory
     {
-        public static IDbFirstExporter Create(string databaseType)
+        public static IDbFirstExporter Create(DatabaseType databaseType)
         {
-            switch(databaseType.ToLower())
+            switch(databaseType)
             {
-                case "mysql":
+                case DatabaseType.MySql:
                     return new MySqlDbFirstExporter();
 
-                case "tsql":
+                case DatabaseType.SqlServer:
                     return new SqlDbFirstExporter();
 
-                case "postgresql":
+                case DatabaseType.PostgreSql:
                     return new PostgreSqlDbFirstExporter();
+
+                case DatabaseType.Cassandra:
+                    return new CqlDbFirstExporter();
 
                 default:
                     throw new Exception("Database type not supported. Only [mysql, tsql] types are supported.");

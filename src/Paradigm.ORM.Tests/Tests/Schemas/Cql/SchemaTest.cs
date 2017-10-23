@@ -51,7 +51,21 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             tables[2].Name.Should().Be("table3");
             tables[2].CatalogName.Should().Be(this.Fixture.GetDatabaseName());
             tables[2].SchemaName.Should().BeNull();
+        }
 
+        [Test]
+        public void ShouldFilterTheTables()
+        {
+            var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
+            List<ITable> tables = null;
+
+            schemaProvider.Invoking(x => tables = x.GetTables(this.Fixture.GetDatabaseName(), "table1")).ShouldNotThrow();
+            tables.Should().NotBeNull();
+            tables.Count.Should().Be(1);
+
+            tables[0].Name.Should().Be("table1");
+            tables[0].CatalogName.Should().Be(this.Fixture.GetDatabaseName());
+            tables[0].SchemaName.Should().BeNull();
         }
 
         [Test]

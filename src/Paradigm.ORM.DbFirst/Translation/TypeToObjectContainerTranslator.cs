@@ -44,7 +44,7 @@ namespace Paradigm.ORM.DbFirst.Translation
             else if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo) && input != typeof(string))
             {
                 objectBase.IsArray = true;
-                objectBase.InnerObjectName = (typeInfo.IsGenericType ? input.GenericTypeArguments.FirstOrDefault() : input.GetElementType()).FullName;
+                objectBase.InnerObjectName = (typeInfo.IsGenericType ? input.GenericTypeArguments.FirstOrDefault() : input.GetElementType())?.FullName;
             }
 
             return output;

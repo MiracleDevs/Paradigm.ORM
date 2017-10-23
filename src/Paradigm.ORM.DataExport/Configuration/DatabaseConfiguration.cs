@@ -9,7 +9,7 @@ namespace Paradigm.ORM.DataExport.Configuration
         public string ConnectionString { get; set; }
 
         [DataMember]
-        public Database DatabaseType { get; set; }
+        public DatabaseType DatabaseType { get; set; }
 
         [DataMember]
         public string DatabaseName { get; set; }

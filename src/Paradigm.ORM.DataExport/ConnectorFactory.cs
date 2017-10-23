@@ -10,20 +10,20 @@ namespace Paradigm.ORM.DataExport
 {
     public static class ConnectorFactory
     {
-        public static IDatabaseConnector Create(Database database)
+        public static IDatabaseConnector Create(DatabaseType database)
         {
             switch (database)
             {
-                case Database.MySql:
+                case DatabaseType.MySql:
                     return new MySqlDatabaseConnector();
 
-                case Database.PostgreSql:
+                case DatabaseType.PostgreSql:
                     return new PostgreSqlDatabaseConnector();
 
-                case Database.SqlServer:
+                case DatabaseType.SqlServer:
                     return new SqlDatabaseConnector();
 
-                case Database.Cassandra:
+                case DatabaseType.Cassandra:
                     return new CqlDatabaseConnector();
 
                 default:

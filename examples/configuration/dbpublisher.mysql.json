@@ -4,7 +4,7 @@
  * to public changes directly to the database, and also
  * produce a publish script.
  ****************************************************************/
-  "databaseType": "mysql",
+  "databaseType": "MySql",
   "connectionString": "SERVER=localhost;UID=root;PASSWORD=********;Allow User Variables=True;",
   "generateScript": true,
   "executeScript": true,

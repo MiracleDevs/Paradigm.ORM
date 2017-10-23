@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Cassandra.Schema.Structure;
@@ -105,7 +106,10 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<ITable> GetTables(string database, params string[] filter)
         {
-            return this.TableQuery.Execute(this.GetTableWhere(database, TableType, filter)).Where(x => x.Type == "Standard").Cast<ITable>().ToList();
+            return this.TableQuery
+                .Execute(this.GetTableWhere(database, TableType, filter))
+                .Where(x => x.Type == "Standard" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Cast<ITable>().ToList();
         }
 
         /// <summary>
@@ -118,7 +122,10 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IView> GetViews(string database, params string[] filter)
         {
-            return this.ViewQuery.Execute(this.GetTableWhere(database, ViewType, filter)).Where(x => x.Type == "View").Cast<IView>().ToList();
+            return this.ViewQuery
+                .Execute(this.GetTableWhere(database, ViewType, filter))
+                .Where(x => x.Type == "View" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Cast<IView>().ToList();
         }
 
         /// <summary>

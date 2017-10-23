@@ -23,7 +23,7 @@ namespace Paradigm.ORM.DbFirst
             var started = DateTime.Now;
 
             LoggingService.Notice("------------------------------------------------------------------------------------------------------");
-            LoggingService.Notice("Miracle Devs - ORM");
+            LoggingService.Notice("Miracle Devs - Paradigm.ORM");
             LoggingService.Notice("DbFirst Tool");
             LoggingService.Notice("");
             LoggingService.Notice($"Started at: {started}");

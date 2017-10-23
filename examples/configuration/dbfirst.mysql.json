@@ -4,7 +4,7 @@
  * a model definition file (json) that will be passed to codegen
  * to generate domain classes, repositories, etc.
  ****************************************************************/
-  "databaseType": "mysql",
+  "databaseType": "MySql",
   "databaseName": "ExampleDatabase",
   "connectionString": "Server=localhost;Database=ExampleDatabase;UserId=root;Password=********;Pooling=true",
   "outputFileName": ".cfg/mysql.models.dbf",

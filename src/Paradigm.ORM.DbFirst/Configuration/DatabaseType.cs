@@ -1,6 +1,6 @@
-namespace Paradigm.ORM.DataExport.Configuration
+namespace Paradigm.ORM.DbFirst.Configuration
 {
-    public enum Database
+    public enum DatabaseType
     {
         SqlServer,
         MySql,

@@ -24,9 +24,9 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""allcolumns"";");
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""table1"";");
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""table2"";");
+            this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""table3"";");
         }
 
         public void CreateTables()

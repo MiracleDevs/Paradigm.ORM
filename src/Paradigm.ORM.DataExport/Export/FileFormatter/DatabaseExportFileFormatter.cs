@@ -58,21 +58,21 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
 
         #region Private Methods
 
-        private Database GetDatabaseType()
+        private DatabaseType GetDatabaseType()
         {
             switch (this.Configuration.DestinationFile.FileType)
             {
                 case ExportFileType.SqlServer:
-                    return Database.SqlServer;
+                    return DatabaseType.SqlServer;
 
                 case ExportFileType.MySql:
-                    return Database.MySql;
+                    return DatabaseType.MySql;
 
                 case ExportFileType.PostgreSql:
-                    return Database.PostgreSql;
+                    return DatabaseType.PostgreSql;
 
                 case ExportFileType.Cassandra:
-                    return Database.Cassandra;
+                    return DatabaseType.Cassandra;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(this.Configuration.DestinationFile.FileType), this.Configuration.DestinationFile.FileType, null);

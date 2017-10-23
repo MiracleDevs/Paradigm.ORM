@@ -14,7 +14,7 @@ namespace Paradigm.ORM.DbFirst.Configuration
         public string ConnectionString { get; set; }
 
         [DataMember]
-        public string DatabaseType { get; set; }
+        public DatabaseType DatabaseType { get; set; }
 
         [DataMember]
         public string OutputFileName { get; set; }

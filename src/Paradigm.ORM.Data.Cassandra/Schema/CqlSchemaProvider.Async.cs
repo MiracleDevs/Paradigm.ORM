@@ -20,7 +20,9 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<ITable>> GetTablesAsync(string database, params string[] filter)
         {
-            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database, TableType, filter))).Where(x => x.Type == "Standard").Cast<ITable>().ToList();
+            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database, TableType, filter)))
+                .Where(x => x.Type == "Standard" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Cast<ITable>().ToList();
         }
 
         /// <summary>
@@ -33,7 +35,9 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<IView>> GetViewsAsync(string database, params string[] filter)
         {
-            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database, ViewType, filter))).Where(x => x.Type == "View").Cast<IView>().ToList();
+            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database, ViewType, filter)))
+                .Where(x => x.Type == "View" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Cast<IView>().ToList();
         }
 
         /// <summary>

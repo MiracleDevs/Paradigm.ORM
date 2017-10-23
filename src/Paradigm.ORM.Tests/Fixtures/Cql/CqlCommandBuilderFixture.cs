@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        protected override string ConnectionString => "Server=192.168.2.160;User Id=test;Password=test1234;Timeout=3";
+        protected override string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
 
         protected override IDatabaseConnector CreateConnector()
         {
