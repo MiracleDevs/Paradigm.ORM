@@ -34,6 +34,14 @@ namespace Paradigm.ORM.Data.PostgreSql
         public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
+        /// Gets the database configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public IDatabaseConfiguration Configuration { get; private set; }
+
+        /// <summary>
         /// Gets the active transaction.
         /// </summary>
         /// <value>
@@ -175,6 +183,7 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             this.Dispose();
 
+            this.Configuration = new DatabaseConfiguration(int.MaxValue, int.MaxValue, int.MaxValue);
             this.FormatProvider = new Lazy<ICommandFormatProvider>(() => new PostgreSqlCommandFormatProvider(), true);
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new PostgreSqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new PostgreSqlCommandBuilderFactory(this), true);

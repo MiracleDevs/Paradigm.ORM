@@ -8,7 +8,6 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
     {
         [Column(Type = "int")]
         [PrimaryKey]
-        [Identity]
         public int Id { get; set; }
 
         [Column(Type = "text")]
@@ -20,7 +19,7 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
         [Column(Type = "decimal")]
         public decimal Amount { get; set; }
 
-        [Column(Type = "timestamp")]
+        [Column(Type = "date")]
         public DateTime CreatedDate { get; set; }
 
     }

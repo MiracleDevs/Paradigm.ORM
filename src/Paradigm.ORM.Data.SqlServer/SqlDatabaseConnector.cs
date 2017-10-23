@@ -34,6 +34,14 @@ namespace Paradigm.ORM.Data.SqlServer
         public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
+        /// Gets the database configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public IDatabaseConfiguration Configuration { get; private set; }
+
+        /// <summary>
         /// Gets the active transaction.
         /// </summary>
         /// <value>
@@ -175,6 +183,7 @@ namespace Paradigm.ORM.Data.SqlServer
         {
             this.Dispose();
 
+            this.Configuration = new DatabaseConfiguration(int.MaxValue, 2100, int.MaxValue);
             this.FormatProvider = new Lazy<ICommandFormatProvider>(() => new SqlCommandFormatProvider(), true);
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new SqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new SqlCommandBuilderFactory(this), true);

@@ -80,7 +80,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <returns></returns>
         public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder()
         {
-            throw new NotSupportedException();
+            return null;
         }
     }
 }

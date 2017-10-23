@@ -121,7 +121,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <example>@param1,@param2,@param3,...,@paramN</example>
         protected virtual string GetDbParameterNames(IEnumerable<IColumnDescriptor> columns, string separator = ",")
         {
-            return string.Join(separator, columns.Select(x => $"@{x.ColumnName}"));
+            return string.Join(separator, columns.Select(x => $"{this.FormatProvider.GetParameterName(x.ColumnName)}"));
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <example>@param1='value1',@param2='value2',@param3='value3',...,@paramN='value4'</example>
         protected virtual string GetDbParameterNamesAndValues(IEnumerable<IColumnDescriptor> columns, string separator = ",")
         {
-            return string.Join(separator, columns.Select(x => $"{this.FormatProvider.GetEscapedName(x.ColumnName)}=@{x.ColumnName}"));
+            return string.Join(separator, columns.Select(x => $"{this.FormatProvider.GetEscapedName(x.ColumnName)}={this.FormatProvider.GetParameterName(x.ColumnName)}"));
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
 
             foreach (var column in columns)
             {
-                this.Command.AddParameter($"@{column.ColumnName}", typeConverter.GetType(column.DataType), column.MaxSize, column.Precision, column.Scale);
+                this.Command.AddParameter($"{this.FormatProvider.GetParameterName(column.ColumnName)}", typeConverter.GetType(column.DataType), column.MaxSize, column.Precision, column.Scale);
             }
         }
 

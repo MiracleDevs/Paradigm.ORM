@@ -19,6 +19,13 @@ namespace Paradigm.ORM.Data.CommandBuilders
         string GetEscapedName(string name);
 
         /// <summary>
+        /// Gets the name of the parameter already formatted for ado.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>A formatted representation of the name.</returns>
+        string GetParameterName(string name);
+
+        /// <summary>
         /// Gets the column value already formatted with the proper characters.
         /// </summary>
         /// <param name="value">The value to format.</param>

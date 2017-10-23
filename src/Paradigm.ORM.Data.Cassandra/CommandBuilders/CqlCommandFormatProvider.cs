@@ -22,6 +22,19 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         }
 
         /// <summary>
+        /// Gets the name of the parameter already formatted for ado.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// A formatted representation of the name.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetParameterName(string name)
+        {
+            return $":{name}";
+        }
+
+        /// <summary>
         /// Gets the column value already formatted with the proper characters.
         /// </summary>
         /// <param name="value">The value to format.</param>

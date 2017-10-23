@@ -156,12 +156,24 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
                 var command = insertCommand.GetCommand(valueProvider);
                 var parameters = command.Parameters.ToList();
                 command.CommandText.Should().Be(fixture.InsertQuery);
-                parameters.Should().HaveCount(4);
-                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                parameters[0].Value.Should().Be(3600m);
-                //parameters[1].Value.Should().Be(new DateTime(2017, 5, 23, 13, 55, 43, 0));
-                parameters[2].Value.Should().Be(true);
-                parameters[3].Value.Should().Be("John Doe");
+
+                if (fixtureType == typeof(CqlCommandBuilderFixture))
+                {
+                    parameters.Should().HaveCount(5);
+                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                    parameters[0].Value.Should().Be(3600m);
+                    parameters[3].Value.Should().Be(true);
+                    parameters[4].Value.Should().Be("John Doe");
+                }
+                else
+                {
+                    parameters.Should().HaveCount(4);
+                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                    parameters[0].Value.Should().Be(3600m);
+                    parameters[1].Value.Should().Be(new DateTime(2017, 5, 23, 13, 55, 43, 0));
+                    parameters[2].Value.Should().Be(true);
+                    parameters[3].Value.Should().Be("John Doe");
+                }
             }
         }
 
@@ -223,13 +235,26 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
                 var command = updateCommand.GetCommand(valueProvider);
                 var parameters = command.Parameters.ToList();
                 command.CommandText.Should().Be(fixture.UpdateQuery);
-                parameters.Should().HaveCount(5);
-                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                parameters[0].Value.Should().Be(7200m);
-                //parameters[1].Value.Should().Be(fixture.Entity1.CreatedDate);
-                parameters[2].Value.Should().Be(fixture.Entity1.Id);
-                parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
-                parameters[4].Value.Should().Be("John Doe Junior");
+
+                if (fixtureType == typeof(CqlCommandBuilderFixture))
+                {
+                    parameters.Should().HaveCount(5);
+                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                    parameters[0].Value.Should().Be(7200m);
+                    parameters[2].Value.Should().Be(fixture.Entity1.Id);
+                    parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
+                    parameters[4].Value.Should().Be("John Doe Junior");
+                }
+                else
+                {
+                    parameters.Should().HaveCount(5);
+                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                    parameters[0].Value.Should().Be(7200m);
+                    parameters[1].Value.Should().Be(fixture.Entity1.CreatedDate);
+                    parameters[2].Value.Should().Be(fixture.Entity1.Id);
+                    parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
+                    parameters[4].Value.Should().Be("John Doe Junior");
+                }
             }
         }
     }

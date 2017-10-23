@@ -22,6 +22,14 @@ namespace Paradigm.ORM.Data.Database
         int ConnectionTimeout { get; }
 
         /// <summary>
+        /// Gets the database configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        IDatabaseConfiguration Configuration { get; }
+
+        /// <summary>
         /// Initializes the connection against the database.
         /// </summary>
         /// <param name="connectionString">A connection string containing information to connect to a given database.</param>

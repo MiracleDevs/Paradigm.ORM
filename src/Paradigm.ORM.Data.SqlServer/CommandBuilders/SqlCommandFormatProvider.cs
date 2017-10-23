@@ -22,6 +22,19 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         }
 
         /// <summary>
+        /// Gets the name of the parameter already formatted for ado.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>
+        /// A formatted representation of the name.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public string GetParameterName(string name)
+        {
+            return $"@{name}";
+        }
+
+        /// <summary>
         /// Gets the column value already formatted with the proper characters.
         /// </summary>
         /// <param name="value">The value to format.</param>
@@ -34,9 +47,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
             if (value == null)
                 return "NULL";
 
-            var bytes = value as byte[];
-
-            if (bytes != null)
+            if (value is byte[] bytes)
                 value = Convert.ToBase64String(bytes);
 
             if (value is DateTime)
@@ -63,7 +74,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
                     return value.ToString();
 
                 case TypeCode.Boolean:
-                    return value is bool && (bool)value ? "1" : "0";
+                    return value is bool b && b ? "1" : "0";
 
                 default:
                     return $"'{value}'";
@@ -81,9 +92,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
             if (value == null)
                 return "NULL";
 
-            var bytes = value as byte[];
-
-            if (bytes != null)
+            if (value is byte[] bytes)
                 value = Convert.ToBase64String(bytes);
 
             if (value is DateTime)
@@ -104,7 +113,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
                     return value.ToString();
 
                 case "bit":
-                    return value is bool && (bool)value ? "1" : "0";
+                    return value is bool b && b ? "1" : "0";
 
                 default:
                     return $"'{value}'";

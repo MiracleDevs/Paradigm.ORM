@@ -7,12 +7,10 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
     {
         [Column(Type = "integer")]
         [PrimaryKey]
-        [Identity]
         public int Id { get; set; }
 
         [Column(Type = "integer")]
         [PrimaryKey]
-        [Identity]
         public int Id2 { get; set; }
 
         [Column(Type = "text")]

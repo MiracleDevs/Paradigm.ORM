@@ -68,7 +68,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
                 {
                     var parameter = parameters[index];
                     var type = parameter == null ? typeof(object) : parameter.GetType();
-                    var commandParameter = this.Command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
+                    var commandParameter = this.Command.AddParameter(this.FormatProvider.GetParameterName((index + 1).ToString()), DbTypeConverter.FromType(type));
                     commandParameter.Value = parameter ?? DBNull.Value;
                 }
             }

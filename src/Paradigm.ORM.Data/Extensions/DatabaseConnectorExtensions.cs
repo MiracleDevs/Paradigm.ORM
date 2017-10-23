@@ -298,7 +298,7 @@ namespace Paradigm.ORM.Data.Extensions
             var command = connector.CreateCommand(commandText);
 
             command.CommandType = CommandType.StoredProcedure;
-            PopulateCommandParameters(command, descriptor, default(TParameters), null);
+            PopulateCommandParameters(connector, command, descriptor, default(TParameters), null);
 
             return command;
         }
@@ -382,7 +382,7 @@ namespace Paradigm.ORM.Data.Extensions
         public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, CommandType commandType, TParameters parameters, params string[] ignoreProperties)
         {
             var command = connector.CreateCommand(commandText);
-            PopulateCommandParameters(command, parameters, ignoreProperties);
+            PopulateCommandParameters(connector, command, parameters, ignoreProperties);
             return command;
         }
 
@@ -406,36 +406,40 @@ namespace Paradigm.ORM.Data.Extensions
         /// Populates the command parameters.
         /// </summary>
         /// <typeparam name="TParameters">The type of the parameters.</typeparam>
+        /// <param name="connector">Reference to a database connector.</param>
         /// <param name="command">The command.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="ignoreProperties">The ignore properties.</param>
-        private static void PopulateCommandParameters<TParameters>(IDatabaseCommand command, TParameters parameters, string[] ignoreProperties)
+        private static void PopulateCommandParameters<TParameters>(IDatabaseConnector connector, IDatabaseCommand command, TParameters parameters, string[] ignoreProperties)
         {
             var descriptor = new RoutineTypeDescriptor(typeof(TParameters));
 
-            PopulateCommandParameters(command, descriptor, parameters, ignoreProperties);
+            PopulateCommandParameters(connector, command, descriptor, parameters, ignoreProperties);
         }
 
         /// <summary>
         /// Populates the command parameters.
         /// </summary>
         /// <typeparam name="TParameters">The type of the parameters.</typeparam>
+        /// <param name="connector">Reference to a database connector.</param>
         /// <param name="command">The command.</param>
         /// <param name="descriptor">The routine type descriptor.</param>
         /// <param name="parameters">The parameters.</param>
         /// <param name="ignoreProperties">The ignore properties.</param>
         /// <exception cref="System.ArgumentNullException">descriptor - descriptor</exception>
-        private static void PopulateCommandParameters<TParameters>(IDatabaseCommand command, IRoutineTypeDescriptor descriptor, TParameters parameters, string[] ignoreProperties)
+        private static void PopulateCommandParameters<TParameters>(IDatabaseConnector connector, IDatabaseCommand command, IRoutineTypeDescriptor descriptor, TParameters parameters, string[] ignoreProperties)
         {
             if (descriptor == null)
                 throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
+
+            var formatProvider = connector.GetCommandFormatProvider();
 
             foreach (var parameter in descriptor.Parameters)
             {
                 if (ignoreProperties != null && ignoreProperties.Contains(parameter.ParameterName))
                     continue;
 
-                var commandParameter = command.AddParameter($"@{parameter.ParameterName}", DbTypeConverter.FromType(parameter.Type));
+                var commandParameter = command.AddParameter(formatProvider.GetParameterName(parameter.ParameterName), DbTypeConverter.FromType(parameter.Type));
                 commandParameter.Direction = parameter.IsInput ? ParameterDirection.Input : ParameterDirection.Output;
 
                 if (parameters == null || parameters.Equals(default(TParameters)))

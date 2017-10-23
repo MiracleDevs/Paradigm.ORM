@@ -27,7 +27,7 @@ namespace Paradigm.ORM.Data.Batching
         /// <summary>
         /// Gets or sets the current count.
         /// </summary>
-        int CurrentCount { get; set; }
+        int CurrentCount { get; }
 
         /// <summary>
         /// Gets the list of command steps.

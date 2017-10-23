@@ -1,4 +1,6 @@
-﻿namespace Paradigm.ORM.Tests.Mocks
+﻿using System;
+
+namespace Paradigm.ORM.Tests.Mocks
 {
     public interface ISimpleTable
     {
@@ -9,5 +11,7 @@
         bool IsActive { get; set; }
 
         decimal Amount { get; set; }
+
+        DateTime CreatedDate { get; set; }
     }
 }

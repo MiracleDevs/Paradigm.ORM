@@ -66,7 +66,7 @@ namespace Paradigm.ORM.Data.Batching
         /// <summary>
         /// Gets or sets the current count.
         /// </summary>
-        public int CurrentCount { get; set; }
+        public int CurrentCount { get; private set; }
 
         #endregion
 
@@ -109,14 +109,20 @@ namespace Paradigm.ORM.Data.Batching
         /// </returns>
         public ICommandBatch Add(ICommandBatchStep step)
         {
-            if (this.MaxCount > 0 && this.CurrentCount >= this.MaxCount)
+            if (this.CurrentCount >= this.Connector.Configuration.MaxCommandsPerBatch)
                 return null;
 
-            /* CURRENT TSQL LIMIT FOR SYNC QUERIES */
-            if (this.ParameterCount + step.Command.Parameters.Count() >= 2100)
+            if (this.MaxCount > 0 && this.CurrentCount >= this.MaxCount)
+                return null;
+            
+            if (this.ParameterCount + step.Command.Parameters.Count() >= this.Connector.Configuration.MaxParametersPerCommand)
+                return null;
+
+            if (this.CommandText != null && this.CommandText.Length >= this.Connector.Configuration.MaxCommandLength)
                 return null;
 
             this.AddCommand(step.Command);
+            this.CurrentCount++;
 
             if (step.BatchResultCallback != null || step.BatchResultCallbackAsync != null)
             {
@@ -199,7 +205,7 @@ namespace Paradigm.ORM.Data.Batching
         //  3. Refresh the CommandText after generating and updating the batch command.
         /// </remarks>
         private void AddCommand(IDatabaseCommand command)
-        {
+        {           
             var builder = new StringBuilder();
 
             builder.Append(command.CommandText);
@@ -208,7 +214,7 @@ namespace Paradigm.ORM.Data.Batching
             foreach (var parameter in command.Parameters)
             {
                 var oldName = parameter.ParameterName;
-                var newName = $"@p{this.ParameterCount++}";
+                var newName = this.FormatProvider.GetParameterName($"p{this.ParameterCount++}");
 
                 builder.Replace(oldName, newName);
 

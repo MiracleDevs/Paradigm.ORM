@@ -13,9 +13,7 @@ namespace Paradigm.ORM.Data.Extensions
             }
             catch (Exception ex)
             {
-                var exception = Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) as Exception;
-
-                if (exception == null)
+                if (!(Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) is Exception exception))
                     throw;
 
                 throw exception;
@@ -30,9 +28,7 @@ namespace Paradigm.ORM.Data.Extensions
             }
             catch (Exception ex)
             {
-                var exception = Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) as Exception;
-
-                if (exception == null)
+                if (!(Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) is Exception exception))
                     throw;
 
                 throw exception;
@@ -47,9 +43,7 @@ namespace Paradigm.ORM.Data.Extensions
             }
             catch (Exception ex)
             {
-                var exception = Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) as Exception;
-
-                if (exception == null)
+                if (!(Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) is Exception exception))
                     throw;
 
                 throw exception;
@@ -64,9 +58,7 @@ namespace Paradigm.ORM.Data.Extensions
             }
             catch (Exception ex)
             {
-                var exception = Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) as Exception;
-
-                if (exception == null)
+                if (!(Activator.CreateInstance(typeof(TException), message ?? ex.Message, ex) is Exception exception))
                     throw;
 
                 throw exception;

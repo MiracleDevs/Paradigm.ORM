@@ -34,6 +34,14 @@ namespace Paradigm.ORM.Data.Cassandra
         public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
+        /// Gets the database configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public IDatabaseConfiguration Configuration { get; private set; }
+
+        /// <summary>
         /// Gets the active transaction.
         /// </summary>
         /// <value>
@@ -175,6 +183,7 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             this.Dispose();
 
+            this.Configuration = new DatabaseConfiguration(1, int.MaxValue, int.MaxValue);
             this.FormatProvider = new Lazy<ICommandFormatProvider>(() => new CqlCommandFormatProvider(), true);
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new CqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new CqlCommandBuilderFactory(this), true);

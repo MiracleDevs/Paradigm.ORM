@@ -34,6 +34,14 @@ namespace Paradigm.ORM.Data.MySql
         public int ConnectionTimeout => this.Connection.ConnectionTimeout;
 
         /// <summary>
+        /// Gets the database configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
+        public IDatabaseConfiguration Configuration { get; private set; }
+
+        /// <summary>
         /// Gets the active transaction.
         /// </summary>
         /// <value>
@@ -175,6 +183,7 @@ namespace Paradigm.ORM.Data.MySql
         {
             this.Dispose();
 
+            this.Configuration = new DatabaseConfiguration(int.MaxValue, int.MaxValue, int.MaxValue);
             this.FormatProvider = new Lazy<ICommandFormatProvider>(() => new MySqlCommandFormatProvider(), true);
             this.SchemaProvider = new Lazy<ISchemaProvider>(() => new MySqlSchemaProvider(this), true);
             this.CommandBuilderFactory = new Lazy<ICommandBuilderFactory>(() => new MySqlCommandBuilderFactory(this), true);
@@ -240,7 +249,7 @@ namespace Paradigm.ORM.Data.MySql
 
             return this.ThrowIfFails<OrmConnectorException, IDatabaseTransaction>(() =>
             {
-                var transaction = new MySqlDatabaseTransaction(this.Connection.BeginTransaction(isolationLevel) as MySqlTransaction, this);
+                var transaction = new MySqlDatabaseTransaction(this.Connection.BeginTransaction(isolationLevel), this);
                 this.Transactions.Push(transaction);
                 return transaction;
 
@@ -263,7 +272,7 @@ namespace Paradigm.ORM.Data.MySql
                 var command = this.Connection.CreateCommand();
                 command.Connection = Connection;
                 command.CommandTimeout = this.ConnectionTimeout;
-                return new MySqlDatabaseCommand(command as MySqlCommand, this);
+                return new MySqlDatabaseCommand(command, this);
 
             }, "Can not create the command.");
         }

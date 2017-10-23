@@ -1,30 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Extensions;
-using Paradigm.ORM.Data.Cassandra;
 using Paradigm.ORM.Tests.Mocks.Cql;
+using System.Collections.Generic;
+using Paradigm.ORM.Data.Cassandra;
 
 namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
-    public class CqlCrudCommandFixture: CrudCommandFixtureBase
+    public class CqlQueryFixture : QueryFixtureBase
     {
         protected override string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
 
-        public override string InsertParentStatement => @"INSERT INTO ""test"".""singlekeyparenttable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
+        public override string WhereClause => @"""Id""=1";
 
-        public override string LastInsertedIdStatement => "SELECT LAST_INSERT_ID()";
-
-        public override string SelectStatement => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""test"".""singlekeyparenttable""";
-
-        public override string SelectOneStatement => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""test"".""singlekeyparenttable"" WHERE ""Id""=:Id";
-
-        public override string DeleteStatement => @"DELETE FROM ""test"".""singlekeyparenttable"" WHERE ""Id"" IN (1,2)";
-
-        public override string UpdateStatement => @"UPDATE ""test"".""singlekeyparenttable"" SET ""Name""=:Name,""IsActive""=:IsActive,""Amount""=:Amount,""CreatedDate""=:CreatedDate WHERE ""Id""=:Id";
-
-        public int Ids { get; set; }
+        public override string SelectClause => @"SELECT * FROM ""test"".""singlekeyparenttable""";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -79,49 +69,62 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
         {
             return new SingleKeyParentTable
             {
-                Id= ++this.Ids,
-                Name = "Test Parent " + Guid.NewGuid(),
+                Id = 1,
+                Name = $"Test Parent 1",
                 IsActive = true,
                 Amount = (decimal)30.34,
-                CreatedDate = DateTime.Now,
+                CreatedDate = new DateTime(2017, 4, 12),
                 Childs = new List<SingleKeyChildTable>
                 {
                     new SingleKeyChildTable
                     {
-                        Name = "Test Child " + Guid.NewGuid(),
+                        Id = 1,
                         ParentId = 1,
+                        Name = "Test Child " + Guid.NewGuid(),
                         IsActive = true,
                         Amount = new decimal(30.34),
-                        CreatedDate = DateTime.Now,
+                        CreatedDate = DateTime.Today,
                     }
                 }
             };
         }
 
-        public override ITableTypeDescriptor GetParentDescriptor()
+        public override object CreateNewEntity2()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyParentTable));
-        }
-
-        public override void SetEntityId(object first, object second)
-        {
-            ((SingleKeyParentTable) first).Id = 1;
-            ((SingleKeyParentTable) second).Id = 2;
-        }
-
-        public override void Update(object first, object second)
-        {
-            ((SingleKeyParentTable)first).Name = "Updated Parent " + Guid.NewGuid();
-            ((SingleKeyParentTable)second).Name = "Updated Parent " + Guid.NewGuid();
-        }
-
-        public override void CheckUpdate(object first, object second)
-        {
-            if (!((SingleKeyParentTable)first).Name.StartsWith("Updated Parent") ||
-                !((SingleKeyParentTable)second).Name.StartsWith("Updated Parent"))
+            return new SingleKeyParentTable
             {
-                throw new Exception("Entities not updated.");
-            }
+                Id = 2,
+                Name = $"Test Parent 2 {Guid.NewGuid()}",
+                IsActive = false,
+                Amount = 215.50m,
+                CreatedDate = new DateTime(2017, 6, 21),
+                Childs = new List<SingleKeyChildTable>
+                {
+                    new SingleKeyChildTable
+                    {
+                        Id=2,
+                        ParentId=2,
+                        Name = $"Test Child 1 {Guid.NewGuid()}",
+                        IsActive = false,
+                        Amount = 100.25m,
+                        CreatedDate = new DateTime(2017, 6, 22),
+                    },
+                    new SingleKeyChildTable
+                    {
+                        Id=3,
+                        ParentId=2,
+                        Name = $"Test Child 2 {Guid.NewGuid()}",
+                        IsActive = true,
+                        Amount = 115.25m,
+                        CreatedDate = new DateTime(2017, 6, 23),
+                    }
+                }
+            };
+        }
+
+        public override ITableTypeDescriptor GetDescriptor()
+        {
+            return new TableTypeDescriptor(typeof(SingleKeyTable));
         }
     }
 }

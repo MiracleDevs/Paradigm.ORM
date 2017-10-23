@@ -25,7 +25,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override string SelectWithTwoPrimaryKeysQuery => @"SELECT ""Id"",""Id2"",""Name"" FROM ""TwoPrimaryKeyTable"" WHERE ""Id""=@Id AND""Id2""=@Id2";
 
-        public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
+        public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (@Id,@Name,@IsActive,@Amount,@CreatedDate)";
 
         public override string DeleteOneEntityQuery => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id})";
 
