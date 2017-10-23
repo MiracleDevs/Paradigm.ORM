@@ -60,7 +60,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Order(2)]
         public void ShouldThrowCqlException()
         {
-            Func<Task> result = async () => await this.Fixture.Connector.QueryAsync<SingleKeyTable>();
+            Func<Task> result = async () => await this.Fixture.Connector.QueryAsync<AllColumnsClass>();
             result.ShouldThrow<Exception>();
         }
 

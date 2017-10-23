@@ -3,8 +3,8 @@ using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.Sql
 {
-    [Table(Catalog = "Test", Schema = "dbo")]
-    public class SingleKeyTable
+    [Table("AllColumns", Catalog = "Test", Schema = "dbo")]
+    public class AllColumnsClass
     {
         [Column(Type = "int")]
         [PrimaryKey]

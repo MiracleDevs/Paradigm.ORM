@@ -114,7 +114,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

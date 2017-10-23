@@ -3,8 +3,8 @@ using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.PostgreSql
 {
-    [Table]
-    public class SingleKeyTable
+    [Table("AllColumns")]
+    public class AllColumnsClass
     {
         [Column(Type = "integer")]
         [PrimaryKey]

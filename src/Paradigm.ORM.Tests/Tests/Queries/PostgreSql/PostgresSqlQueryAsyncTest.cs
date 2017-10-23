@@ -61,8 +61,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.PostgreSql
         [Order(2)]
         public void ShouldThrowPostgreSqlException()
         {
-            Func<Task> result = async () => await Fixture.Connector.QueryAsync<SingleKeyTable>();
-            result.ShouldThrow<PostgresException>().WithMessage("42P01: relation \"SingleKeyTable\" does not exist");
+            Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
+            result.ShouldThrow<PostgresException>().WithMessage("42P01: relation \"AllColumns\" does not exist");
         }
 
         [Test]

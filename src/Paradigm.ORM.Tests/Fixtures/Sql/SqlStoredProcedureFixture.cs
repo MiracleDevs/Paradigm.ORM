@@ -132,7 +132,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
 
         public override void CreateStoredProcedures()

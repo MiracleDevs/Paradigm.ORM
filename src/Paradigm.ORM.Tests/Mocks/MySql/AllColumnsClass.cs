@@ -3,8 +3,8 @@ using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.MySql
 {
-    [Table("singlekeytable", Catalog = "test")]
-    public class SingleKeyTable
+    [Table("allcolumns", Catalog = "test")]
+    public class AllColumnsClass
     {
         [Column(Type = "int")]
         [PrimaryKey]

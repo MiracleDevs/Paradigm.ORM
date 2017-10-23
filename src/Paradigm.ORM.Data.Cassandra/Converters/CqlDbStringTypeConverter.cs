@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Numerics;
 using Cassandra;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database.Schema.Structure;
@@ -13,7 +15,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
     {
         public static string ValidatorToDbType(string validator)
         {
-            switch(validator)
+            switch (validator)
             {
                 case "org.apache.cassandra.db.marshal.BooleanType":
                     return "boolean";
@@ -68,7 +70,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
 
                 case "org.apache.cassandra.db.marshal.InetAddressType":
                     return "inet";
-                
+
                 default:
                     throw new Exception("CQL Validator not recognized.");
             }
@@ -157,7 +159,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return "boolean";
 
                 case TypeCode.Byte:
-                case TypeCode.SByte:               
+                case TypeCode.SByte:
                     return "tinyint";
 
                 case TypeCode.UInt16:
@@ -195,15 +197,17 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
             if (type == typeof(byte[]))
                 return "blob";
 
-            if (type == typeof(LocalTime))
+            if (type == typeof(LocalTime) ||
+                type == typeof(TimeSpan))
                 return "time";
 
             if (type == typeof(LocalDate))
                 return "date";
 
-            if (type == typeof(DateTimeOffset))
+            if (type == typeof(DateTimeOffset) ||
+                type == typeof(DateTime))
                 return "timestamp";
-                       
+
             return null;
         }
 
@@ -232,7 +236,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(long);
 
                 case "varint":
-                    return typeof(long);
+                    return typeof(BigInteger);
 
                 case "float":
                     return typeof(float);
@@ -244,16 +248,16 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(decimal);
 
                 case "date":
-                    return typeof(LocalDate);
+                    return typeof(DateTime);
 
                 case "time":
-                    return typeof(LocalTime);
+                    return typeof(TimeSpan);
 
                 case "timestamp":
                     return typeof(DateTimeOffset);
 
                 case "timeuuid":
-                    throw new NotImplementedException();
+                    return typeof(TimeUuid);
 
                 case "uuid":
                     return typeof(Guid);
@@ -271,7 +275,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(byte[]);
 
                 case "inet":
-                    return typeof(string);
+                    return typeof(IPAddress);
 
                 default:
                     return typeof(object);

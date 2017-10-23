@@ -58,8 +58,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.PostgreSql
         [Test]
         public void ShouldThrowPostgreSqlException()
         {
-            Action result = () => Fixture.Connector.Query<SingleKeyTable>();
-            result.ShouldThrow<PostgresException>().WithMessage("42P01: relation \"SingleKeyTable\" does not exist");
+            Action result = () => Fixture.Connector.Query<AllColumnsClass>();
+            result.ShouldThrow<PostgresException>().WithMessage("42P01: relation \"AllColumns\" does not exist");
         }
 
         [Test]

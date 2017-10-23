@@ -56,7 +56,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Test]
         public void ShouldThrowCqlException()
         {
-            Action result = () => this.Fixture.Connector.Query<SingleKeyTable>();
+            Action result = () => this.Fixture.Connector.Query<AllColumnsClass>();
             result.ShouldThrow<Exception>();
         }
 

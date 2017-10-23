@@ -58,8 +58,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
         [Test]
         public void ShouldThrowMySqlException()
         {
-            Action result = () => Fixture.Connector.Query<SingleKeyTable>();
-            result.ShouldThrow<MySqlException>().WithMessage("Table 'test.singlekeytable' doesn't exist");
+            Action result = () => Fixture.Connector.Query<AllColumnsClass>();
+            result.ShouldThrow<MySqlException>().WithMessage("Table 'test.allcolumns' doesn't exist");
         }
 
         [Test]

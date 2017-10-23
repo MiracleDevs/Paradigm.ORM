@@ -61,8 +61,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
         [Order(2)]
         public void ShouldThrowMySqlException()
         {
-            Func<Task> result = async () => await Fixture.Connector.QueryAsync<SingleKeyTable>();
-            result.ShouldThrow<MySqlException>().WithMessage("Table 'test.singlekeytable' doesn't exist");
+            Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
+            result.ShouldThrow<MySqlException>().WithMessage("Table 'test.allcolumns' doesn't exist");
         }
 
         [Test]

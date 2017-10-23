@@ -21,7 +21,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                                                            ""TimestampTimeZoneProperty"",""TimeProperty"",""TimeNoTimeZoneProperty"",""IntervalProperty"",
                                                            ""CharProperty"",""CharacterProperty"",""VarcharProperty"",""CharacterVaryingProperty"",
                                                            ""TextProperty"" 
-                                                    FROM ""SingleKeyTable""";
+                                                    FROM ""AllColumns""";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -34,13 +34,13 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 
         public override void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS \"SingleKeyTable\";");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS \"AllColumns\";");
         }
 
         public override void CreateTable()
         {
             this.Connector.ExecuteNonQuery(
-                "CREATE TABLE IF NOT EXISTS \"SingleKeyTable\"(" +
+                "CREATE TABLE IF NOT EXISTS \"AllColumns\"(" +
                     "\"Id\"                             SERIAL," +
                     "\"Name\"                           VARCHAR(200)                    NOT NULL," +
                     "\"IsActive\"                       BOOLEAN                         NOT NULL," +
@@ -77,14 +77,14 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                     "\"CharacterVaryingProperty\"       CHARACTER VARYING               NOT NULL," +
                     "\"TextProperty\"                   TEXT                            NOT NULL," +
 
-                    "CONSTRAINT \"PK_SingleKeyTable\" PRIMARY KEY (\"Id\")," +
-                    "CONSTRAINT \"UX_SingleKeyTable_Name\" UNIQUE (\"Name\")" +
+                    "CONSTRAINT \"PK_AllColumns\" PRIMARY KEY (\"Id\")," +
+                    "CONSTRAINT \"UX_AllColumns_Name\" UNIQUE (\"Name\")" +
                 ");");
         }
 
         public override object CreateNewEntity()
         {
-            return new SingleKeyTable
+            return new AllColumnsClass
             {
                 Name = "Test " + Guid.NewGuid(),
                 IsActive = true,
@@ -125,7 +125,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

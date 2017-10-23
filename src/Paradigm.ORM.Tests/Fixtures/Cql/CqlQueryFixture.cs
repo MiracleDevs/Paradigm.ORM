@@ -124,7 +124,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

@@ -61,8 +61,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         [Order(2)]
         public void ShouldThrowSqlException()
         {
-            Func<Task> result = async () => await Fixture.Connector.QueryAsync<SingleKeyTable>();
-            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.SingleKeyTable'.");
+            Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
+            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.AllColumns'.");
         }
 
         [Test]

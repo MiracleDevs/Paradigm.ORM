@@ -11,6 +11,7 @@ using Paradigm.ORM.Tests.Fixtures.MySql;
 using Paradigm.ORM.Tests.Fixtures.PostgreSql;
 using Paradigm.ORM.Tests.Fixtures.Sql;
 using NUnit.Framework;
+using Paradigm.ORM.Tests.Fixtures.Cql;
 
 namespace Paradigm.ORM.Tests.Tests.Mappers
 {
@@ -18,9 +19,10 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
     public class DatabaseReaderMapperTest
     {
 
-        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.SingleKeyTable))]
-        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.SingleKeyTable))]
-        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.SingleKeyTable))]
+        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.AllColumnsClass))]
+        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.AllColumnsClass))]
+        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.AllColumnsClass))]
+        [TestCase(typeof(CqlReaderMapperFixture), typeof(Mocks.Cql.AllColumnsClass))]
         public void ShouldMapPropertiesCorrectly(Type fixtureType, Type mappedType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
@@ -70,9 +72,10 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             });
         }
 
-        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.SingleKeyTable))]
-        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.SingleKeyTable))]
-        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.SingleKeyTable))]
+        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.AllColumnsClass))]
+        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.AllColumnsClass))]
+        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.AllColumnsClass))]
+        [TestCase(typeof(CqlReaderMapperFixture), typeof(Mocks.Cql.AllColumnsClass))]
         public void ShouldRetrieveTwoEntities(Type fixtureType, Type mappedType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
@@ -93,9 +96,10 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             });
         }
 
-        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.SingleKeyTable))]
-        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.SingleKeyTable))]
-        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.SingleKeyTable))]
+        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.AllColumnsClass))]
+        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.AllColumnsClass))]
+        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.AllColumnsClass))]
+        [TestCase(typeof(CqlReaderMapperFixture), typeof(Mocks.Cql.AllColumnsClass))]
         public void ShouldRetrieveZeroEntities(Type fixtureType, Type mappedType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
@@ -111,9 +115,10 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             });
         }
 
-        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.SingleKeyTable))]
-        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.SingleKeyTable))]
-        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.SingleKeyTable))]
+        [TestCase(typeof(MySqlReaderMapperFixture), typeof(Mocks.MySql.AllColumnsClass))]
+        [TestCase(typeof(SqlReaderMapperFixture), typeof(Mocks.Sql.AllColumnsClass))]
+        [TestCase(typeof(PostgreSqlReaderMapperFixture), typeof(Mocks.PostgreSql.AllColumnsClass))]
+        [TestCase(typeof(CqlReaderMapperFixture), typeof(Mocks.Cql.AllColumnsClass))]
         public void ShouldThrowArgumentNullException(Type fixtureType, Type mappedType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
@@ -151,6 +156,12 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             {
                 fixturePostgreSql.CreateDatabase();
                 fixturePostgreSql.DropDatabase();
+            }
+
+            using (var fixtureCql = Activator.CreateInstance(typeof(CqlReaderMapperFixture)) as ReaderMapperFixtureBase)
+            {
+                fixtureCql.CreateDatabase();
+                fixtureCql.DropDatabase();
             }
         }
 

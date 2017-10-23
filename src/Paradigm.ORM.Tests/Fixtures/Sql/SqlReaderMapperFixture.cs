@@ -18,7 +18,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
                                                            [DateTime2Property],[SmallDateTimeProperty],[DateTimeOffsetProperty],[CharProperty],
                                                            [TextProperty],[VarcharProperty],[NCharProperty],[NTextProperty],[NVarcharProperty],[XmlProperty],
                                                            [BinaryProperty],[VarBinaryProperty],[ImageProperty]
-                                                    FROM [Test].[dbo].[SingleKeyTable]";
+                                                    FROM [Test].[dbo].[AllColumns]";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -37,15 +37,15 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
         public override void DropDatabase()
         {
             this.Connector.ExecuteNonQuery(@"
-                IF (OBJECT_ID('[dbo].[SingleKeyTable]') IS NOT NULL)
-                    DROP TABLE [dbo].[SingleKeyTable]");         
+                IF (OBJECT_ID('[dbo].[AllColumns]') IS NOT NULL)
+                    DROP TABLE [dbo].[AllColumns]");         
         }
 
         public override void CreateTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                IF (OBJECT_ID('[dbo].[SingleKeyTable]') IS NULL)
-                CREATE TABLE [SingleKeyTable]
+                IF (OBJECT_ID('[dbo].[AllColumns]') IS NULL)
+                CREATE TABLE [AllColumns]
                 (
                     [Id]                            INT                 NOT NULL IDENTITY,
                     [Name]                          NVARCHAR(200)       NOT NULL,
@@ -78,15 +78,15 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
                     [VarBinaryProperty]             BINARY(235)         NOT NULL,
                     [ImageProperty]                 IMAGE               NOT NULL,
 
-                    CONSTRAINT [PK_SingleKeyTable] PRIMARY KEY ([Id] ASC),
-	                CONSTRAINT [UX_SingleKeyTable_Name] UNIQUE ([Name])
+                    CONSTRAINT [PK_AllColumns] PRIMARY KEY ([Id] ASC),
+	                CONSTRAINT [UX_AllColumns_Name] UNIQUE ([Name])
                 );
             ");
         }
 
         public override object CreateNewEntity()
         {
-            return new SingleKeyTable
+            return new AllColumnsClass
             {
                 Name = "Test " + Guid.NewGuid(),
                 IsActive = true,
@@ -123,7 +123,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

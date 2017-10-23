@@ -58,8 +58,8 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         [Test]
         public void ShouldThrowSqlException()
         {
-            Action result = () => Fixture.Connector.Query<SingleKeyTable>();
-            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.SingleKeyTable'.");
+            Action result = () => Fixture.Connector.Query<AllColumnsClass>();
+            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.AllColumns'.");
         }
 
         [Test]

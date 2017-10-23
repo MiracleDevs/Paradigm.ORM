@@ -18,7 +18,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                                                            `TimestampProperty`,`CharProperty`,`VarcharProperty`,`TinytextProperty`,
                                                            `TextProperty`,`MediumtextProperty`,`LongtextProperty`,`BlobProperty`,`TinyBlobProperty`,
                                                            `MediumBlobProperty`,`LongBlobProperty`,`BinaryProperty`,`VarBinaryProperty`
-                                                    FROM   `test`.`singlekeytable`";
+                                                    FROM   `test`.`allcolumns`";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -32,13 +32,13 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeytable`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `allcolumns`;");
         }
 
         public override void CreateTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`singlekeytable`
+                CREATE TABLE IF NOT EXISTS `test`.`allcolumns`
                 (
                     `Id`                    INT             NOT NULL AUTO_INCREMENT,
                     `Name`                  NVARCHAR(200)   NOT NULL,
@@ -71,8 +71,8 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                     `BinaryProperty`        BINARY(235)     NOT NULL,
                     `VarBinaryProperty`     VARBINARY(255)  NOT NULL,
 
-                    CONSTRAINT `PK_singlekeytable` PRIMARY KEY (`Id` ASC),
-	                CONSTRAINT `UX_singlekeytable_Name` UNIQUE (`Name`)
+                    CONSTRAINT `PK_allcolumns` PRIMARY KEY (`Id` ASC),
+	                CONSTRAINT `UX_allcolumns_Name` UNIQUE (`Name`)
 
                 )ENGINE=INNODB;
             ");
@@ -80,7 +80,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override object CreateNewEntity()
         {
-            return new SingleKeyTable
+            return new AllColumnsClass
             {
                 Name = "Test " + Guid.NewGuid(),
                 IsActive = true,
@@ -116,7 +116,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyTable));
+            return new TableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

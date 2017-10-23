@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using Cassandra;
 using Paradigm.ORM.Data.Converters;
 
@@ -86,14 +87,9 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
             if (type == typeof(TimeSpan))
             {
                 if (value is LocalTime localTime)
-                    return new TimeSpan(localTime.Hour, localTime.Minute, localTime.Second, localTime.Nanoseconds / 1000000);
+                    return new TimeSpan(0, localTime.Hour, localTime.Minute, localTime.Second, localTime.Nanoseconds / 1000000);
 
                 throw new NotSupportedException();
-            }
-
-            if (type == typeof(Guid))
-            {
-                return (Guid)value;
             }
 
             return value;
@@ -131,7 +127,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
 
                 case "timestamp":
                     if (value is DateTime dateTime)
-                        return new DateTimeOffset(dateTime);
+                        return new DateTimeOffset(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second, TimeSpan.Zero);
 
                     return value;
 
