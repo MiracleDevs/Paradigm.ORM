@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Numerics;
-using Cassandra;
 using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.Cql

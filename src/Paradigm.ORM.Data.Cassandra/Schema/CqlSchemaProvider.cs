@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Cassandra.Schema.Structure;
 using Paradigm.ORM.Data.CommandBuilders;
@@ -107,7 +105,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<ITable> GetTables(string database, params string[] filter)
         {
-            return this.TableQuery.Execute(this.GetTableWhere(database, TableType, filter)).Cast<ITable>().ToList();
+            return this.TableQuery.Execute(this.GetTableWhere(database, TableType, filter)).Where(x => x.Type == "Standard").Cast<ITable>().ToList();
         }
 
         /// <summary>
@@ -120,7 +118,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IView> GetViews(string database, params string[] filter)
         {
-            return this.ViewQuery.Execute(this.GetTableWhere(database, ViewType, filter)).Cast<IView>().ToList();
+            return this.ViewQuery.Execute(this.GetTableWhere(database, ViewType, filter)).Where(x => x.Type == "View").Cast<IView>().ToList();
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IStoredProcedure> GetStoredProcedures(string database, params string[] filter)
         {
-            throw new NotSupportedException();
+            return new List<IStoredProcedure>();
         }
 
         /// <summary>
@@ -172,7 +170,10 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
                 .ToList();
 
             foreach (var constraint in constraints)
+            {
                 constraint.Type = ConstraintType.PrimaryKey;
+                constraint.FromColumnName = constraint.Name;
+            }
 
             return constraints.Cast<IConstraint>().ToList();
         }
@@ -187,7 +188,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IParameter> GetParameters(string database, string routineName)
         {
-            throw new NotSupportedException();
+            return new List<IParameter>();
         }
 
         #endregion
@@ -213,14 +214,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// <returns>A sql WHERE clause string.</returns>
         private string GetTableWhere(string database, string type, string[] filter)
         {
-            var builder = new StringBuilder();
-            builder.AppendFormat("\"type\"={0} AND ", this.FormatProvider.GetColumnValue(type.ToUpper(), typeof(string)));
-            builder.AppendFormat("\"keyspace_name\"={0}", this.FormatProvider.GetColumnValue(database, typeof(string)));
-
-            if (filter != null && filter.Any())
-                builder.AppendFormat(" AND \"columnfamily_name\" IN ({0})", this.GetStringInGroup(filter));
-
-            return builder.ToString();
+            return $"\"keyspace_name\"={this.FormatProvider.GetColumnValue(database, typeof(string))}";
         }
 
         #endregion

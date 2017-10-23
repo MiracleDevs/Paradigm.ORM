@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.Cassandra.Schema
@@ -20,7 +20,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<ITable>> GetTablesAsync(string database, params string[] filter)
         {
-            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database, TableType, filter))).Cast<ITable>().ToList();
+            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database, TableType, filter))).Where(x => x.Type == "Standard").Cast<ITable>().ToList();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<IView>> GetViewsAsync(string database, params string[] filter)
         {
-            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database, ViewType, filter))).Cast<IView>().ToList();
+            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database, ViewType, filter))).Where(x => x.Type == "View").Cast<IView>().ToList();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public Task<List<IStoredProcedure>> GetStoredProceduresAsync(string database, params string[] filter)
         {
-            throw new NotSupportedException();
+            return Task.FromResult(new List<IStoredProcedure>());
         }
 
         /// <summary>
@@ -59,7 +59,14 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<IColumn>> GetColumnsAsync(string database, string tableName)
         {
-            return (await this.ColumnQuery.ExecuteAsync($"`keyspace_name`='{database}' AND `columnfamily_name`='{tableName}'")).Cast<IColumn>().ToList();
+            var columns = (await this.ColumnQuery.ExecuteAsync($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'")).ToList();
+
+            foreach (var column in columns)
+            {
+                column.DataType = CqlDbStringTypeConverter.ValidatorToDbType(column.DataType);
+            }
+
+            return columns.Cast<IColumn>().ToList();
         }
 
         /// <summary>
@@ -70,9 +77,20 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// <returns>
         /// A list of constraint schemas.
         /// </returns>
-        public Task<List<IConstraint>> GetConstraintsAsync(string database, string tableName)
+        public async Task<List<IConstraint>> GetConstraintsAsync(string database, string tableName)
         {
-            throw new NotSupportedException();
+            var constraints = (await this.ConstraintQuery
+                .ExecuteAsync($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'"))
+                .Where(x => x.ColumnType == "partition_key")
+                .ToList();
+
+            foreach (var constraint in constraints)
+            {
+                constraint.Type = ConstraintType.PrimaryKey;
+                constraint.FromColumnName = constraint.Name;
+            }
+
+            return constraints.Cast<IConstraint>().ToList();
         }
 
         /// <summary>
@@ -85,7 +103,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public Task<List<IParameter>> GetParametersAsync(string database, string routineName)
         {
-            throw new NotSupportedException();
+            return Task.FromResult(new List<IParameter>());
         }
 
         #endregion

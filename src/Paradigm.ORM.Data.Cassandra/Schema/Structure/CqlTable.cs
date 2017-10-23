@@ -11,6 +11,12 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     public class CqlTable : ITable
     {
         /// <summary>
+        /// Gets the name of the constraint.
+        /// </summary>
+        [Column("type", "text")]
+        public string Type { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         [Column("columnfamily_name", "text")]

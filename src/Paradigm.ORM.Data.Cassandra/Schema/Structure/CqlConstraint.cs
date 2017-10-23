@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// Provides a database constraint schema.
     /// </summary>
     /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IConstraint" />
-    [Table("schema_columns", Catalog = "information_schema")]
+    [Table("schema_columns", Catalog = "system")]
     public class CqlConstraint: IConstraint
     {
         /// <summary>
@@ -37,7 +37,6 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
         /// <summary>
         /// Gets the name of the source column of the constraint.
         /// </summary>
-        [Column("column_name", "text")]
         public string FromColumnName { get; set; }
 
         /// <summary>

@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// Provides a database column schema.
     /// </summary>
     /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IColumn" />
-    [Table("schema_columns", Catalog = "information_schema")]
+    [Table("schema_columns", Catalog = "system")]
     public class CqlColumn : IColumn
     {
         /// <summary>
