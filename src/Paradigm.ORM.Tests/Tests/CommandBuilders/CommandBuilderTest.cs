@@ -14,7 +14,7 @@ using Paradigm.ORM.Tests.Fixtures.Cql;
 namespace Paradigm.ORM.Tests.Tests.CommandBuilders
 {
     [TestFixture]
-    public class SqlCommandBuilderTest
+    public class CommandBuilderTest
     {
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
@@ -131,11 +131,10 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
             using (var lastIdCommand = commandBuilderFactory.CreateLastInsertIdCommandBuilder())
             {
-                var command = lastIdCommand.GetCommand().CommandText.Should().Be(fixture.LastInsertIdQuery);
+                lastIdCommand.GetCommand().CommandText.Should().Be(fixture.LastInsertIdQuery);
             }
         }
 

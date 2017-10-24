@@ -1,6 +1,6 @@
 ﻿using System;
+using Paradigm.ORM.Data.Cassandra;
 using Paradigm.ORM.Data.Database;
-using Paradigm.ORM.Data.PostgreSql;
 using Paradigm.ORM.Tests.Mocks;
 using Paradigm.ORM.Tests.Mocks.Cql;
 
@@ -12,26 +12,26 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         protected override IDatabaseConnector CreateConnector()
         {
-            return new PostgreSqlDatabaseConnector(this.ConnectionString);
+            return new CqlDatabaseConnector(this.ConnectionString);
         }
 
         public override string SelectQuery => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""SimpleTable""";
 
         public override string SelectWhereClause => @"""Name"" = ""John Doe""";
 
-        public override string SelectOneQuery => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""SimpleTable"" WHERE ""Id""=@Id";
+        public override string SelectOneQuery => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""SimpleTable"" WHERE ""Id""=:Id";
 
         public override string SelectWithWhereQuery => $"{SelectQuery} WHERE {SelectWhereClause}";
 
-        public override string SelectWithTwoPrimaryKeysQuery => @"SELECT ""Id"",""Id2"",""Name"" FROM ""TwoPrimaryKeyTable"" WHERE ""Id""=@Id AND""Id2""=@Id2";
+        public override string SelectWithTwoPrimaryKeysQuery => @"SELECT ""Id"",""Id2"",""Name"" FROM ""TwoPrimaryKeyTable"" WHERE ""Id""=:Id AND""Id2""=:Id2";
 
-        public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (@Id,@Name,@IsActive,@Amount,@CreatedDate)";
+        public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
 
         public override string DeleteOneEntityQuery => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id})";
 
         public override string DeleteTwoEntitiesQuery => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id},{Entity2.Id})";
 
-        public override string UpdateQuery => @"UPDATE ""SimpleTable"" SET ""Id""=@Id,""Name""=@Name,""IsActive""=@IsActive,""Amount""=@Amount,""CreatedDate""=@CreatedDate WHERE ""Id""=@Id";
+        public override string UpdateQuery => @"UPDATE ""SimpleTable"" SET ""Name""=:Name,""IsActive""=:IsActive,""Amount""=:Amount,""CreatedDate""=:CreatedDate WHERE ""Id""=:Id";
 
         public override string LastInsertIdQuery => null;
 

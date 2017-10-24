@@ -11,7 +11,8 @@
     <Company>Miracle Devs</Company>
     <Copyright>Miracle Devs</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.0.1</Version>
+    <Version>2.1.0</Version>
+    <Product>Paradigm.ORM</Product>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="npgsql" Version="3.2.5" />

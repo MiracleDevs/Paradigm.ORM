@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Cassandra.Schema.Structure;

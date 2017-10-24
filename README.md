@@ -10,7 +10,7 @@
 
 
 # Paradigm.ORM
-.NET Core ORM with dbfirst support, and code scaffonding features. This ORM supports different database sources.
+.NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources.
 
 
 Self Contained Deploy (SCD)
@@ -38,6 +38,21 @@ If you are planning to use the tools in several projects, we recommend to add th
 
 Change log
 ---
+
+Version `2.1.0`
+- Added a new Cassandra connector.
+  This new connector allows to work against Apache Cassandra o ScyllaDB. There are some limitations imposed by the
+  Datastax connector, and other imposed by the orm, but for most cases will be just fine.
+> Warning: The ORM will work with column families that mimic sql tables, aka. without lists, maps, or other not standard
+> relational databases. Even if Cassandra does not supports joins, the ORM allows to create virtual foreign keys between tables
+> and create navigation properties from it.
+- Data Export, DbFirst and DbPublisher can work now against Cassandra and ScyllaDB.
+- In all the configuration files, now the Database Type changed to Upper Camel Case syntax, the database types are:
+    - SqlServer,
+    - MySql,
+    - PostgreSql,
+    - Cassandra
+- Updated MySql Connector version.
 
 Version `2.0.1`
 - Updated Paradigm.Core to version `2.0.1`.
