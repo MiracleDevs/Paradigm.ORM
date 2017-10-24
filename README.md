@@ -7,7 +7,7 @@
 | MySql      | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.MySql/)      | `Install-Package Paradigm.ORM.Data.MySql` |
 | PostgreSQL | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.PostgreSql/) | `Install-Package Paradigm.ORM.Data.PostgreSql` |
 | SQL Server | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.SqlServer/)  | `Install-Package Paradigm.ORM.Data.SqlServer` |
-| SQL Server | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.Cassandra/)  | `Install-Package Paradigm.ORM.Data.Cassandra` |
+| Cassandra | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.Cassandra/)  | `Install-Package Paradigm.ORM.Data.Cassandra` |
 
 # Paradigm.ORM
 .NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources.
