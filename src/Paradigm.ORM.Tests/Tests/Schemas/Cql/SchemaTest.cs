@@ -165,6 +165,42 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             constraints[0].ToTableName.Should().Be(null);
             constraints[0].ToColumnName.Should().Be(null);
             constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
+
+            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table2")).ShouldNotThrow();
+
+            constraints.Should().NotBeNull();
+            constraints.Count.Should().Be(1);
+            constraints[0].Name.Should().Be("column01");
+            constraints[0].CatalogName.Should().Be("test");
+            constraints[0].SchemaName.Should().Be(null);
+            constraints[0].FromTableName.Should().Be("table2");
+            constraints[0].FromColumnName.Should().Be("column01");
+            constraints[0].ToTableName.Should().Be(null);
+            constraints[0].ToColumnName.Should().Be(null);
+            constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
+
+            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table3")).ShouldNotThrow();
+
+            constraints.Should().NotBeNull();
+            constraints.Count.Should().Be(2);
+
+            constraints[0].Name.Should().Be("column01");
+            constraints[0].CatalogName.Should().Be("test");
+            constraints[0].SchemaName.Should().Be(null);
+            constraints[0].FromTableName.Should().Be("table3");
+            constraints[0].FromColumnName.Should().Be("column01");
+            constraints[0].ToTableName.Should().Be(null);
+            constraints[0].ToColumnName.Should().Be(null);
+            constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
+
+            constraints[1].Name.Should().Be("column02");
+            constraints[1].CatalogName.Should().Be("test");
+            constraints[1].SchemaName.Should().Be(null);
+            constraints[1].FromTableName.Should().Be("table3");
+            constraints[1].FromColumnName.Should().Be("column02");
+            constraints[1].ToTableName.Should().Be(null);
+            constraints[1].ToColumnName.Should().Be(null);
+            constraints[1].Type.Should().Be(ConstraintType.PrimaryKey);
         }
 
         [Test]

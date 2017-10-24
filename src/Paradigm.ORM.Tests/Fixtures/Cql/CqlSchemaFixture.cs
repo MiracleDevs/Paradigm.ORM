@@ -33,7 +33,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
         {
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS ""test"".""table1"" (
-                    ""column01"" uuid PRIMARY KEY,
+                    ""column01"" uuid,
                     ""column02"" ascii,
                     ""column03"" bigint,
                     ""column04"" blob,
@@ -51,13 +51,14 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""column16"" timeuuid,
                     ""column17"" tinyint,
                     ""column18"" varchar,
-                    ""column19"" varint
+                    ""column19"" varint,
+                    PRIMARY KEY (""column01"")
                 );
             ");
 
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS ""test"".""table2"" (
-                    ""column01"" uuid PRIMARY KEY,
+                    ""column01"" uuid,
                     ""column02"" ascii,
                     ""column03"" bigint,
                     ""column04"" blob,
@@ -75,13 +76,14 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""column16"" timeuuid,
                     ""column17"" tinyint,
                     ""column18"" varchar,
-                    ""column19"" varint
+                    ""column19"" varint,
+                    PRIMARY KEY (""column01"", ""column15"", ""column13"")
                 );
             ");
 
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS ""test"".""table3"" (
-                    ""column01"" uuid PRIMARY KEY,
+                    ""column01"" uuid,
                     ""column02"" ascii,
                     ""column03"" bigint,
                     ""column04"" blob,
@@ -99,7 +101,8 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""column16"" timeuuid,
                     ""column17"" tinyint,
                     ""column18"" varchar,
-                    ""column19"" varint
+                    ""column19"" varint,
+                    PRIMARY KEY ((""column01"", ""column02""), ""column15"", ""column13"")
                 );
             ");
         }
