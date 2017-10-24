@@ -12,7 +12,7 @@ namespace Paradigm.ORM.DbPublisher.Configuration
         public string ConnectionString { get; set; }
 
         [DataMember]
-        public string DatabaseType { get; set; }
+        public DatabaseType DatabaseType { get; set; }
 
         [DataMember]
         public bool ExecuteScript { get; set; }

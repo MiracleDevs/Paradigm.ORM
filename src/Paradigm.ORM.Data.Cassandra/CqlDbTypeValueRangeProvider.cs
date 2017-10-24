@@ -39,7 +39,7 @@ namespace Paradigm.ORM.Data.Cassandra
                     return new DateTime(9999, 12, 31);
 
                 case "time":
-                    return new TimeSpan(838, 59, 59);
+                    return new TimeSpan(23, 59, 59);
 
                 default:
                     return null;
@@ -74,10 +74,10 @@ namespace Paradigm.ORM.Data.Cassandra
                     return -9223372036854775808;
 
                 case "date":
-                    return new DateTime(1000, 01, 01);
+                    return new DateTime(1970, 01, 01);
 
                 case "time":
-                    return new TimeSpan(-838, 59, 59);
+                    return new TimeSpan(0, 0, 0);
 
                 default:
                     return null;

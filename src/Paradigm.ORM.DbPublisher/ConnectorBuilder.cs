@@ -1,3 +1,4 @@
+using Paradigm.ORM.Data.Cassandra;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.MySql;
 using Paradigm.ORM.Data.PostgreSql;
@@ -12,14 +13,17 @@ namespace Paradigm.ORM.DbPublisher
         {
             switch (configuration.DatabaseType)
             {
-                case "tsql":
+                case DatabaseType.SqlServer:
                     return new SqlDatabaseConnector(configuration.ConnectionString);
 
-                case "mysql":
+                case DatabaseType.MySql:
                     return new MySqlDatabaseConnector(configuration.ConnectionString);
 
-                case "postgres":
+                case DatabaseType.PostgreSql:
                     return new PostgreSqlDatabaseConnector(configuration.ConnectionString);
+
+                case DatabaseType.Cassandra:
+                    return new CqlDatabaseConnector(configuration.ConnectionString);
 
                 default:
                     return null;

@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Paradigm.ORM.Data.Cassandra\Paradigm.ORM.Data.Cassandra.csproj" />
     <ProjectReference Include="..\Paradigm.ORM.Data.MySql\Paradigm.ORM.Data.MySql.csproj" />
     <ProjectReference Include="..\Paradigm.ORM.Data.PostgreSql\Paradigm.ORM.Data.PostgreSql.csproj" />
     <ProjectReference Include="..\Paradigm.ORM.Data.SqlServer\Paradigm.ORM.Data.SqlServer.csproj" />

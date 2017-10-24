@@ -37,6 +37,11 @@ namespace Paradigm.ORM.DbPublisher.Builders
 
         public void SaveScript(string fileName)
         {
+            var path = Path.GetDirectoryName(fileName);
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
             File.WriteAllText(fileName, string.Join(Environment.NewLine, this.Scripts.Keys.Select(x => ProcessScript(x, true))));
         }
 

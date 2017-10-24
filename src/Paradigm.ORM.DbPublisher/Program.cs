@@ -57,7 +57,7 @@ namespace Paradigm.ORM.DbPublisher
         private static async Task<int> OpenConfigurationFileAsync(string fileName, bool verbose)
         {
             var location = Directory.GetCurrentDirectory();
-            fileName = Path.GetFullPath($"{location}/{fileName}");
+            fileName = Path.IsPathRooted(fileName)? fileName : Path.GetFullPath($"{location}/{fileName}");
 
             if (string.IsNullOrWhiteSpace(fileName))
                 throw new Exception("Please provide a configuration file name.");
@@ -103,7 +103,7 @@ namespace Paradigm.ORM.DbPublisher
 
             if (verbose)
             {
-                LoggingService.Notice($"Discovering Files");
+                LoggingService.Notice("Discovering Files");
                 LoggingService.WriteLine($"    Directory:       [{path}]");
             }
 
