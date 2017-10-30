@@ -39,10 +39,15 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.1.1`
+- Fixed a problem in cassandra connector where the schema provider can not guess the column type when the column is a
+  clustering key with order applied to it.
+- Made the modifications to the tests to test the above problem.
+
 Version `2.1.0`
 - Added a new Cassandra connector.
   This new connector allows to work against Apache Cassandra o ScyllaDB. There are some limitations imposed by the
-  Datastax connector, and other imposed by the orm, but for most cases will be just fine.
+  DataStax connector, and other imposed by the orm, but for most cases will be just fine.
 > Warning: The ORM will work with column families that mimic sql tables, aka. without lists, maps, or other not standard
 > relational databases. Even if Cassandra does not supports joins, the ORM allows to create virtual foreign keys between tables
 > and create navigation properties from it.
