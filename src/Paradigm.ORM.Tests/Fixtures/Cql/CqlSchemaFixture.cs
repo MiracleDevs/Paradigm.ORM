@@ -103,7 +103,8 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""column18"" varchar,
                     ""column19"" varint,
                     PRIMARY KEY ((""column01"", ""column02""), ""column15"", ""column13"")
-                );
+                )
+                WITH CLUSTERING ORDER BY (""column15"" ASC, ""column13"" DESC);
             ");
         }
 

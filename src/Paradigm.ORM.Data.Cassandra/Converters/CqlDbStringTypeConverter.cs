@@ -15,65 +15,61 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
     {
         public static string ValidatorToDbType(string validator)
         {
-            switch (validator)
-            {
-                case "org.apache.cassandra.db.marshal.BooleanType":
-                    return "boolean";
+            if (validator.Contains("org.apache.cassandra.db.marshal.BooleanType"))
+                return "boolean";
 
-                case "org.apache.cassandra.db.marshal.ByteType":
-                    return "tinyint";
+            if (validator.Contains("org.apache.cassandra.db.marshal.ByteType"))
+                return "tinyint";
 
-                case "org.apache.cassandra.db.marshal.ShortType":
-                    return "smallint";
+            if (validator.Contains("org.apache.cassandra.db.marshal.ShortType"))
+                return "smallint";
 
-                case "org.apache.cassandra.db.marshal.Int32Type":
-                    return "int";
+            if (validator.Contains("org.apache.cassandra.db.marshal.Int32Type"))
+                return "int";
 
-                case "org.apache.cassandra.db.marshal.LongType":
-                    return "bigint";
+            if (validator.Contains("org.apache.cassandra.db.marshal.LongType"))
+                return "bigint";
 
-                case "org.apache.cassandra.db.marshal.IntegerType":
-                    return "varint";
+            if (validator.Contains("org.apache.cassandra.db.marshal.IntegerType"))
+                return "varint";
 
-                case "org.apache.cassandra.db.marshal.FloatType":
-                    return "float";
+            if (validator.Contains("org.apache.cassandra.db.marshal.FloatType"))
+                return "float";
 
-                case "org.apache.cassandra.db.marshal.DoubleType":
-                    return "double";
+            if (validator.Contains("org.apache.cassandra.db.marshal.DoubleType"))
+                return "double";
 
-                case "org.apache.cassandra.db.marshal.DecimalType":
-                    return "decimal";
+            if (validator.Contains("org.apache.cassandra.db.marshal.DecimalType"))
+                return "decimal";
 
-                case "org.apache.cassandra.db.marshal.SimpleDateType":
-                    return "date";
+            if (validator.Contains("org.apache.cassandra.db.marshal.SimpleDateType"))
+                return "date";
 
-                case "org.apache.cassandra.db.marshal.TimeType":
-                    return "time";
+            if (validator.Contains("org.apache.cassandra.db.marshal.TimeType"))
+                return "time";
 
-                case "org.apache.cassandra.db.marshal.TimestampType":
-                    return "timestamp";
+            if (validator.Contains("org.apache.cassandra.db.marshal.TimestampType"))
+                return "timestamp";
 
-                case "org.apache.cassandra.db.marshal.TimeUUIDType":
-                    return "timeuuid";
+            if (validator.Contains("org.apache.cassandra.db.marshal.TimeUUIDType"))
+                return "timeuuid";
 
-                case "org.apache.cassandra.db.marshal.UUIDType":
-                    return "uuid";
+            if (validator.Contains("org.apache.cassandra.db.marshal.UUIDType"))
+                return "uuid";
 
-                case "org.apache.cassandra.db.marshal.UTF8Type":
-                    return "text";
+            if (validator.Contains("org.apache.cassandra.db.marshal.UTF8Type"))
+                return "text";
 
-                case "org.apache.cassandra.db.marshal.AsciiType":
-                    return "ascii";
+            if (validator.Contains("org.apache.cassandra.db.marshal.AsciiType"))
+                return "ascii";
 
-                case "org.apache.cassandra.db.marshal.BytesType":
-                    return "blob";
+            if (validator.Contains("org.apache.cassandra.db.marshal.BytesType"))
+                return "blob";
 
-                case "org.apache.cassandra.db.marshal.InetAddressType":
-                    return "inet";
+            if (validator.Contains("org.apache.cassandra.db.marshal.InetAddressType"))
+                return "inet";
 
-                default:
-                    throw new Exception("CQL Validator not recognized.");
-            }
+            throw new Exception("CQL Validator not recognized.");
         }
 
         /// <summary>
