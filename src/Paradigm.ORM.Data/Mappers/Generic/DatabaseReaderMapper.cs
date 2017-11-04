@@ -1,21 +1,44 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 
 namespace Paradigm.ORM.Data.Mappers.Generic
 {
-    /// <inheritdoc />
     /// <summary>
     /// Provides a way to map from a <see cref="T:Paradigm.ORM.Data.Database.IDatabaseReader" /> to a known object type.
     /// </summary>
     /// <typeparam name="TEntity">A type containing mapping information.</typeparam>
     /// <seealso cref="T:Paradigm.ORM.Data.Mappers.DatabaseReaderMapper" />
     /// <seealso cref="T:Paradigm.ORM.Data.Mappers.Generic.IDatabaseReaderMapper`1" />
-    public partial class DatabaseReaderMapper<TEntity> : DatabaseReaderMapper, IDatabaseReaderMapper<TEntity> where TEntity : new()
+    public partial class DatabaseReaderMapper<TEntity> : DatabaseReaderMapper, IDatabaseReaderMapper<TEntity>
     {
         #region Constructor
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider) : base(serviceProvider.GetService<IDatabaseConnector>(), typeof(TEntity))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, IColumnPropertyDescriptorCollection descriptor) : base(serviceProvider.GetService<IDatabaseConnector>(), descriptor)
+        {
+            if (descriptor == null)
+                throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
+
+            if (descriptor.Type != typeof(TEntity))
+                throw new ArgumentException($"The {nameof(TableTypeDescriptor)} inner {nameof(Type)} is not {nameof(TEntity)}.");
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="T:Paradigm.ORM.Data.Mappers.DatabaseReaderMapper" /> class.
@@ -55,20 +78,6 @@ namespace Paradigm.ORM.Data.Mappers.Generic
         public new List<TEntity> Map(IDatabaseReader reader)
         {
             return base.Map(reader).Cast<TEntity>().ToList();
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Creates a new instance of <see cref="!:TEntity" />.
-        /// </summary>
-        /// <returns>New instance of <see cref="!:TEntity" />.</returns>
-        protected override object CreateInstance()
-        {
-            return new TEntity();
         }
 
         #endregion

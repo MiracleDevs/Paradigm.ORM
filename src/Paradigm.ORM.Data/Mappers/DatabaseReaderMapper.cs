@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
@@ -13,7 +14,12 @@ namespace Paradigm.ORM.Data.Mappers
     public partial class DatabaseReaderMapper : IDatabaseReaderMapper
     {
         #region Properties
-        
+
+        /// <summary>
+        /// Gets the service provider.
+        /// </summary>
+        protected IServiceProvider ServiceProvider { get; }
+
         /// <summary>
         /// Gets the table type descriptor used to extract the mapping information.
         /// </summary>
@@ -28,9 +34,30 @@ namespace Paradigm.ORM.Data.Mappers
         /// Gets the value converter.
         /// </summary>
         protected IValueConverter ValueConverter { get; }
+
         #endregion
 
         #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, Type type): this(serviceProvider.GetService<IDatabaseConnector>(), type)
+        {
+            this.ServiceProvider = serviceProvider;    
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, IColumnPropertyDescriptorCollection descriptor) : this(serviceProvider.GetService<IDatabaseConnector>(), descriptor)
+        {
+            this.ServiceProvider = serviceProvider;
+        }
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
@@ -89,7 +116,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <returns></returns>
         protected virtual object CreateInstance()
         {
-            var instance = Activator.CreateInstance(this.Descriptor.Type);
+            var instance = this.ServiceProvider?.GetService(this.Descriptor.Type) ?? Activator.CreateInstance(this.Descriptor.Type);
 
             if (instance == null)
                 throw new Exception($"Couldn't instantiate type '{this.Descriptor.TypeName}'.");

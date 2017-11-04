@@ -19,7 +19,7 @@ namespace Paradigm.ORM.Data.Mappers.Generic
     /// <seealso cref="Descriptors.TableTypeDescriptor"/>
     /// <seealso cref="Attributes.TableTypeAttribute" />
     /// <seealso cref="Attributes.TableAttribute"/>
-    public partial interface IDatabaseReaderMapper<TEntity> : IDatabaseReaderMapper where TEntity : new()
+    public partial interface IDatabaseReaderMapper<TEntity> : IDatabaseReaderMapper
     {
         /// <summary>
         /// Gets a list of <see cref="TEntity"/> from a <see cref="IDatabaseReader"/>.
