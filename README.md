@@ -38,6 +38,11 @@ If you are planning to use the tools in several projects, we recommend to add th
 
 Change log
 ---
+Version `2.1.2`
+- Changed the database reader mappers to work with the `IServiceProvider` class. Now, will try to instantiate
+  the entities with the service provider first, and if the service provider can't, will use the activator to
+  create a new instance. This will allow the Paradigm.Services framework to fully delegate the instancing to
+  DI allowing better DDD.
 
 Version `2.1.1`
 - Fixed a problem in cassandra connector where the schema provider can not guess the column type when the column is a
