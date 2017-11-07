@@ -33,6 +33,15 @@ namespace Paradigm.ORM.Data.StoredProcedures
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NonQueryStoredProcedure{TParameters}"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">The database connector.</param>
+        public NonQueryStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector): base(serviceProvider, connector)
+        {           
+        }
+
         #endregion
 
         #region Public Methods

@@ -87,6 +87,15 @@ namespace Paradigm.ORM.Data.StoredProcedures
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderStoredProcedure{TParameters, TResult1, TResult2, TResult3, TResult4, TResult5, TResult6}"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">The database connector.</param>
+        public ReaderStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector) : base(serviceProvider, connector)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the ReaderStoredProcedure.
         /// </summary>
         /// <param name="connector">The database connector.</param>
@@ -104,6 +113,35 @@ namespace Paradigm.ORM.Data.StoredProcedures
             IDatabaseReaderMapper<TResult4> mapper4,
             IDatabaseReaderMapper<TResult5> mapper5,
             IDatabaseReaderMapper<TResult6> mapper6) : base(connector)
+        {
+            this.Mapper1 = mapper1;
+            this.Mapper2 = mapper2;
+            this.Mapper3 = mapper3;
+            this.Mapper4 = mapper4;
+            this.Mapper5 = mapper5;
+            this.Mapper6 = mapper6;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ReaderStoredProcedure.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">The database connector.</param>
+        /// <param name="mapper1">The first result mapper.</param>
+        /// <param name="mapper2">The second result mapper.</param>
+        /// <param name="mapper3">The third result mapper.</param>
+        /// <param name="mapper4">The fourth result mapper.</param>
+        /// <param name="mapper5">The fifth result mapper.</param>
+        /// <param name="mapper6">The sixth result mapper.</param>
+        public ReaderStoredProcedure(
+            IServiceProvider serviceProvider,
+            IDatabaseConnector connector,
+            IDatabaseReaderMapper<TResult1> mapper1,
+            IDatabaseReaderMapper<TResult2> mapper2,
+            IDatabaseReaderMapper<TResult3> mapper3,
+            IDatabaseReaderMapper<TResult4> mapper4,
+            IDatabaseReaderMapper<TResult5> mapper5,
+            IDatabaseReaderMapper<TResult6> mapper6) : base(serviceProvider, connector)
         {
             this.Mapper1 = mapper1;
             this.Mapper2 = mapper2;

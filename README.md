@@ -38,16 +38,26 @@ If you are planning to use the tools in several projects, we recommend to add th
 
 Change log
 ---
+
+Version `2.1.3`
+- Added new constructor to `DatabaseReaderMapper` to allow set both the service provider and the
+  database connector. This will allow multi-tenancy support using the dbfirst generated code.
+- Added new constructors to all the stored procedure types for the same reason as the previous point.
+- Added missing ValueConverter inside the database reader value provider.
+
+
 Version `2.1.2`
 - Changed the database reader mappers to work with the `IServiceProvider` class. Now, will try to instantiate
   the entities with the service provider first, and if the service provider can't, will use the activator to
   create a new instance. This will allow the Paradigm.Services framework to fully delegate the instancing to
   DI allowing better DDD.
 
+
 Version `2.1.1`
 - Fixed a problem in cassandra connector where the schema provider can not guess the column type when the column is a
   clustering key with order applied to it.
 - Made the modifications to the tests to test the above problem.
+
 
 Version `2.1.0`
 - Added a new Cassandra connector.
@@ -64,11 +74,14 @@ Version `2.1.0`
     - Cassandra
 - Updated MySql Connector version.
 
+
 Version `2.0.1`
 - Updated Paradigm.Core to version `2.0.1`.
 
+
 Version `2.0.0`
 - Updated .net core from version 1 to version 2.
+
 
 Version `1.0.0`
 - Uploaded first version of the Paradigm ORM.

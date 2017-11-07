@@ -63,7 +63,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="connector">The database connector.</param>
-        private StoredProcedureBase(IServiceProvider serviceProvider, IDatabaseConnector connector)
+        protected StoredProcedureBase(IServiceProvider serviceProvider, IDatabaseConnector connector)
         {
             this.ServiceProvider = serviceProvider;
             this.Connector = connector;

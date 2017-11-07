@@ -17,6 +17,29 @@ namespace Paradigm.ORM.Data.Mappers.Generic
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">A reference to a database connector.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, IDatabaseConnector connector) : base(serviceProvider, connector, typeof(TEntity))
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">A reference to a database connector.</param>
+        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, IDatabaseConnector connector, IColumnPropertyDescriptorCollection descriptor) : base(serviceProvider, connector, descriptor)
+        {
+            if (descriptor == null)
+                throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
+
+            if (descriptor.Type != typeof(TEntity))
+                throw new ArgumentException($"The {nameof(TableTypeDescriptor)} inner {nameof(Type)} is not {nameof(TEntity)}.");
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.

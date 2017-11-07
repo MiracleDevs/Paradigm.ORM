@@ -69,7 +69,7 @@ namespace Paradigm.ORM.Data.ValueProviders
         /// </returns>
         public object GetValue(IColumnDescriptor descriptor)
         {
-            return this.Reader.GetValue(descriptor.ColumnName);
+            return this.ValueConverter.ConvertFrom(this.Reader.GetValue(descriptor.ColumnName), descriptor.DataType);
         }
 
         #endregion

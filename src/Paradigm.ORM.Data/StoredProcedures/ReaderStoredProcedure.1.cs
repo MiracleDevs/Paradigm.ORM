@@ -52,11 +52,34 @@ namespace Paradigm.ORM.Data.StoredProcedures
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="ReaderStoredProcedure{TParameters, TResult}"/> class.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">The database connector.</param>
+        public ReaderStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector): base(serviceProvider, connector)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the ReaderStoredProcedure.
         /// </summary>
         /// <param name="connector">The database connector.</param>
         /// <param name="mapper">The result mapper.</param>
         public ReaderStoredProcedure(IDatabaseConnector connector, IDatabaseReaderMapper<TResult> mapper) : base(connector)
+        {
+            this.Mapper = mapper;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the ReaderStoredProcedure.
+        /// </summary>
+        /// <param name="serviceProvider">The service provider.</param>
+        /// <param name="connector">The database connector.</param>
+        /// <param name="mapper">The result mapper.</param>
+        public ReaderStoredProcedure(
+            IServiceProvider serviceProvider, 
+            IDatabaseConnector connector, 
+            IDatabaseReaderMapper<TResult> mapper) : base(serviceProvider, connector)
         {
             this.Mapper = mapper;
         }
