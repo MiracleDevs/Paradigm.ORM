@@ -16,9 +16,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// <typeparam name="TResult3">The type of the third result.</typeparam>
     /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.IRoutine" />
     public partial interface IReaderStoredProcedure<in TParameters, TResult1, TResult2, TResult3> : IRoutine
-        where TResult1 : new()
-        where TResult2 : new()
-        where TResult3 : new()
     {
         /// <summary>
         /// Executes the stored procedure and return a list of tuples.

@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
     /// <typeparam name="TEntity">A type containing or referencing the mapping information.</typeparam>
     /// <seealso cref="Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess" />
     public partial interface IDatabaseAccess<TEntity> : IDatabaseAccess
-        where TEntity : class, new()
+        where TEntity : class
     {
         /// <summary>
         /// Selects one element from the database.

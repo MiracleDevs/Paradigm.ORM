@@ -20,13 +20,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// <typeparam name="TResult7">The type of the seventh result.</typeparam>
     /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.IRoutine" />
     public partial interface IReaderStoredProcedure<in TParameters, TResult1, TResult2, TResult3, TResult4, TResult5, TResult6, TResult7> : IRoutine
-        where TResult1 : new()
-        where TResult2 : new()
-        where TResult3 : new()
-        where TResult4 : new()
-        where TResult5 : new()
-        where TResult6 : new()
-        where TResult7 : new()
     {
         /// <summary>
         /// Executes the stored procedure and return a list of tuples.

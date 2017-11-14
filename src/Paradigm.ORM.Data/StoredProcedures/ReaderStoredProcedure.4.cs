@@ -25,10 +25,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
     public partial class ReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4> : 
         StoredProcedureBase<TParameters>,
         IReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4>
-        where TResult1 : new()
-        where TResult2 : new()
-        where TResult3 : new()
-        where TResult4 : new()
     {
         #region Properties
 

@@ -9,7 +9,7 @@ namespace Paradigm.ORM.Data.Querying
     /// <typeparam name="TResultType">The type containing or referencing the mapping information, that will be returned after executing the query.</typeparam>
     /// <seealso cref="System.IDisposable" />
     public partial interface IQuery<TResultType> : IDisposable
-        where TResultType : class, new()
+        where TResultType : class
     {
         /// <summary>
         /// Executes the specified query and returns a list of <see cref="TResultType"/>.

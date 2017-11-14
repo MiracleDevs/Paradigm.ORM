@@ -14,7 +14,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
     /// <seealso cref="DatabaseAccess"/>
     /// <seealso cref="IDatabaseAccess{TEntity}"/>
     public partial class DatabaseAccess<TEntity> : DatabaseAccess, IDatabaseAccess<TEntity>
-        where TEntity: class, new()
+        where TEntity: class
     {
         #region Constructor
 

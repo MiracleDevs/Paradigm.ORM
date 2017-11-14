@@ -19,10 +19,9 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// <typeparam name="TResult">The type of the result.</typeparam>
     /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.StoredProcedureBase{TParameters}" />
     /// <seealso cref="IReaderStoredProcedure{TParameters,TResult1}" />
-    public partial class ReaderStoredProcedure<TParameters, TResult>: 
+    public partial class ReaderStoredProcedure<TParameters, TResult>:
         StoredProcedureBase<TParameters>,
         IReaderStoredProcedure<TParameters, TResult>
-        where TResult: new()
     {
         #region Properties
 

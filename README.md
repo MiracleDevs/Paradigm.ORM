@@ -39,6 +39,15 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.1.5`
+- Removed a dependency over generic entities that needed a parameterless constructor
+  in all the solution.
+
+
+Version `2.1.4`
+- Removed a dependency over generic entities that needed a parameterless constructor.
+
+
 Version `2.1.3`
 - Added new constructor to `DatabaseReaderMapper` to allow set both the service provider and the
   database connector. This will allow multi-tenancy support using the dbfirst generated code.

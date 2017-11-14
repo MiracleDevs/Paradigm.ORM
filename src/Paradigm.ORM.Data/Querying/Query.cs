@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Data.Querying
     /// <typeparam name="TResultType">The type containing or referencing the mapping information, that will be returned after executing the query.</typeparam>
     /// <seealso cref="IQuery{TResultType}" />
     public partial class Query<TResultType> : IQuery<TResultType>
-        where TResultType : class, new()
+        where TResultType : class
     {
         #region Properties
 

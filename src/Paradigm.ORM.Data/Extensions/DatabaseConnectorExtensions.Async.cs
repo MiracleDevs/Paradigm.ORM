@@ -19,7 +19,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="parameters">A list of parameter values.</param>
         /// <returns>A list of <see cref="TResultType"/></returns>
         /// <seealso cref="Querying.Query{TResultType}"/>
-        public static async Task<List<TResultType>> QueryAsync<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class, new()
+        public static async Task<List<TResultType>> QueryAsync<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class
         {
             using (var query = new Query<TResultType>(connector))
             {
@@ -33,11 +33,11 @@ namespace Paradigm.ORM.Data.Extensions
         /// <typeparam name="TResultType">The result type.</typeparam>
         /// <param name="connector">The database connector.</param>
         /// <param name="query">A custom commandText string. The select columns should be mapped to the <see cref="TResultType"/></param>
-        /// /// <param name="whereClause">A where filter clause. Do not add the "WHERE" keyword to it. If you need to pass parameters, pass using @1, @2, @3.</param>     
+        /// /// <param name="whereClause">A where filter clause. Do not add the "WHERE" keyword to it. If you need to pass parameters, pass using @1, @2, @3.</param>
         /// <param name="parameters">A list of parameter values.</param>
         /// <returns>A list of <see cref="TResultType"/></returns>
         /// <seealso cref="Querying.CustomQuery{TResultType}"/>
-        public static async Task<List<TResultType>> CustomQueryAsync<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class, new()
+        public static async Task<List<TResultType>> CustomQueryAsync<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class
         {
             using (var customQuery = new CustomQuery<TResultType>(connector, query))
             {

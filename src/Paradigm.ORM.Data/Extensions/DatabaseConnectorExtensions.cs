@@ -22,7 +22,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="parameters">A list of parameter values.</param>
         /// <returns>A list of <see cref="TResultType"/></returns>
         /// <seealso cref="Querying.Query{TResultType}"/>
-        public static List<TResultType> Query<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class, new()
+        public static List<TResultType> Query<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class
         {
             using (var query = new Query<TResultType>(connector))
             {
@@ -40,7 +40,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="parameters">A list of parameter values.</param>
         /// <returns>A list of <see cref="TResultType"/></returns>
         /// <seealso cref="Querying.CustomQuery{TResultType}"/>
-        public static List<TResultType> CustomQuery<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class, new()
+        public static List<TResultType> CustomQuery<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class
         {
             using (var customQuery = new CustomQuery<TResultType>(connector, query))
             {

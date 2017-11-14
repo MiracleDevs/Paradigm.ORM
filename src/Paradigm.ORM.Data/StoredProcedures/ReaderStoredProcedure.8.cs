@@ -26,17 +26,9 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// <typeparam name="TResult8">The type of the eighth result.</typeparam>
     /// <seealso cref="StoredProcedureBase{TParameters}" />
     /// <seealso cref="IReaderStoredProcedure{TParameters,TResult1,TResult2,TResult3,TResult4,TResult5,TResult6,TResult7}" />
-    public partial class ReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5, TResult6, TResult7, TResult8> 
+    public partial class ReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5, TResult6, TResult7, TResult8>
         : StoredProcedureBase<TParameters>,
             IReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5, TResult6, TResult7, TResult8>
-        where TResult1 : new()
-        where TResult2 : new()
-        where TResult3 : new()
-        where TResult4 : new()
-        where TResult5 : new()
-        where TResult6 : new()
-        where TResult7 : new()
-        where TResult8 : new()
     {
         #region Properties
 
@@ -122,8 +114,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="mapper7">The seventh result mapper.</param>
         /// <param name="mapper8">The eighth result mapper.</param>
         public ReaderStoredProcedure(
-            IDatabaseConnector connector, 
-            IDatabaseReaderMapper<TResult1> mapper1, 
+            IDatabaseConnector connector,
+            IDatabaseReaderMapper<TResult1> mapper1,
             IDatabaseReaderMapper<TResult2> mapper2,
             IDatabaseReaderMapper<TResult3> mapper3,
             IDatabaseReaderMapper<TResult4> mapper4,
