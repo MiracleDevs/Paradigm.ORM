@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        protected override string ConnectionString => "Server=192.168.2.160;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        protected override string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
         protected override IDatabaseConnector CreateConnector()
         {

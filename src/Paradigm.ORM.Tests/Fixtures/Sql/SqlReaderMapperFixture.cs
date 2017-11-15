@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlReaderMapperFixture : ReaderMapperFixtureBase
     { 
-        protected override string ConnectionString => "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+        protected override string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         public override string SelectStatement => @"SELECT [Id],[Name],[IsActive],[Amount],[CreatedDate],[BoolProperty],[TinyintProperty],
                                                            [SmallintProperty],[BigintProperty],[RealProperty],[FloatProperty],[MoneyProperty],

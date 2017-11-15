@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
     {
         private StoredProcedureFixtureBase Fixture { get; set; }
 
-        protected string ConnectionStringNoDb => "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+        protected string ConnectionStringNoDb => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         [OneTimeSetUp]
         public void OneTimeSetup()

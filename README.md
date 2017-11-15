@@ -39,6 +39,11 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.1.6`
+- Updated Paradigm.Core and other dependencies.
+- Published new versions for the tools.
+
+
 Version `2.1.5`
 - Removed a dependency over generic entities that needed a parameterless constructor
   in all the solution.

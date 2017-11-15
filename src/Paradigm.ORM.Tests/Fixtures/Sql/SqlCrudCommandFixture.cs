@@ -9,8 +9,8 @@ using Paradigm.ORM.Tests.Mocks.Sql;
 namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlCrudCommandFixture: CrudCommandFixtureBase
-    { 
-        protected override string ConnectionString => "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+    {
+        protected override string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         public override string InsertParentStatement => "INSERT INTO [Test].[dbo].[SingleKeyParentTable] ([Name],[IsActive],[Amount],[CreatedDate]) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 
@@ -46,7 +46,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 
             this.Connector.ExecuteNonQuery(@"
                 IF (OBJECT_ID('[dbo].[SingleKeyParentTable]') IS NOT NULL)
-                    DROP TABLE [dbo].[SingleKeyParentTable]");         
+                    DROP TABLE [dbo].[SingleKeyParentTable]");
         }
 
         public override void CreateParentTable()

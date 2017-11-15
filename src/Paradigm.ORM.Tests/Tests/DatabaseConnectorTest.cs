@@ -13,11 +13,11 @@ namespace Paradigm.ORM.Tests.Tests
     [TestFixture]
     public class DatabaseConnectorTest
     {
-        private const string MySqlConnectionString = "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+        private const string MySqlConnectionString = "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
-        private const string PostgreSqlConnectionString = "Server=192.168.2.160;User Id=test;Password=test1234;Timeout=3";
+        private const string PostgreSqlConnectionString = "Server=localhost;User Id=test;Password=test1234;Timeout=3";
 
-        private const string SqlConnectionString = "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+        private const string SqlConnectionString = "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         private const string CqlConnectionString = "Contact Points=192.168.2.240;Port=9042";
 
