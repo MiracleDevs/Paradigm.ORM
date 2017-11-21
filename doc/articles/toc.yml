@@ -1,0 +1,17 @@
+- name: 1. Introduction
+  href: 1.introduction/index.md
+
+- name: 2. Supported Databases
+  href: 2.databases/index.md
+
+- name: 3. Core Components
+  href: 3.core/index.md
+
+- name: 4. Shared Components
+  href: 4.shared/index.md
+
+- name: 5. DbFirst
+  href: 5.dbfirst/index.md
+
+- name: 6. DbPublisher
+  href: 6.dbpublisher/index.md
