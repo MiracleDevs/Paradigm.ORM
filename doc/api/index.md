@@ -1,2 +1,2 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+# API Documentation
+Here you can find thorough documentation on each of the classes that compose Paradigm Framework, including the ORM and the Service Libraries. For an introduction to the framework and a high-level overview about what you can find, please refer to the Articles.
