@@ -13,7 +13,7 @@ Our second option was to study Dapper, the fresh and fast "new" kid on the block
 
 Dapper did leave us with a question in mind. We know that we want (need) blazing fast data access. But we also need fast code development, and ability to generate boilerplate code quickly and efficiently across projects (something we loved about entity framework and custom T4s). What if we made a custom library to try and implement a middle ground between the two?
 
-And that's how we started development on our own ORM, Paradigm ORM, a solution that doesn't compromise on all the things we need. This is not meant to be a one-fits-all kind of solution, and may not be a good fit for many of you. But for us it serves the purpose just right, and we are making it available in the hope someone else find that true as well. 
+And that's how we started development on our own ORM, Paradigm ORM, a solution that doesn't compromise on all the things we need. This is not meant to be a one-fits-all kind of solution, and may not be a good fit for many of you. But for us it serves the purpose just right, and we are making it available in the hope someone else find that true as well.
 
 The next point will explore Paradigm ORM objectives and how we intended it: basically an overview of what this tool is, and what it's not.
 
@@ -30,7 +30,7 @@ As mentioned on the previous points, the main features on Paradigm ORM are:
 These were the main principles, objectives or goals driving us while developing this library. Being a small company we did have to leave some features behind, stuff that we considered unnecessary for an initial implementation. We do realize the value of having them, for us and other, and so we are listing them below as a reminder for future milestones:
 
 - Fancy mapping types and mapping relations: Maybe one day in the far-off future when people and robots live together in harmony but there's a murder and everything seems to point to a robot as the murderer, there will be a well designed enterprise application that needs this. So why not having it?
-- Queryable interfaces: True that they do come in handy on some situations, and they speed up development when you don't feel like issuing an update on the db or hand crafting a query. 
+- Queryable interfaces: True that they do come in handy on some situations, and they speed up development when you don't feel like issuing an update on the db or hand crafting a query.
 - Graphical model editors: This one we do miss from the good ol' EF days :)
 
 All in all, Paradigm ORM is the result of a desire to use .NET Core on our development stack, and do it in our terms. It includes most of the features that we used time and time again for every project in the last 7 years, while fixing some of the ones we had to work around. And it does that without compromising any performance, in line with the NET Core spirit of minimal footprint and maximum efficiency on any kind of deployment scenario.

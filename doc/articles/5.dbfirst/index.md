@@ -1,5 +1,5 @@
 # Miracle Devs DbFirst
-One of the main objectives behind Paradigm ORM was the ability to seamlessly integrate Database First workflows. We wanted to have full control of the database, and then derive our domain and logic from the database rather than the other way around. That allows us to leverage the DB muscle to retrieve and sort data: but it also means that the database needs to be designed with the domain in mind. 
+One of the main objectives behind Paradigm ORM was the ability to seamlessly integrate Database First workflows. We wanted to have full control of the database, and then derive our domain and logic from the database rather than the other way around. That allows us to leverage the DB muscle to retrieve and sort data: but it also means that the database needs to be designed with the domain in mind.
 
 Paradigm ORM DbFirst CLI tool allows users to create a object model from a database schema, and use that intermediate model to run the `Code Generation` tool that automatically outputs  the relevant classes. If you are planning on using this tool (and we highly encourage you to do so) have in mind that you'll be using other components of the Paradigm Core Suite.
 
@@ -10,7 +10,7 @@ Below you'll find a brief explanation of the DbFirst tool, its command line inte
 
 ## Command Line Arguments
 
-| Short           | Long                        | Description 
+| Short           | Long                        | Description
 |-----------------|-----------------------------|--------------------------
 | `-f`            | `--filenames <filename>`    | Indicates the path of a configuration file.
 | `-d`            | `--directories <directory>` | Indicates the path of a directory in which the tool should search for configuration files.
@@ -38,7 +38,7 @@ As we saw in the previous point, we must provide at least one configuration file
 
 | Property           | Type                                                                          | Description
 |--------------------|-------------------------------------------------------------------------------|-------------
-| `databaseType`     | **string**                                                                    | The database identification type used by the ORM configuration files. It can be one of the following values: **mysql** \| **postgresql** \| **sql**
+| `databaseType`     | **string**                                                                    | The database identification type used by the ORM configuration files. It can be one of the following values: **MySql** \| **PostgreSql** \| **SqlServer** \| **Cassandra**
 | `connectionString` | **string**                                                                    | A standard [ADO.NET](https://msdn.microsoft.com/en-us/library/ms254500(v=vs.110).aspx) connection string. Note that each database may implement and use their own parameters, with their own meaning.
 | `databaseName`     | **string**                                                                    | Name of the database being used.
 | `outputFileName`   | **string**                                                                    | A filename to save the resulting object model file.
@@ -61,8 +61,8 @@ As we saw in the previous point, we must provide at least one configuration file
 ```
 
 
-First of all, you need to provide the database type you're planning to use. The database type needs to be supported by the ORM. Additionally, you need to include a connection string allowing the tool to connect to the database. When configuring the connection string, remember that the user should have permissions to retrieve schema information. Internally, the DbFirst will utilize the @MiracleDevs.ORM.Data.Database.Schema.ISchemaProvider to obtain the tables, views, procedures, columns, constraints and parameters to create the object model.
-The configuration also expects the database name and output filename to save the object model. 
+First of all, you need to provide the database type you're planning to use. The database type needs to be supported by the ORM. Additionally, you need to include a connection string allowing the tool to connect to the database. When configuring the connection string, remember that the user should have permissions to retrieve schema information. Internally, the DbFirst will utilize the @Paradigm.ORM.Data.Database.Schema.ISchemaProvider to obtain the tables, views, procedures, columns, constraints and parameters to create the object model.
+The configuration also expects the database name and output filename to save the object model.
 
 > [!NOTE]
 > The object model produced by this tool is a `json` file with a specific format that the Code Generator tool understands. When fed to the Code Generator tool, this configuration file allows generation of all the scaffolding code and necessary files, making for a true DbFirst workflow.
@@ -70,7 +70,7 @@ The configuration also expects the database name and output filename to save the
 The `tables`, `views` and `storedProcedures` parameters need a more thorough explanation, and we'll go through each one in more detail below. But we can say that they will basically help you configure individual elements to be mapped.
 
 ### Table Configuration
-The `tables` configuration allows mapping customizations on tables, columns and constraints to objects. When mapping these objects, the naming conventions of the origin may not match your code naming conventions, and here you can map tables, columns or constraints to a name other than the one they have on the DB. You can also ignore existing columns or constraints if you don't want to map them, and even add your own. 
+The `tables` configuration allows mapping customizations on tables, columns and constraints to objects. When mapping these objects, the naming conventions of the origin may not match your code naming conventions, and here you can map tables, columns or constraints to a name other than the one they have on the DB. You can also ignore existing columns or constraints if you don't want to map them, and even add your own.
 
 > [!NOTE]
 > As we'll see in the next point, views use the same configuration as tables. Views don't have constraints like foreign or primary keys. But the DbFirst tool reads these keys to create navigation relationships, so its useful to be able to add your own constraints to elements. For example, adding a primary key to a view is mandatory, but you could also add a foreign key to another view as well and generate a navigation property.
@@ -78,7 +78,7 @@ The `tables` configuration allows mapping customizations on tables, columns and 
 
 | Property              | Type                                                              | Description
 |-----------------------|-------------------------------------------------------------------|-------------
-| `name`                | **string**                                                        | The name of the table you want to map.                
+| `name`                | **string**                                                        | The name of the table you want to map.
 | `newName`             | **string**                                                        | You can provide a different name for the entity that will map to the table. This is useful when, for instance, your code convention is upper camel case and the database uses lowercase names.
 | `columnsToRename`     | **Array of [RenameConfiguration](#rename-configuration)**         | An array of columns renames. Like the `newName` for the table, this array allows to rename columns.
 | `constraintsToRename` | **Array of [RenameConfiguration](#rename-configuration)**         | An array of constraint renames. Like the `columnsToRename`, this array allows to rename constraints.
@@ -111,7 +111,7 @@ The rename configuration allows to map both columns and constraints in the DB to
 
 | Property  | Type        | Description
 |-----------|-------------|-------------
-| `name`    | **string**  | The name of the column or constraint you want to change.     
+| `name`    | **string**  | The name of the column or constraint you want to change.
 | `newName` | **string**  | The new name for the column or constraint.
 
 **Example:**
@@ -156,9 +156,9 @@ The column configuration allows you to add new columns to a table or view. This 
 The constraint configuration allows to add new constraints to a table or view. This can come in handy when mapping views, to add new navigation relationships that are not available in the database.
 
 | Property              | Type              | Description
-|-----------------------|-------------------|-------------        
+|-----------------------|-------------------|-------------
 | Name                  | **string**        | Sets the name of the constraint.
-| Type                  | **@MiracleDevs.ORM.Data.Database.Schema.Structure.ConstraintType**  | Sets the type of the constraint.
+| Type                  | **@Paradigm.ORM.Data.Database.Schema.Structure.ConstraintType**  | Sets the type of the constraint.
 | FromColumnName        | **string**        | Sets the source column.
 | ToTableName           | **string**        | Sets the destination table.
 | ToColumnName          | **string**        | Sets the destination column.
@@ -179,7 +179,7 @@ The constraint configuration allows to add new constraints to a table or view. T
 ### View Configuration
 
 As we can see in the table above, the view configuration is a list of [TableConfiguration](#table-configuration) so the previous point is valid for views. You can add new columns, constraints, rename objects, remove objects, etc. using the same structure reviewed above.
-If you are planning to use the existing Code Generator templates in conjunction with the Paradigm Core suite, be sure to add a primary key to each view, because if not, repositories will fail. 
+If you are planning to use the existing Code Generator templates in conjunction with the Paradigm Core suite, be sure to add a primary key to each view, because if not, repositories will fail.
 
 **Example:**
 ```json
@@ -205,7 +205,7 @@ The stored procedure configuration allows you to map stored procedures. The proc
 |-----------------------|-------------------------------------------------------------------------|-------------
 | name                  | **string**                                                              | The name of the stored procedure you want to map.
 | newName               | **string**                                                              | Sets a new name for the stored procedure mapping.
-| type                  | **@MiracleDevs.ORM.Data.Database.Schema.Structure.StoredProcedureType** | Sets the type of stored procedure.
+| type                  | **@Paradigm.ORM.Data.Database.Schema.Structure.StoredProcedureType** | Sets the type of stored procedure.
 | parametersToRename    | **Array of [RenameConfiguration](#rename-configuration)**               | An array of parameter renames. Allows renaming of each parameter individually.
 | resultTypes           | **Array of string**                                                     | An array of result objects. If your procedure retrieves a lists of clients, then the result types should include `Client`.
 

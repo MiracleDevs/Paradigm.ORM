@@ -499,7 +499,7 @@ $(function () {
           }
 
           var section = $(e);
-          section.html(section.html().replace(/MiracleDevs.ORM.Data./g, ""));
+          section.html(section.html().replace(/Paradigm.ORM.Data./g, ""));
           section.breakWord();
         });
 

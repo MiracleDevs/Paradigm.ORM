@@ -6,7 +6,7 @@ You can maintain your database structure as one file per element, reversioning t
 
 ## Command Line Arguments
 
-| Short           | Long                  | Description 
+| Short           | Long                  | Description
 |-----------------|-----------------------|--------------------------------
 | `-c <filename>` | `--config <filename>` | Indicates the path of the configuration file.
 | `-h` or `-?`    | `--help`              | Prints the help.
@@ -27,11 +27,11 @@ In order for the DbPublisher to work, you must provide a json configuration file
 
 | Property            | Type          | Description
 |---------------------|---------------|------------------------------------
-| `databaseType`      | **string**    | The same database identification type used by the ORM configuration files. At present, it can be one of the following values: **mysql** \| **postgresql** \| **sql**
+| `databaseType`      | **string**    | The same database identification type used by the ORM configuration files. At present, it can be one of the following values: **MySql** \| **PostgreSql** \| **SqlServer** \| **Cassandra**
 | `connectionString`  | **string**    | An regular [ADO.NET](https://msdn.microsoft.com/en-us/library/ms254500(v=vs.110).aspx) connection string. Note that each database may implement and use their own parameters, with their own meaning.
 | `generateScript`    | **boolean**   | Indicates whether the tool should generate the publishing script or not. This can come in handy if you are planning to run the script later on using a tool like SQL Server Management Studio, MySql Workbench, etc, or if you need to send a third party IT team the scripts to run in order to deploy a new version of your system.
 | `outputFileName`    | **string**    | File name for the generated publish script. I.E.: c:\Users\\[User]\Documents\publish.sql
-| `executeScript`     | **boolean**   | Indicates if the tool should run the sql files against the database. This can come in handy on dev stages, to publish changes directly to a local DB. 
+| `executeScript`     | **boolean**   | Indicates if the tool should run the sql files against the database. This can come in handy on dev stages, to publish changes directly to a local DB.
 | `files`             | **string[]**  | An array of sql files to compile or run. This is the most straightforward approach to working with this tool, because you can reorder the scripts taking in account their mutual dependencies. Referenced DB elements should be processed first, because the tool will execute them in order. At the time of this writing, if you have a situation where there is a cross reference between elements, one of the constraints must be added on a third file, separated from the first table, so the Database has both tables declared. **IMPORTANT**: The filename should be relative to the configuration file, or an absolute path.
 | `paths`             | **string[]**  | An array of folders to search for sql files. The tool will enumerate the files inside the folder, and will run the files in alphabetical order. This approach is less common, but if you have a bunch of files with no ordering needed, you can use these instead of manually adding each individual file. **IMPORTANT**: The path should be relative to the configuration file, or an absolute.
 | `topDirectoyOnly`   | **boolean**   | If you provide paths, this property tells the system to search only on the top directory. If you want to recursively search for files inside inner folders, set this property to false.
@@ -56,7 +56,7 @@ In order for the DbPublisher to work, you must provide a json configuration file
 
         "tables\\shared\\AddressType.sql",
         "tables\\shared\\Address.sql",
-        "tables\\shared\\File.sql",   
+        "tables\\shared\\File.sql",
         "tables\\shared\\AddressTypeView.sql",
         "tables\\shared\\AddressView.sql",
         "tables\\shared\\FileView.sql",
@@ -65,7 +65,7 @@ In order for the DbPublisher to work, you must provide a json configuration file
         "storedprocedures\\security\\CreateUser.sql",
         "storedprocedures\\security\\ChangePassword.sql",
 
-        /* SYSTEM DATA */   
+        /* SYSTEM DATA */
         "scripts\\postdeployment\\AddressTypeData.sql",
         "scripts\\postdeployment\\RoleData.sql",
         "scripts\\postdeployment\\UserData.sql",
@@ -88,7 +88,7 @@ To work around this limitation, DbPublisher utilizes a simple pre-processor nota
 
 ### Define code only for the publishing file
 ````SQL
- #ifcmd 
+ #ifcmd
     /* This code will only appear on the final publishing script */
  #endif
 ````
@@ -96,7 +96,7 @@ To work around this limitation, DbPublisher utilizes a simple pre-processor nota
 
 ### Define code only for the direct execution
 ````SQL
- #ifexe 
+ #ifexe
     /* This code will only appear on execution scripts */
  #endif
 ````

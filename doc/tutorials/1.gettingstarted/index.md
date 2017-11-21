@@ -71,7 +71,7 @@ The first step we need to take in order to retrieve data from the database, is d
 There are two ways to provide these mappings: either by decorating the class itself, or by decorating another class or interface. In the second case, we'll need to also decorate the class that we will use with the reference to the other class (where the mapping is). If this doesn't make sense now, it will surely do as we go over the examples.   
 
 ### Mapping the class
-We'll use the @MiracleDevs.ORM.Data.Attributes.TableAttribute to indicate that the classes will be mapped to specific database tables. 
+We'll use the @Paradigm.ORM.Data.Attributes.TableAttribute to indicate that the classes will be mapped to specific database tables. 
 
 > [!TIP]
 > If your database allows catalogs and schemas, and you want to separate distinct sectors of your app using different schemas, you can also provide them as parameters.
@@ -82,16 +82,16 @@ We'll use the @MiracleDevs.ORM.Data.Attributes.TableAttribute to indicate that t
 For columns, we have various attributes we can use to provide information about the mapping:
 | Attribute                                        | Description
 |--------------------------------------------------|------------
-| @MiracleDevs.ORM.Data.Attributes.ColumnAttribute | Indicates that the property will be mapped to a table or view column. If the column and property names are equal, the name can be ignored. When working with `SQL Server`, the column type should be provided as well.
-| @MiracleDevs.ORM.Data.Attributes.IdentityAttribute | Indicates that the property will be mapped to an identity column. Identity columns are auto numeric, auto increment properties (SQL Server: `IDENTITY`, MySql: `AUTO_INCREMENT`, PostgreSql: `SERIAL`). Each database refers to them in different ways, and the implementation details may vary. The ORM just need to know if it's responsible for the value, or can ignore it.
-| @MiracleDevs.ORM.Data.Attributes.PrimaryKeyAttribute | Indicates that the column is part of the primary key.
-| @MiracleDevs.ORM.Data.Attributes.ForeignKeyAttribute | Indicates that the column is part of a foreign key to another table.
-| @MiracleDevs.ORM.Data.Attributes.UniqueKeyAttribute | Indicates that the column is part of a unique constraint.
-| @MiracleDevs.ORM.Data.Attributes.SizeAttribute | If the column is a sizeable type like `VARCHAR`, `BINARY`, etc, this attribute allows to provide the size for the column.
-| @MiracleDevs.ORM.Data.Attributes.NumericAttribute | If the column type is a numeric type, this attribute provides a description for the numeric scale and precision.
-| @MiracleDevs.ORM.Data.Attributes.RangeAttribute | If the column type has a minimum and maximum value, this attribute allows to provide the range values. This is helpful for numbers and dates. For example, each database handle date ranges differently.
-| @MiracleDevs.ORM.Data.Attributes.NotNullableAttribute | Indicates if the column does not allows null values.
-| @MiracleDevs.ORM.Data.Attributes.NavigationAttribute | The `NavigationAttribute` **does not map** to a column. It provides a way to indicate that the property references a relation to another entity, and should be taken in account when retrieving or storing data.
+| @Paradigm.ORM.Data.Attributes.ColumnAttribute | Indicates that the property will be mapped to a table or view column. If the column and property names are equal, the name can be ignored. When working with `SQL Server`, the column type should be provided as well.
+| @Paradigm.ORM.Data.Attributes.IdentityAttribute | Indicates that the property will be mapped to an identity column. Identity columns are auto numeric, auto increment properties (SQL Server: `IDENTITY`, MySql: `AUTO_INCREMENT`, PostgreSql: `SERIAL`). Each database refers to them in different ways, and the implementation details may vary. The ORM just need to know if it's responsible for the value, or can ignore it.
+| @Paradigm.ORM.Data.Attributes.PrimaryKeyAttribute | Indicates that the column is part of the primary key.
+| @Paradigm.ORM.Data.Attributes.ForeignKeyAttribute | Indicates that the column is part of a foreign key to another table.
+| @Paradigm.ORM.Data.Attributes.UniqueKeyAttribute | Indicates that the column is part of a unique constraint.
+| @Paradigm.ORM.Data.Attributes.SizeAttribute | If the column is a sizeable type like `VARCHAR`, `BINARY`, etc, this attribute allows to provide the size for the column.
+| @Paradigm.ORM.Data.Attributes.NumericAttribute | If the column type is a numeric type, this attribute provides a description for the numeric scale and precision.
+| @Paradigm.ORM.Data.Attributes.RangeAttribute | If the column type has a minimum and maximum value, this attribute allows to provide the range values. This is helpful for numbers and dates. For example, each database handle date ranges differently.
+| @Paradigm.ORM.Data.Attributes.NotNullableAttribute | Indicates if the column does not allows null values.
+| @Paradigm.ORM.Data.Attributes.NavigationAttribute | The `NavigationAttribute` **does not map** to a column. It provides a way to indicate that the property references a relation to another entity, and should be taken in account when retrieving or storing data.
 
 
  Ok, so let's go back to the client example we saw earlier. The client model should have two navigation relationships:
@@ -200,7 +200,7 @@ Ok, so here we managed to create three classes, and successfully map the classes
 But if you are a little bit like us, you're probably wondering whether having all that information in your domain may bring problems down the road, while also visually contaminating your code.
 Well, we feel you: we also believe having all that mapping information inside your domain classes, DTOs and entities is not the greatest idea, even moreso if you are deploying a medium to large sized system.
 So, as we mentioned at the begining of this section, we included a way for you to separate mapping information from your classes, leaving your domain clean, beautiful and database agnostic (at least in theory).
-To do this, we can use the @MiracleDevs.ORM.Data.Attributes.TableTypeAttribute to reference another type, and tell the ORM to extract mapping information from that other class or interface. If we decide to do that, our sample code would end up looking something like this:
+To do this, we can use the @Paradigm.ORM.Data.Attributes.TableTypeAttribute to reference another type, and tell the ORM to extract mapping information from that other class or interface. If we decide to do that, our sample code would end up looking something like this:
 
 ```csharp
 [Table("client")]
@@ -275,7 +275,7 @@ public class Client: IClientTable
 > There are multiple ways you can place your mapping attributes. You can place them on base classes, base interfaces, referenced classes, referenced base classes and interfaces, etc. And also, you can spread them between multiple classes. While that's not recommended, it can come in handy if you need to translate from a relational structure to a class hierarchy. See tip below for further details on this situation.
 
 > [!TIP]
-> Suppose all your main transaction tables require audit information like `CreationUserId`, `CreationDate`, `ModificationUserId` and `ModificationDate`. Instead of mapping those fields on every single class, you could create an interface IAuditable with those fields, and their respective mappings. You can later implement that interface in each transaction class. Or even better, do a base abstract class with all the information, and just extend the functionalty. This is possible due to the flexibility of @MiracleDevs.ORM.Data.Descriptors.TableTypeDescriptor to create the mapping model, and allow complex hierarchy trees that will later be translated to the relational logic of the database.
+> Suppose all your main transaction tables require audit information like `CreationUserId`, `CreationDate`, `ModificationUserId` and `ModificationDate`. Instead of mapping those fields on every single class, you could create an interface IAuditable with those fields, and their respective mappings. You can later implement that interface in each transaction class. Or even better, do a base abstract class with all the information, and just extend the functionalty. This is possible due to the flexibility of @Paradigm.ORM.Data.Descriptors.TableTypeDescriptor to create the mapping model, and allow complex hierarchy trees that will later be translated to the relational logic of the database.
 
 > [!TIP]
 > The ORM allows navigation properties with multiple primary / foreign keys. If you need to navigate using more than just one primary / foreign key, you need to add more 
@@ -322,12 +322,12 @@ using(var command = connector.CreateCommand())
 }
 ```
 
-The code above is mostly self explanatory. It opens a connection to the database, creates a command, and then executes the query. Using the `@MiracleDevs.ORM.Data.Mappers.Generic.DatabaseReaderMapper` class, it gets the resulting clients.
+The code above is mostly self explanatory. It opens a connection to the database, creates a command, and then executes the query. Using the `@Paradigm.ORM.Data.Mappers.Generic.DatabaseReaderMapper` class, it gets the resulting clients.
 In the example above we went to the database and back, but it's still a good deal of code just to get data: it should be easier and cleaner to do such a standard task. We have several other ways to write this down, but internally this is basically what is happening behind the scenes.
 We'll see how to translate the code to make it easier to read. There are many ways to do this: the one you choose will depend on the situation and what you need to accomplish.
 
 ### Using Extension Methods
-The interface `@MiracleDevs.ORM.Data.Database.IDatabaseConnector` has various extension methods available for all the different database types that can help you with repetitive tasks, and is also in charge of disposing every disposable object for you. In particular, we want to use the executing extensions:
+The interface `@Paradigm.ORM.Data.Database.IDatabaseConnector` has various extension methods available for all the different database types that can help you with repetitive tasks, and is also in charge of disposing every disposable object for you. In particular, we want to use the executing extensions:
 - ExecuteReader
 - ExecuteNonQuery
 - ExecuteScalar
@@ -347,8 +347,8 @@ There are also a set of objects that can handle data retrieval operations for yo
 
 | Query                                        | Description
 |----------------------------------------------|------------------------
-| @MiracleDevs.ORM.Data.Querying.Query         | Represents a `SELECT * Table` for a given type. You can provide a WHERE clause. All columns will be retrieved.
-| @MiracleDevs.ORM.Data.Querying.CustomQuery   | Represents a custom `SELECT` statement, where the user must provide the sentence. The selected columns must be configured (mapped) in the entity. 
+| @Paradigm.ORM.Data.Querying.Query         | Represents a `SELECT * Table` for a given type. You can provide a WHERE clause. All columns will be retrieved.
+| @Paradigm.ORM.Data.Querying.CustomQuery   | Represents a custom `SELECT` statement, where the user must provide the sentence. The selected columns must be configured (mapped) in the entity. 
 
 **Query**
 
@@ -381,22 +381,22 @@ Summarizing: we saw how to configure the mapping between tables and types, how t
 
 
 ## CRUD Operations
-In this point we'll cover how to store and delete data. In order to do that, will see how the @MiracleDevs.ORM.Data.DatabaseAccess.IDatabaseAccess operates, and what happens when you have relationships between entities.
+In this point we'll cover how to store and delete data. In order to do that, will see how the @Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess operates, and what happens when you have relationships between entities.
 
 
 ### Database Access
 The `DatabaseAccess` class handles CRUD operations for a given type, including the relationships with other types. The `DatabaseAccess` object is one of the cornerstones of Paradigm ORM. If you want to see more:
-- @MiracleDevs.ORM.Data.DatabaseAccess.IDatabaseAccess
-- @MiracleDevs.ORM.Data.DatabaseAccess.DatabaseAccess
-- @MiracleDevs.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1
-- @MiracleDevs.ORM.Data.DatabaseAccess.Generic.DatabaseAccess`1
+- @Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess
+- @Paradigm.ORM.Data.DatabaseAccess.DatabaseAccess
+- @Paradigm.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1
+- @Paradigm.ORM.Data.DatabaseAccess.Generic.DatabaseAccess`1
 
 > [!WARNING]
 > - (1 To 1) is fully supported.
 > - (1 To Many) is fully supported.
 > - (Many To Many) is NOT supported.
 
-Internally, the database access will create an instance of a @MiracleDevs.ORM.Data.ITableTypeDescriptor, a @MiracleDevs.ORM.Data.Mappers.IDatabaseReaderMapper and a @MiracleDevs.ORM.Data.CommandBuilders.ICommandBuilderManager (other objects as well) and with them will operate the different data access operations. You can think of it as a Entity Framework DatabaseContext with only one publicly exposed DbSet. Internally they do completely different things, but the role for the end user is somewhat similar. 
+Internally, the database access will create an instance of a @Paradigm.ORM.Data.ITableTypeDescriptor, a @Paradigm.ORM.Data.Mappers.IDatabaseReaderMapper and a @Paradigm.ORM.Data.CommandBuilders.ICommandBuilderManager (other objects as well) and with them will operate the different data access operations. You can think of it as a Entity Framework DatabaseContext with only one publicly exposed DbSet. Internally they do completely different things, but the role for the end user is somewhat similar. 
 
 So, let's see how to use this class to do more interesting things than just retrieving data from a table:
 
@@ -449,7 +449,7 @@ As you can see, it's a pretty straightforward process. As we'll find out later, 
 > If you are an Entity Framework user, you'll probably notice the lack of `SaveChanges` or other form of data commitment. Paradigm ORM **commits immediately**, so if you want to replicate Entity Framework's way of doing things, you will need to use transactions.
 
 > [!TIP]
-> If you want to insert more than one entity, please use the [Insert(IEnumerable{TEntity})](xref:MiracleDevs.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1#MiracleDevs_ORM_Data_DatabaseAccess_Generic_IDatabaseAccess_1_Insert_System_Collections_Generic_IEnumerable__0__) method. The ORM uses command batching to optimize bulk operations, and reduce roundtrips to the database.
+> If you want to insert more than one entity, please use the [Insert(IEnumerable{TEntity})](xref:Paradigm.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1#MiracleDevs_ORM_Data_DatabaseAccess_Generic_IDatabaseAccess_1_Insert_System_Collections_Generic_IEnumerable__0__) method. The ORM uses command batching to optimize bulk operations, and reduce roundtrips to the database.
 
 #### Selecting Data
 Selecting data from the database is also really simple, so lets retrieve the client we inserted in the previous point:
@@ -490,7 +490,7 @@ The client, additional information and addresses should have their new values up
 > To select the desired client, we're using the select method, and passing a where clause. As we are aiming for velocity, there are no plans to add LINQ and IQuery support in the short run, as EF does. Also worth mentioning, Paradigm ORM supports Stored Procedures. If the query is sufficiently complex, we suggest you target a view or a stored procedure instead.
 
 > [!TIP]
-> If you have the entity id, the `DatabaseAccess` ships with a method to retrieve by Id: [SelectOne](xref:MiracleDevs.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1#MiracleDevs_ORM_Data_DatabaseAccess_Generic_IDatabaseAccess_1_SelectOne_System_Object___).
+> If you have the entity id, the `DatabaseAccess` ships with a method to retrieve by Id: [SelectOne](xref:Paradigm.ORM.Data.DatabaseAccess.Generic.IDatabaseAccess`1#MiracleDevs_ORM_Data_DatabaseAccess_Generic_IDatabaseAccess_1_SelectOne_System_Object___).
 
 #### Deleting Data
 Let's open the client, and change some of the fields:
@@ -507,16 +507,16 @@ One of the reasons behind our efforts with Paradigm ORM was to make stored proce
 > *Render unto Caesar the things that are Caesar's, and unto God the things that are God's*
 
 The ORM supports 3 types of stored procedures. Like commands, you have reading operations, scalar operations and non queries. Each has its own class, and knows how to operate and do the call. 
-- @MiracleDevs.ORM.Data.StoredProcedures.ScalarStoredProcedure`2
-- @MiracleDevs.ORM.Data.StoredProcedures.NonQueryStoredProcedure`1
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`2
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`3
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`4
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`5
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`6
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`7
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`8
-- @MiracleDevs.ORM.Data.StoredProcedures.ReaderStoredProcedure`9
+- @Paradigm.ORM.Data.StoredProcedures.ScalarStoredProcedure`2
+- @Paradigm.ORM.Data.StoredProcedures.NonQueryStoredProcedure`1
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`2
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`3
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`4
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`5
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`6
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`7
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`8
+- @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`9
 
 All the Procedure types expect a generic argument, representing a parameter class.
 We'll se what a stored procedure parameter is in the next point.
@@ -544,8 +544,8 @@ Instead of sending a list of parameters in the execute method, we prefer to use 
 
 Like table-mapped types, the user must provide some minimal mapping information for the ORM. This operates exactly as you'd expect after reading how table and types are mapped. The stored procedure classes will use these mapping descriptions to execute and map the results.
 
-If you want to provide the map information inside the class directly, you can use @MiracleDevs.ORM.Data.Attributes.RoutineAttribute or if you prefer to use an interface and leave the object clean, you can use  @MiracleDevs.ORM.Data.Attributes.RoutineTypeAttribute.
-The individual parameters can be mapped with the @MiracleDevs.ORM.Data.Attributes.ParameterAttribute, but you can also you @MiracleDevs.ORM.Data.Attributes.SizeAttribute and @MiracleDevs.ORM.Data.Attributes.NumericAttribute to provide more information about the parameters.
+If you want to provide the map information inside the class directly, you can use @Paradigm.ORM.Data.Attributes.RoutineAttribute or if you prefer to use an interface and leave the object clean, you can use  @Paradigm.ORM.Data.Attributes.RoutineTypeAttribute.
+The individual parameters can be mapped with the @Paradigm.ORM.Data.Attributes.ParameterAttribute, but you can also you @Paradigm.ORM.Data.Attributes.SizeAttribute and @Paradigm.ORM.Data.Attributes.NumericAttribute to provide more information about the parameters.
 
 > [!IMPORTANT]
 > As for today, the ORM does not have a way to send table type arguments to a stored procedure.
