@@ -113,27 +113,28 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 }
             }
 
-            // 2. Save the main entities, and batch the queries.
-            this.BatchManager.Reset();
-
-            var valueProvider = new ClassValueProvider(this.Connector, entityList);
-
-            // don't use the async move next because the class provider
-            // is not really async right now.
-            while (valueProvider.MoveNext())
+            // 2. Use a batch manager to save the main entities
+            using (var batchManager = this.CreateBatchManager())
             {
-                this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
+                var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
-                // if the entity has an auto incremental property,
-                // queue a command to retrieve the id from the last insertion.
-                if (this.Descriptor.IdentityProperty != null)
+                // don't use the async move next because the class provider
+                // is not really async right now.
+                while (valueProvider.MoveNext())
                 {
-                    var entity = valueProvider.CurrentEntity;
-                    this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), async reader => await this.SetEntityIdAsync(entity, reader)));
-                }
-            }
+                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
 
-            await this.BatchManager.ExecuteAsync();
+                    // if the entity has an auto incremental property,
+                    // queue a command to retrieve the id from the last insertion.
+                    if (this.Descriptor.IdentityProperty != null)
+                    {
+                        var entity = valueProvider.CurrentEntity;
+                        batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), async reader => await this.SetEntityIdAsync(entity, reader)));
+                    }
+                }
+
+                await batchManager.ExecuteAsync();
+            }
 
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
@@ -193,17 +194,18 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 }
             }
 
-            // 2. Save the main entities, and batch the queries.
-            this.BatchManager.Reset();
-
-            var valueProvider = new ClassValueProvider(this.Connector, entityList);
-
-            while (valueProvider.MoveNext())
+            // 2. Use a batch manager to save the main entities
+            using (var batchManager = this.CreateBatchManager())
             {
-                this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
-            }
+                var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
-            await this.BatchManager.ExecuteAsync();
+                while (valueProvider.MoveNext())
+                {
+                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
+                }
+
+                await batchManager.ExecuteAsync();
+            }
 
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.

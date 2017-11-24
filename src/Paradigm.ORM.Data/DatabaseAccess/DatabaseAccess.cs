@@ -35,11 +35,6 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         protected IDatabaseConnector Connector { get; private set; }
 
         /// <summary>
-        /// Gets the batch manager.
-        /// </summary>
-        protected IBatchManager BatchManager { get; private set; }
-
-        /// <summary>
         /// Gets the table type descriptor.
         /// </summary>
         protected ITableTypeDescriptor Descriptor { get; private set; }
@@ -113,9 +108,6 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // Sets the database connector.
             this.Connector = connector;
 
-            // Sets the command batch manager.
-            this.BatchManager = new BatchManager(connector);
-
             // Sets the Table Type Descriptor with reflected info about the table behind the entity.
             this.Descriptor = descriptor;
 
@@ -134,13 +126,11 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </summary>
         public virtual void Dispose()
         {
-            this.BatchManager?.Dispose();
             this.NavigationDatabaseAccesses?.ForEach(x => x?.Dispose());
             this.CommandBuilderManager?.Dispose();
 
             this.ServiceProvider = null;
             this.Connector = null;
-            this.BatchManager = null;
             this.Mapper = null;
             this.CommandBuilderManager = null;
             this.Descriptor = null;
@@ -246,26 +236,26 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 }
             }
 
-            // 2. Save the main entities, and batch the queries.
-            this.BatchManager.Reset();
+            // 2. Use a batch manager to save the main entities
+            using (var batchManager = this.CreateBatchManager())
+            { 
+                var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
-            var valueProvider = new ClassValueProvider(this.Connector, entityList);
-
-            while(valueProvider.MoveNext())
-            {
-                this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
-
-                // if the entity has an auto incremental property,
-                // queue a command to retrieve the id from the last insertion.
-                if (this.Descriptor.IdentityProperty != null)
+                while(valueProvider.MoveNext())
                 {
-                    var entity = valueProvider.CurrentEntity;
-                    this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), reader => this.SetEntityId(entity, reader)));
+                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
+
+                    // if the entity has an auto incremental property,
+                    // queue a command to retrieve the id from the last insertion.
+                    if (this.Descriptor.IdentityProperty != null)
+                    {
+                        var entity = valueProvider.CurrentEntity;
+                        batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), reader => this.SetEntityId(entity, reader)));
+                    }
                 }
+
+                batchManager.Execute();
             }
-
-            this.BatchManager.Execute();
-
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
@@ -322,17 +312,18 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 }
             }
 
-            // 2. Save the main entities, and batch the queries.
-            this.BatchManager.Reset();
-
-            var valueProvider = new ClassValueProvider(this.Connector, entityList);
-
-            while (valueProvider.MoveNext())
+            // 2. Use a batch manager to save the main entities
+            using (var batchManager = this.CreateBatchManager())
             {
-                this.BatchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
-            }
+                var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
-            this.BatchManager.Execute();
+                while (valueProvider.MoveNext())
+                {
+                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
+                }
+
+                batchManager.Execute();
+            }
 
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
@@ -421,6 +412,15 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // this method is not being used here, but will be used
             // by inherited classes to instance stored procedures if needed.
             return this.ServiceProvider?.GetService<TProcedure>();
+        }
+
+        /// <summary>
+        /// Creates a new batch manager
+        /// </summary>
+        /// <returns>A new instance of a batch manager</returns>
+        protected IBatchManager CreateBatchManager()
+        {
+            return new BatchManager(this.Connector);
         }
 
         #endregion
