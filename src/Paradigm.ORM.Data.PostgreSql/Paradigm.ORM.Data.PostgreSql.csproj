@@ -6,12 +6,12 @@
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
     <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
+    <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
     <Authors>Miracle Devs</Authors>
     <Company>Miracle Devs</Company>
     <Copyright>Miracle Devs</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.6</Version>
+    <Version>2.1.7</Version>
     <Product>Paradigm.ORM</Product>
   </PropertyGroup>
   <ItemGroup>

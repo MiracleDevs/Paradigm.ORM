@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Copyright>Miracle Devs</Copyright>
-    <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
+    <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
     <Description>Paradigm ORM data library.</Description>
     <PostBuildEvent></PostBuildEvent>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -14,7 +14,7 @@
     <RepositoryType>git</RepositoryType>
     <Authors>Miracle Devs</Authors>
     <Company>Miracle Devs</Company>
-    <Version>2.1.6</Version>
+    <Version>2.1.7</Version>
     <Product>Paradigm.ORM</Product>
   </PropertyGroup>
 

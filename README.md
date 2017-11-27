@@ -39,6 +39,9 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.1.7`
+- Changed how the DatabaseAccess classes utilize the BatchManager to be thread safe.
+
 Version `2.1.6`
 - Updated Paradigm.Core and other dependencies.
 - Published new versions for the tools.
@@ -99,5 +102,3 @@ Version `2.0.0`
 
 Version `1.0.0`
 - Uploaded first version of the Paradigm ORM.
-
-

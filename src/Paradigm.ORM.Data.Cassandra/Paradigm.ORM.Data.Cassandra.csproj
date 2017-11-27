@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.6</Version>
+    <Version>2.1.7</Version>
     <Authors>Miracle Devs</Authors>
     <Company>Miracle Devs</Company>
     <Product>Paradigm.ORM</Product>
     <Description>Paradigm ORM Cassandra Connector library.</Description>
     <Copyright>Miracle Devs</Copyright>
     <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>http://www.miracledevs.com</PackageProjectUrl>
+    <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
     <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
