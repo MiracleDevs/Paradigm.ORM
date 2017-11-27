@@ -238,7 +238,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
             // 2. Use a batch manager to save the main entities
             using (var batchManager = this.CreateBatchManager())
-            { 
+            {
                 var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
                 while(valueProvider.MoveNext())
@@ -399,15 +399,13 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         {
         }
 
-        #region Protected Methods
-
         /// <summary>
         /// Gets the stored procedure from the service provider.
         /// </summary>
         /// <typeparam name="TProcedure">The type of the procedure.</typeparam>
         /// <remarks>The stored procedure must be registered or this method will fail.</remarks>
         /// <returns>A instance of the stored procedure.</returns>
-        protected TProcedure GetStoredProcedure<TProcedure>() where TProcedure : class, IRoutine
+        protected virtual TProcedure GetStoredProcedure<TProcedure>() where TProcedure : class, IRoutine
         {
             // this method is not being used here, but will be used
             // by inherited classes to instance stored procedures if needed.
@@ -418,12 +416,10 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// Creates a new batch manager
         /// </summary>
         /// <returns>A new instance of a batch manager</returns>
-        protected IBatchManager CreateBatchManager()
+        protected virtual IBatchManager CreateBatchManager()
         {
             return new BatchManager(this.Connector);
         }
-
-        #endregion
 
         #endregion
 
