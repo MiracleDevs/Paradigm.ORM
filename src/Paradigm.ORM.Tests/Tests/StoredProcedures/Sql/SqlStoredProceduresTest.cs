@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using Paradigm.ORM.Data.DatabaseAccess;
 using Paradigm.ORM.Data.StoredProcedures;
-using Paradigm.ORM.Tests.Fixtures;
 using Paradigm.ORM.Tests.Fixtures.Sql;
 using Paradigm.ORM.Tests.Mocks.Sql;
 using Paradigm.ORM.Tests.Mocks.Sql.Routines;
@@ -13,11 +12,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
     [TestFixture]
     public class SqlStoredProceduresTest
     {
-        private StoredProcedureFixtureBase Fixture { get; }
+        private SqlStoredProcedureFixture Fixture { get; }
 
         public SqlStoredProceduresTest()
         {
-            this.Fixture = Activator.CreateInstance(typeof(SqlStoredProcedureFixture)) as StoredProcedureFixtureBase;
+            this.Fixture = new SqlStoredProcedureFixture();
         }
 
         [OneTimeSetUp]

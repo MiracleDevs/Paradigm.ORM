@@ -123,9 +123,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            if (this.ServiceProvider == null)
-                return;
-
             this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector, new TableTypeDescriptor(typeof(TResult))));
 
             if (this.Mapper == null)

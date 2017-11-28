@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 
         public override string SelectWithWhereQuery => $"{SelectQuery} WHERE {SelectWhereClause}";
 
-        public override string SelectWithTwoPrimaryKeysQuery => "SELECT \"Id\",\"Id2\",\"Name\" FROM \"TwoPrimaryKeyTable\" WHERE \"Id\"=@Id AND\"Id2\"=@Id2";
+        public override string SelectWithTwoPrimaryKeysQuery => "SELECT \"Id\",\"Id2\",\"Name\" FROM \"TwoPrimaryKeyTable\" WHERE \"Id\"=@Id AND \"Id2\"=@Id2";
 
         public override string InsertQuery => "INSERT INTO \"SimpleTable\" (\"Name\",\"IsActive\",\"Amount\",\"CreatedDate\") VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 

@@ -38,7 +38,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <remarks>This method do not advance the reading cursor.</remarks>
         protected virtual Task<object> MapRowAsync(IDatabaseReader reader)
         {
-            // TODO: maybe we could add an option to allow map by index instead of name. Should be even faster.            
+            // TODO: maybe we could add an option to allow map by index instead of name. Should be even faster.
             var entity = Activator.CreateInstance(this.Descriptor.Type);
 
             foreach (var property in this.Descriptor.AllProperties)

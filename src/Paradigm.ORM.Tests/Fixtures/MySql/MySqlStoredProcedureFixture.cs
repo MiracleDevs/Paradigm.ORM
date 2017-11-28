@@ -140,20 +140,20 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                     WHERE t.`Name` like concat('%', `ParentName`, '%')
                           AND t.`IsActive` = `Active`;
                 END;");
-            
+
             this.Connector.ExecuteNonQuery(@"
-                CREATE DEFINER=`test`@`%` PROCEDURE `UpdateRoutine`
+                CREATE PROCEDURE `UpdateRoutine`
                 (
-	                `tId`        INT
+	                `Id`        INT
                 )
                 BEGIN
 	                UPDATE `SingleKeyParentTable` AS skpt
 	                SET skpt.Name = 'Test Parent ChangedNameTest'
-	                WHERE skpt.Id = tId;
+	                WHERE skpt.Id = Id;
                 END");
 
             this.Connector.ExecuteNonQuery(@"
-                CREATE DEFINER=`test`@`%` PROCEDURE `SearchParentsAndChilds`
+                CREATE PROCEDURE `SearchParentsAndChilds`
                 (
 	                `ParentName`        NVARCHAR(200),
 	                `Active`            TINYINT
@@ -167,13 +167,13 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                       AND skct.IsActive = Active;
                 END");
 
-           this.Connector.ExecuteNonQuery(@"
-               CREATE DEFINER=`test`@`%` PROCEDURE `GetTotalAmount`
+            this.Connector.ExecuteNonQuery(@"
+               CREATE PROCEDURE `GetTotalAmount`
                (
 	               `Active`	TINYINT
                )
                BEGIN
-	               SELECT SUM(skpt.Amount) 
+	               SELECT SUM(skpt.Amount)
 	               FROM `SingleKeyParentTable` as skpt
                    WHERE skpt.IsActive = Active;
                END");

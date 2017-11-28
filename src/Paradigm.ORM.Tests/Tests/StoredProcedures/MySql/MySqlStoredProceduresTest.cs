@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Paradigm.ORM.Data.DatabaseAccess;
 using Paradigm.ORM.Data.StoredProcedures;
-using Paradigm.ORM.Tests.Fixtures;
 using Paradigm.ORM.Tests.Fixtures.MySql;
 using Paradigm.ORM.Tests.Mocks.MySql;
 using Paradigm.ORM.Tests.Mocks.MySql.Routines;
@@ -13,9 +12,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
     [TestFixture]
     public class MySqlStoredProceduresTest
     {
-        private StoredProcedureFixtureBase Fixture { get; set; }
-
-        protected string ConnectionStringNoDb => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
+        private MySqlStoredProcedureFixture Fixture { get; set; }
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -30,7 +27,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
                 mySqlNoDbConnector.Close();
             }*/
 
-            Fixture = Activator.CreateInstance(typeof(MySqlStoredProcedureFixture)) as StoredProcedureFixtureBase;
+            Fixture = new MySqlStoredProcedureFixture();
 
             if (Fixture == null)
                 throw new Exception("Couldn't create the fixture.");
@@ -164,13 +161,13 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
         [Test]
         public void NonQueryProcedureShouldModifyEntity()
         {
-            var UpdateRoutineParametersArgs = new UpdateRoutineParameters
+            var updateRoutineParametersArgs = new UpdateRoutineParameters
             {
-                Id = 1,
+                Id = 1
             };
 
             var nonQuery = new NonQueryStoredProcedure<UpdateRoutineParameters>(Fixture.Connector);
-            nonQuery.ExecuteNonQuery(UpdateRoutineParametersArgs);
+            nonQuery.ExecuteNonQuery(updateRoutineParametersArgs);
 
             var searchClientArgs = new SearchParentTableParameters
             {

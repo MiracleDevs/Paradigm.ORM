@@ -59,11 +59,11 @@ namespace Paradigm.ORM.Data.CommandBuilders
             var builder = new StringBuilder(this.CommandText);
 
             if (!string.IsNullOrWhiteSpace(whereClause))
-                builder.AppendFormat("WHERE {0}", whereClause);
+                builder.AppendFormat(" WHERE {0}", whereClause);
 
-            var command = this.Connector.CreateCommand(this.CommandText);
+            var command = this.Connector.CreateCommand(builder.ToString());
 
-            if (parameters == null)
+            if (parameters == null || parameters.Length == 0)
                 return command;
 
             for (var index = 0; index < parameters.Length; index++)

@@ -99,7 +99,7 @@ namespace Paradigm.ORM.Data.Querying
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
 
-            using (var command = this.Connector.CreateCommand(this.CommandText))
+            using (var command = this.Connector.CreateCommand(builder.ToString()))
             {
                 if (parameters != null)
                 {

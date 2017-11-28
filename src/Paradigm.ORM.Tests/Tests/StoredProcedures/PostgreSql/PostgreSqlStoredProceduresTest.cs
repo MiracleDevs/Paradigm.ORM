@@ -1,7 +1,6 @@
 ﻿using System;
 using Paradigm.ORM.Data.DatabaseAccess;
 using Paradigm.ORM.Data.StoredProcedures;
-using Paradigm.ORM.Tests.Fixtures;
 using Paradigm.ORM.Tests.Fixtures.PostgreSql;
 using Paradigm.ORM.Tests.Mocks.PostgreSql;
 using Paradigm.ORM.Tests.Mocks.PostgreSql.Routines;
@@ -13,11 +12,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.PostgreSql
     [TestFixture]
     public class PostgreSqlStoredProceduresTest
     {
-        private StoredProcedureFixtureBase Fixture { get; }
+        private PostgreSqlStoredProcedureFixture Fixture { get; }
 
         public PostgreSqlStoredProceduresTest()
         {
-            Fixture = Activator.CreateInstance(typeof(PostgreSqlStoredProcedureFixture)) as StoredProcedureFixtureBase;
+            Fixture = new PostgreSqlStoredProcedureFixture();
         }
 
         [OneTimeSetUp]
@@ -64,6 +63,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.PostgreSql
             result.Should().Be(notActiveEntity.Amount * 2);
         }
 
+        /****************************************************************************************************************************
+         * DUE TO BAD DRIVER DESIGN AND LACK OF AUTOMATIC CURSOR FETCH, WE HAVE TO DEPRECATE
+         * MULTIPLE RESULTSETS FOR POSTGRE, AT LEAST UNTIL THE PEOPLE BEHIND THE DRIVER
+         * ALLOW TO GO BACK TO PREVIOUS DEREFERENCING. SEE: https://github.com/npgsql/npgsql/issues/438
+         * ***************************************************************************************************************************
         [Test]
         public void ShouldRetrieveMultipleResults()
         {
@@ -73,32 +77,38 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.PostgreSql
                 Active = true
             };
 
-            var results = new ReaderStoredProcedure<SearchParentsAndChildsParameters, SingleKeyParentTable, SingleKeyChildTable>(Fixture.Connector).Execute(args);
-
-            results.Item1.Should().NotBeNull();
-            results.Item1.Should().HaveCount(2);
-            results.Item2.Should().NotBeNull();
-            results.Item2.Should().HaveCount(4);
-
-            var activeParentEntity = Fixture.CreateNewActiveEntity();
-            foreach (var entity in results.Item1)
+            using (var transaction = this.Fixture.Connector.CreateTransaction())
             {
-                entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
-                                                                                  .Excluding(o => o.Id)
-                                                                                  .Excluding(o => o.Childs));
-            }
+                var procedure = new ReaderStoredProcedure<SearchParentsAndChildsParameters, SingleKeyParentTable, SingleKeyChildTable>(Fixture.Connector);
+                var results = procedure.ExecuteAsync(args).Result;
 
-            var activeChildEntity = Fixture.CreateActiveChildEntity();
-            foreach (var entity in results.Item2)
-            {
-                entity.Name.Should().StartWith("Test Child");
-                entity.ShouldBeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
-                                                                                 .Excluding(o => o.Id)
-                                                                                 .Excluding(o => o.ParentId));
+                results.Item1.Should().NotBeNull();
+                results.Item1.Should().HaveCount(2);
+                results.Item2.Should().NotBeNull();
+                results.Item2.Should().HaveCount(4);
+
+                var activeParentEntity = Fixture.CreateNewActiveEntity();
+                foreach (var entity in results.Item1)
+                {
+                    entity.Name.Should().StartWith("Test Parent");
+                    entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                                                                                      .Excluding(o => o.Id)
+                                                                                      .Excluding(o => o.Childs));
+                }
+
+                var activeChildEntity = Fixture.CreateActiveChildEntity();
+                foreach (var entity in results.Item2)
+                {
+                    entity.Name.Should().StartWith("Test Child");
+                    entity.ShouldBeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
+                                                                                     .Excluding(o => o.Id)
+                                                                                     .Excluding(o => o.ParentId));
+                }
+
+                transaction.Commit();
             }
         }
-
+        */
         [Test]
         public void ShouldRetrieveTwoResultsOnActiveClients()
         {

@@ -5,11 +5,11 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
     [Table]
     public class TwoPrimaryKeyTable : ITwoPrimaryKeyTable
     {
-        [Column(Type = "integer")]
+        [Column(Type = "int")]
         [PrimaryKey]
         public int Id { get; set; }
 
-        [Column(Type = "integer")]
+        [Column(Type = "int")]
         [PrimaryKey]
         public int Id2 { get; set; }
 

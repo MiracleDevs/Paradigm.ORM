@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
+using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.CommandBuilders
 {
@@ -59,7 +60,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
             if (ids.Length != primaryKeys.Count)
                 throw new ArgumentException($"The id count does not match the entity primary key count (the entity has {primaryKeys.Count} keys).", nameof(ids));
 
-            var command = this.GetCommand(this.CommandText);
+            var command = this.Connector.CreateCommand(this.CommandText);
             var valueConverter = this.Connector.GetValueConverter();
             var typeConverter = this.Connector.GetDbStringTypeConverter();
 
@@ -96,9 +97,9 @@ namespace Paradigm.ORM.Data.CommandBuilders
                 builder.Append(" WHERE ");
 
             foreach (var primaryKey in this.Descriptor.PrimaryKeyColumns)
-                builder.AppendFormat("{0}={1} AND", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), this.FormatProvider.GetParameterName(primaryKey.ColumnName));
+                builder.AppendFormat("{0}={1} AND ", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), this.FormatProvider.GetParameterName(primaryKey.ColumnName));
 
-            this.CommandText = builder.Remove(builder.Length - 4, 4).ToString();
+            this.CommandText = builder.Remove(builder.Length - 5, 5).ToString();
         }
 
         #endregion

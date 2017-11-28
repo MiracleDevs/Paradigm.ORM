@@ -5,7 +5,7 @@ namespace Paradigm.ORM.Tests.Mocks.PostgreSql.Routines
     [Routine("SearchParentsAndChilds")]
     public class SearchParentsAndChildsParameters
     {
-        [Parameter("ParentName", "varchar", true), Size(200)]
+        [Parameter("ParentName", "text", true)]
         public string ParentName { get; set; }
 
         [Parameter("Active", "bool", true)]

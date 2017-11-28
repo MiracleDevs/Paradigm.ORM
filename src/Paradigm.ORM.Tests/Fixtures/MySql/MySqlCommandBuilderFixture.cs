@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override string SelectWithWhereQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simpletable` WHERE " + SelectWhereClause;
 
-        public override string SelectWithTwoPrimaryKeysQuery => "SELECT `Id`,`Id2`,`Name` FROM `test`.`twoprimarykeytable` WHERE `Id`=@Id AND`Id2`=@Id2";
+        public override string SelectWithTwoPrimaryKeysQuery => "SELECT `Id`,`Id2`,`Name` FROM `test`.`twoprimarykeytable` WHERE `Id`=@Id AND `Id2`=@Id2";
 
         public override string InsertQuery => "INSERT INTO `test`.`simpletable` (`Name`,`IsActive`,`Amount`,`CreatedDate`) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Cassandra.Data;
-using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Cassandra
@@ -167,8 +166,7 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             var parameter = new CqlParameter
             {
-                ParameterName = name,
-                DbType = DbTypeConverter.FromType(type)
+                ParameterName = name               
             };
 
             if (type == typeof(Nullable<>))
@@ -192,7 +190,6 @@ namespace Paradigm.ORM.Data.Cassandra
             var parameter = new CqlParameter
             {
                 ParameterName = name,
-                DbType = DbTypeConverter.FromType(type),
                 Size = (int)size
             };
 
@@ -218,7 +215,6 @@ namespace Paradigm.ORM.Data.Cassandra
             var parameter = new CqlParameter
             {
                 ParameterName = name,
-                DbType = DbTypeConverter.FromType(type),
                 Precision = precision,
                 Scale = scale
             };
@@ -246,7 +242,6 @@ namespace Paradigm.ORM.Data.Cassandra
             var parameter = new CqlParameter
             {
                 ParameterName = name,
-                DbType = DbTypeConverter.FromType(type),
                 Size = (int)size,
                 Precision = precision,
                 Scale = scale
@@ -276,7 +271,6 @@ namespace Paradigm.ORM.Data.Cassandra
             var parameter = new CqlParameter
             {
                 ParameterName = name,
-                DbType = DbTypeConverter.FromType(type),
                 Size = (int)size,
                 Precision = precision,
                 Scale = scale,

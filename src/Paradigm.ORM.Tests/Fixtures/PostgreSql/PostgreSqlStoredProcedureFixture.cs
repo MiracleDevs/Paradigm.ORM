@@ -143,7 +143,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                 $$ LANGUAGE plpgsql;");
 
             this.Connector.ExecuteNonQuery(@"
-                CREATE OR REPLACE FUNCTION ""SearchParentsAndChilds""(""ParentName"" VARCHAR(200), ""Active"" BOOLEAN)
+                CREATE OR REPLACE FUNCTION ""SearchParentsAndChilds""(""ParentName"" TEXT, ""Active"" BOOLEAN)
                 RETURNS SETOF refcursor AS
                 $$
                 DECLARE
@@ -152,15 +152,14 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                 BEGIN
 	                OPEN ref1 FOR
 		                SELECT * FROM ""SingleKeyParentTable"" as skpt
-                        WHERE skpt.""Name"" like '%' || ""ParentName"" || '%'
+                        WHERE skpt.""Name"" like ('%' || ""ParentName"" || '%')
                               AND skpt.""IsActive"" = ""Active"";
-                RETURN NEXT ref1;
+                    RETURN NEXT ref1;
                     OPEN ref2 FOR
                             SELECT* FROM ""SingleKeyChildTable"" as skct
-                            WHERE skct.""Name"" like '%' || ""ParentName"" || '%'
+                            WHERE skct.""Name"" like ('%' || ""ParentName"" || '%')
                                   AND skct.""IsActive"" = ""Active"";
-                RETURN NEXT ref2;
-                RETURN;
+                    RETURN NEXT ref2;
                 END;
                     $$ LANGUAGE plpgsql;");
 
