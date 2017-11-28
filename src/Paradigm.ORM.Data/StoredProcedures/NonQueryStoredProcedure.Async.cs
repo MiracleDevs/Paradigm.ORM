@@ -1,3 +1,6 @@
+using System;
+using Paradigm.ORM.Data.Extensions;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Paradigm.ORM.Data.StoredProcedures
@@ -15,8 +18,14 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </returns>
         public async Task<int> ExecuteNonQueryAsync(TParameters parameters)
         {
-            this.SetParametersValue(parameters);
-            return await this.Command.ExecuteNonQueryAsync();
+            if (parameters == null)
+                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
+            {
+                this.PopulateParameters(command, parameters);
+                return await command.ExecuteNonQueryAsync();
+            }
         }
 
         #endregion

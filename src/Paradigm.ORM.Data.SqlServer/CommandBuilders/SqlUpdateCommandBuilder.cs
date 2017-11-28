@@ -3,38 +3,16 @@ using System.Linq;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
-using Paradigm.ORM.Data.Extensions;
-using Paradigm.ORM.Data.ValueProviders;
 
 namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
 {
     /// <summary>
     /// Provides an implementation for sql update command builder objects.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.CommandBuilderBase" />
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.IUpdateCommandBuilder" />
-    public class SqlUpdateCommandBuilder : CommandBuilderBase, IUpdateCommandBuilder
+    /// <seealso cref="UpdateCommandBuilderBase" />
+    /// <seealso cref="IUpdateCommandBuilder" />
+    public class SqlUpdateCommandBuilder : UpdateCommandBuilderBase
     {
-        #region Columns
-
-        /// <summary>
-        /// Gets or sets the updateable properties.
-        /// </summary>
-        /// <value>
-        /// The updateable properties.
-        /// </value>
-        private List<IColumnDescriptor> UpdateableColumns { get; set; }
-
-        /// <summary>
-        /// Gets or sets the populable properties.
-        /// </summary>
-        /// <value>
-        /// The populable properties.
-        /// </value>
-        private List<IColumnDescriptor> PopulableColumns { get; set; }
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -44,44 +22,42 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         /// <param name="descriptor">A table type descriptor.</param>
         public SqlUpdateCommandBuilder(IDatabaseConnector connector, ITableDescriptor descriptor): base(connector, descriptor)
         {
-            this.Initialize();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
         /// <summary>
-        /// Gets an update command query ready to update one entity.
+        /// Gets a list of column descriptors that must be used in the update statement.
         /// </summary>
-        /// <param name="valueProvider"></param>
         /// <returns>
-        /// An update command already parametrized to update the entity.
+        /// A list of column descriptors.
         /// </returns>
-        public IDatabaseCommand GetCommand(IValueProvider valueProvider)
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// updated due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        protected override List<IColumnDescriptor> GetUpdateableColumns()
         {
-            for (var i = 0; i < this.PopulableColumns.Count; i++)
-            {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.PopulableColumns[i]);
-            }
-
-            return this.Command;
+            return this.Descriptor.SimpleColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
-        /// Initializes the command builder.
+        /// Gets a list of column descriptors used to populate the command parameters.
         /// </summary>
-        private void Initialize()
+        /// <returns>
+        /// A list of column descriptors.
+        /// </returns>
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// updated due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        protected override List<IColumnDescriptor> GetPopulableColumns()
         {
-            this.UpdateableColumns = this.Descriptor.SimpleColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
-            this.PopulableColumns = this.Descriptor.AllColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
-
-            this.Command = this.Connector.CreateCommand($"UPDATE {this.GetTableName()} SET {this.GetDbParameterNamesAndValues(this.UpdateableColumns)} WHERE {this.GetDbParameterNamesAndValues(this.Descriptor.PrimaryKeyColumns, " AND ")}");
-            this.PopulateParameters(this.PopulableColumns);
+            return this.Descriptor.AllColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
         }
 
         #endregion

@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.MySql
     /// <summary>
     /// Represents a SQL transaction to be made in a MySql Server database.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.IDatabaseTransaction" />
+    /// <seealso cref="IDatabaseTransaction" />
     internal partial class MySqlDatabaseTransaction: IDatabaseTransaction
     {
         #region Properties

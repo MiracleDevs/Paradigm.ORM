@@ -63,20 +63,26 @@ namespace Paradigm.ORM.DataExport.Export
 
         protected override void ProcessData(TableData tableData, IValueProvider valueProvider)
         {
-            using (var commandBuilder = new InsertCommandBuilder(this.DestinationDatabase, tableData.TableDescriptor))
-            {
-                if (this.Verbose)
-                    this.LoggingService.WriteLine("Command Created...");
+            var commandBuilder = new InsertCommandBuilder(this.DestinationDatabase, tableData.TableDescriptor);
 
-                while (valueProvider.MoveNext())
+            if (this.Verbose)
+            {
+                this.LoggingService.WriteLine("Command Created...");
+            }
+
+            while (valueProvider.MoveNext())
+            {
+                using (var command = commandBuilder.GetCommand(valueProvider))
                 {
-                    var command = commandBuilder.GetCommand(valueProvider);
                     command.ExecuteNonQuery();
                 }
+            }
 
-                if (this.Verbose)
-                    this.LoggingService.WriteLine("Inserts Finished.");
-            }         
+            if (this.Verbose)
+            {
+                this.LoggingService.WriteLine("Inserts Finished.");
+            }
+
         }
 
         #endregion

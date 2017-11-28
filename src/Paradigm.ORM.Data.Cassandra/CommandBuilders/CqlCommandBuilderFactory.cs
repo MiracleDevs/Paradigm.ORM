@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
     /// <summary>
     /// Provides an implementation to instantiate all the standard command builders.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ICommandBuilderFactory" />
+    /// <seealso cref="ICommandBuilderFactory" />
     public class CqlCommandBuilderFactory : ICommandBuilderFactory
     {
         /// <summary>
@@ -76,8 +76,9 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <summary>
         /// Creates the last insert identifier command builder.
         /// </summary>
+        /// <param name="descriptor">The table descriptor.</param>
         /// <returns></returns>
-        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder()
+        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder(ITableDescriptor descriptor)
         {
             return null;
         }

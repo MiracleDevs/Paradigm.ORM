@@ -60,26 +60,25 @@ namespace Paradigm.ORM.Tests.Tests
             fixture.CreateParentTable();
             fixture.CreateChildTable();
 
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
-            {
-                var entityToInsert = fixture.CreateNewEntity();
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
 
-                entityToInsert.Should().NotBeNull();
-                insertCommandBuilder.Should().NotBeNull();
+            var entityToInsert = fixture.CreateNewEntity();
 
-                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { entityToInsert });
-                valueProvider.MoveNext();
+            entityToInsert.Should().NotBeNull();
+            insertCommandBuilder.Should().NotBeNull();
 
-                var insertCommand = insertCommandBuilder.GetCommand(valueProvider);
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { entityToInsert });
+            valueProvider.MoveNext();
 
-                insertCommand.Should().NotBeNull();
-                insertCommand.CommandText.Should().Be(fixture.InsertParentStatement);
+            var insertCommand = insertCommandBuilder.GetCommand(valueProvider);
 
-                if (fixtureType == typeof(CqlCrudCommandFixture))
-                    insertCommand.ExecuteNonQuery().Should().Be(-1);
-                else
-                    insertCommand.ExecuteNonQuery().Should().Be(1);
-            }
+            insertCommand.Should().NotBeNull();
+            insertCommand.CommandText.Should().Be(fixture.InsertParentStatement);
+
+            if (fixtureType == typeof(CqlCrudCommandFixture))
+                insertCommand.ExecuteNonQuery().Should().Be(-1);
+            else
+                insertCommand.ExecuteNonQuery().Should().Be(1);
 
             fixture.DropDatabase();
         }
@@ -100,26 +99,24 @@ namespace Paradigm.ORM.Tests.Tests
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.CreateNewEntity() });
             valueProvider.MoveNext();
 
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
+            var lastInsertIdCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateLastInsertIdCommandBuilder(fixture.GetParentDescriptor());
+
+            var insertCommand = insertCommandBuilder.GetCommand(valueProvider);
+
+            var lastInsertCommand = lastInsertIdCommandBuilder.GetCommand();
+            lastInsertCommand.Should().NotBeNull();
+            lastInsertCommand.CommandText.Should().Be(fixture.LastInsertedIdStatement);
+
+            insertCommand.CommandText += fixture.Connector.GetCommandFormatProvider().GetQuerySeparator() + lastInsertCommand.CommandText;
+
+            using (var reader = insertCommand.ExecuteReader())
             {
-                using (var lastInsertIdCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateLastInsertIdCommandBuilder())
-                {
-                    var insertCommand = insertCommandBuilder.GetCommand(valueProvider);
-
-                    var lastInsertCommand = lastInsertIdCommandBuilder.GetCommand();
-                    lastInsertCommand.Should().NotBeNull();
-                    lastInsertCommand.CommandText.Should().Be(fixture.LastInsertedIdStatement);
-
-                    insertCommand.CommandText += fixture.Connector.GetCommandFormatProvider().GetQuerySeparator() + lastInsertCommand.CommandText;
-
-                    using (var reader = insertCommand.ExecuteReader())
-                    {
-                        reader.Should().NotBeNull();
-                        reader.Read().Should().BeTrue();
-                        Convert.ToInt32(reader.GetValue(0)).Should().BeGreaterThan(0);
-                    }
-                }
+                reader.Should().NotBeNull();
+                reader.Read().Should().BeTrue();
+                Convert.ToInt32(reader.GetValue(0)).Should().BeGreaterThan(0);
             }
+
 
             fixture.DropDatabase();
         }
@@ -140,31 +137,29 @@ namespace Paradigm.ORM.Tests.Tests
 
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
 
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
+
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+
+            var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
+
+            selectCommandBuilder.Should().NotBeNull();
+            var selectCommand = selectCommandBuilder.GetCommand();
+
+            selectCommand.Should().NotBeNull();
+            selectCommand.CommandText.Should().Be(fixture.SelectStatement);
+
+            using (var reader = selectCommand.ExecuteReader())
             {
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
-            }
+                reader.Should().NotBeNull();
 
-            using (var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor()))
-            {
-                selectCommandBuilder.Should().NotBeNull();
-                var selectCommand = selectCommandBuilder.GetCommand();
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
+                var results = mapper.Map(reader);
 
-                selectCommand.Should().NotBeNull();
-                selectCommand.CommandText.Should().Be(fixture.SelectStatement);
-
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    reader.Should().NotBeNull();
-
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
-                    var results = mapper.Map(reader);
-
-                    results.Should().NotBeNull().And.HaveCount(2);
-                }
+                results.Should().NotBeNull().And.HaveCount(2);
             }
 
             fixture.DropDatabase();
@@ -189,31 +184,28 @@ namespace Paradigm.ORM.Tests.Tests
 
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
 
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+
+            var selectOneCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectOneCommandBuilder(fixture.GetParentDescriptor());
+
+            selectOneCommandBuilder.Should().NotBeNull();
+            var selectCommand = selectOneCommandBuilder.GetCommand(1);
+
+            selectCommand.Should().NotBeNull();
+            selectCommand.CommandText.Should().Be(fixture.SelectOneStatement);
+
+            using (var reader = selectCommand.ExecuteReader())
             {
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
-            }
+                reader.Should().NotBeNull();
 
-            using (var selectOneCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectOneCommandBuilder(fixture.GetParentDescriptor()))
-            {
-                selectOneCommandBuilder.Should().NotBeNull();
-                var selectCommand = selectOneCommandBuilder.GetCommand(1);
-
-                selectCommand.Should().NotBeNull();
-                selectCommand.CommandText.Should().Be(fixture.SelectOneStatement);
-
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    reader.Should().NotBeNull();
-
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
-                    var results = mapper.Map(reader);
-                    results.Should().NotBeNull().And.HaveCount(1);
-                }
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
+                var results = mapper.Map(reader);
+                results.Should().NotBeNull().And.HaveCount(1);
             }
 
             fixture.DropDatabase();
@@ -235,8 +227,8 @@ namespace Paradigm.ORM.Tests.Tests
 
             var first = fixture.CreateNewEntity();
             var second = fixture.CreateNewEntity();
-      
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
+
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
             {
                 var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
@@ -247,7 +239,7 @@ namespace Paradigm.ORM.Tests.Tests
                 insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
             }
 
-            using (var deleteCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateDeleteCommandBuilder(fixture.GetParentDescriptor()))
+            var deleteCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateDeleteCommandBuilder(fixture.GetParentDescriptor());
             {
                 fixture.SetEntityId(first, second);
                 var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
@@ -258,10 +250,10 @@ namespace Paradigm.ORM.Tests.Tests
                 deleteCommand.Should().NotBeNull();
                 deleteCommand.CommandText.Should().Be(fixture.DeleteStatement);
                 deleteCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
-             }
+            }
 
-            using (var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor()))
-            {            
+            var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
+            {
                 var selectCommand = selectCommandBuilder.GetCommand();
 
                 using (var reader = selectCommand.ExecuteReader())
@@ -292,67 +284,60 @@ namespace Paradigm.ORM.Tests.Tests
             var first = fixture.CreateNewEntity();
             var second = fixture.CreateNewEntity();
 
-            using (var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor()))
+            var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetParentDescriptor());
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
+
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+
+            valueProvider.MoveNext();
+            insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+
+            var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
+            var selectCommand = selectCommandBuilder.GetCommand();
+
+            using (var reader = selectCommand.ExecuteReader())
             {
-                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
+                var results = mapper.Map(reader);
 
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
-
-                valueProvider.MoveNext();
-                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
+                first = results[0];
+                second = results[1];
             }
 
-            using (var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor()))
+            var updateCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateUpdateCommandBuilder(fixture.GetParentDescriptor());
+
+            fixture.Update(first, second);
+            valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
+
+            updateCommandBuilder.Should().NotBeNull();
+
+            valueProvider.MoveNext();
+            var updateCommand = updateCommandBuilder.GetCommand(valueProvider);
+            updateCommand.Should().NotBeNull();
+            updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
+            updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
+
+            valueProvider.MoveNext();
+            updateCommand = updateCommandBuilder.GetCommand(valueProvider);
+            updateCommand.Should().NotBeNull();
+            updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
+            updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
+
+            selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
+            selectCommand = selectCommandBuilder.GetCommand();
+
+            using (var reader = selectCommand.ExecuteReader())
             {
-                var selectCommand = selectCommandBuilder.GetCommand();
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
+                var results = mapper.Map(reader);
 
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
-                    var results = mapper.Map(reader);
+                first = results[0];
+                second = results[1];
 
-                    first = results[0];
-                    second = results[1];
-                }
+                fixture.CheckUpdate(first, second);
             }
 
-            using (var updateCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateUpdateCommandBuilder(fixture.GetParentDescriptor()))
-            {
-                fixture.Update(first, second);
-                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
-
-                updateCommandBuilder.Should().NotBeNull();
-
-                valueProvider.MoveNext(); 
-                var updateCommand = updateCommandBuilder.GetCommand(valueProvider);
-                updateCommand.Should().NotBeNull();
-                updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
-                updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
-
-                valueProvider.MoveNext();
-                updateCommand = updateCommandBuilder.GetCommand(valueProvider);
-                updateCommand.Should().NotBeNull();
-                updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
-                updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
-
-            }
-
-            using (var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor()))
-            {
-                var selectCommand = selectCommandBuilder.GetCommand();
-
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
-                    var results = mapper.Map(reader);
-
-                    first = results[0];
-                    second = results[1];
-
-                    fixture.CheckUpdate(first, second);
-                }
-            }
             fixture.DropDatabase();
         }
     }

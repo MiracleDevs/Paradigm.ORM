@@ -68,7 +68,7 @@ namespace Paradigm.ORM.Data.Database
         /// set returned by the query. Additional columns or rows are ignored.
         /// </summary>
         /// <returns>
-        /// The first column of the first row in the result set, or a null reference 
+        /// The first column of the first row in the result set, or a null reference
         /// if the result set is empty.
         /// </returns>
         object ExecuteScalar();
@@ -117,6 +117,18 @@ namespace Paradigm.ORM.Data.Database
         /// <param name="scale">Parameter scale.</param>
         /// <returns>The reference of the parameter recently added.</returns>
         IDataParameter AddParameter(string name, Type type, long size, byte precision, byte scale);
+
+        /// <summary>
+        /// Adds a new parameter to the command.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <param name="type">Parameter type.</param>
+        /// <param name="size">Parameter size.</param>
+        /// <param name="precision">Parameter precision.</param>
+        /// <param name="scale">Parameter scale.</param>
+        /// <param name="value">Parameter value</param>
+        /// <returns>The reference of the parameter recently added.</returns>
+        IDataParameter AddParameter(string name, Type type, long size, byte precision, byte scale, object value);
 
         /// <summary>
         /// Adds a new parameter to the command.
@@ -197,6 +209,19 @@ namespace Paradigm.ORM.Data.Database
         /// <param name="isNullable">Indicates if the parameter is nullable.</param>
         /// <returns>The reference of the parameter recently added.</returns>
         IDataParameter AddParameter(string name, DbType type, long size, byte precision, byte scale, bool isNullable);
+
+        /// <summary>
+        /// Adds a new parameter to the command.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <param name="type">Parameter type.</param>
+        /// <param name="size">Parameter size.</param>
+        /// <param name="precision">Parameter precision.</param>
+        /// <param name="scale">Parameter scale.</param>
+        /// <param name="isNullable">Indicates if the parameter is nullable.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>The reference of the parameter recently added.</returns>
+        IDataParameter AddParameter(string name, DbType type, long size, byte precision, byte scale, bool isNullable, object value);
 
         /// <summary>
         /// Gets a parameter by index.

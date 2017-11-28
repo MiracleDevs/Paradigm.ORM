@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Data.PostgreSql
     /// <summary>
     /// Provides a way to execute commands on a PostgreSQL Server Database.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.IDatabaseCommand" />
+    /// <seealso cref="IDatabaseCommand" />
     internal partial class PostgreSqlDatabaseCommand : IDatabaseCommand
     {
         #region Properties
@@ -156,7 +156,11 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, Type type)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = DbTypeConverter.FromType(type) };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = DbTypeConverter.FromType(type)
+            };
 
             if (type == typeof(Nullable<>))
                 parameter.IsNullable = true;
@@ -176,7 +180,12 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, Type type, long size)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = DbTypeConverter.FromType(type), Size = (int)size };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = DbTypeConverter.FromType(type),
+                Size = (int)size
+            };
 
             if (type == typeof(Nullable<>))
                 parameter.IsNullable = true;
@@ -197,7 +206,13 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, Type type, byte precision, byte scale)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = DbTypeConverter.FromType(type), Precision = precision, Scale = scale };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = DbTypeConverter.FromType(type),
+                Precision = precision,
+                Scale = scale
+            };
 
             if (type == typeof(Nullable<>))
                 parameter.IsNullable = true;
@@ -219,7 +234,46 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, Type type, long size, byte precision, byte scale)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = DbTypeConverter.FromType(type), Size = (int)size, Precision = precision, Scale = scale };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = DbTypeConverter.FromType(type),
+                Size = (int)size,
+                Precision = precision,
+                Scale = scale
+            };
+
+            if (type == typeof(Nullable<>))
+                parameter.IsNullable = true;
+
+            this.Command.Parameters.Add(parameter);
+            return parameter;
+        }
+
+        /// <summary>
+        /// Adds a new parameter to the command.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <param name="type">Parameter type.</param>
+        /// <param name="size">Parameter size.</param>
+        /// <param name="precision">Parameter precision.</param>
+        /// <param name="scale">Parameter scale.</param>
+        /// <param name="value">Parameter value</param>
+        /// <returns>
+        /// The reference of the parameter recently added.
+        /// </returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public IDataParameter AddParameter(string name, Type type, long size, byte precision, byte scale, object value)
+        {
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = DbTypeConverter.FromType(type),
+                Size = (int)size,
+                Precision = precision,
+                Scale = scale,
+                Value = value ?? DBNull.Value
+            };
 
             if (type == typeof(Nullable<>))
                 parameter.IsNullable = true;
@@ -238,7 +292,12 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -254,7 +313,13 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, bool isNullable)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, IsNullable = isNullable};
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                IsNullable = isNullable
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -270,7 +335,13 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, long size)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Size = (int)size };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Size = (int)size
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -287,7 +358,14 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, int size, bool isNullable)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Size = size, IsNullable = isNullable};
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Size = size,
+                IsNullable = isNullable
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -304,7 +382,14 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, byte precision, byte scale)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Precision = precision, Scale = scale };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Precision = precision,
+                Scale = scale
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -322,7 +407,15 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, long size, byte precision, byte scale)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Size = (int)size, Precision = precision, Scale = scale };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Size = (int)size,
+                Precision = precision,
+                Scale = scale
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -340,7 +433,15 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, byte precision, byte scale, bool isNullable)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Precision = precision, Scale = scale, IsNullable = isNullable };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Precision = precision,
+                Scale = scale,
+                IsNullable = isNullable
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }
@@ -359,7 +460,46 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDataParameter AddParameter(string name, DbType type, long size, byte precision, byte scale, bool isNullable)
         {
-            var parameter = new NpgsqlParameter { ParameterName = name, DbType = type, Size = (int)size, Precision = precision, Scale = scale, IsNullable = isNullable };
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Size = (int)size,
+                Precision = precision,
+                Scale = scale,
+                IsNullable = isNullable
+            };
+
+            this.Command.Parameters.Add(parameter);
+            return parameter;
+        }
+
+        /// <summary>
+        /// Adds a new parameter to the command.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <param name="type">Parameter type.</param>
+        /// <param name="size">Parameter size.</param>
+        /// <param name="precision">Parameter precision.</param>
+        /// <param name="scale">Parameter scale.</param>
+        /// <param name="isNullable">Indicates if the parameter is nullable.</param>
+        /// <param name="value">Parameter value.</param>
+        /// <returns>
+        /// The reference of the parameter recently added.
+        /// </returns>
+        public IDataParameter AddParameter(string name, DbType type, long size, byte precision, byte scale, bool isNullable, object value)
+        {
+            var parameter = new NpgsqlParameter
+            {
+                ParameterName = name,
+                DbType = type,
+                Size = (int)size,
+                Precision = precision,
+                Scale = scale,
+                IsNullable = isNullable,
+                Value = value ?? DBNull.Value
+            };
+
             this.Command.Parameters.Add(parameter);
             return parameter;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Extensions;
@@ -20,25 +21,26 @@ namespace Paradigm.ORM.Data.Querying
         /// </returns>
         public async Task<List<TResultType>> ExecuteAsync(string whereClause = null, params object[] parameters)
         {
+            var builder = new StringBuilder(this.CommandText);
+
             if (!string.IsNullOrWhiteSpace(whereClause))
+                builder.AppendFormat(" WHERE {0}", whereClause);
+
+            using (var command = this.Connector.CreateCommand(this.CommandText))
             {
-                this.Command.CommandText = $"{this.CommandText} WHERE {whereClause}";
-
-                this.Command.ClearParameters();
-
                 if (parameters != null)
                 {
                     for (var index = 0; index < parameters.Length; index++)
                     {
                         var parameter = parameters[index];
                         var type = parameter == null ? typeof(object) : parameter.GetType();
-                        var commandParameter = this.Command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
+                        var commandParameter = command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
                         commandParameter.Value = parameter ?? DBNull.Value;
                     }
                 }
-            }
 
-            return await this.Connector.ExecuteReaderAsync(this.Command, async reader => await this.Mapper.MapAsync(reader));
+                return await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
+            }
         }
 
         #endregion

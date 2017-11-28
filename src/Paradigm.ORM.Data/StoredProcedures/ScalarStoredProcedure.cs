@@ -1,5 +1,7 @@
 using System;
+using System.Data;
 using Paradigm.ORM.Data.Database;
+using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.StoredProcedures
 {
@@ -12,8 +14,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// </remarks>
     /// <typeparam name="TParameters">The type of the parameters.</typeparam>
     /// <typeparam name="TResult">The type of the result.</typeparam>
-    /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.StoredProcedureBase{TParameters}" />
-    /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.IScalarStoredProcedure{TParameters, TResult}" />
+    /// <seealso cref="StoredProcedureBase{TParameters}" />
+    /// <seealso cref="IScalarStoredProcedure{TParameters, TResult}" />
     public partial class ScalarStoredProcedure<TParameters, TResult> : StoredProcedureBase<TParameters>, IScalarStoredProcedure<TParameters, TResult>
     {
         #region Constructor
@@ -59,8 +61,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
             if (parameters == null)
                 throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
 
-            this.SetParametersValue(parameters);
-            return (TResult)this.Command.ExecuteScalar();
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
+            {
+                this.PopulateParameters(command, parameters);
+                return (TResult)command.ExecuteScalar();
+            }
         }
 
         #endregion

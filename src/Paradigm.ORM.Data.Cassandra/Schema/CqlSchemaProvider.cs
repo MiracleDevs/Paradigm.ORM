@@ -13,9 +13,9 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
     /// <summary>
     /// Provides a way to retrieve schema information from the database.
     /// </summary>
-    public partial class CqlSchemaProvider : ISchemaProvider
+    public partial class CqlSchemaProvider: ISchemaProvider
     {
-        #region String Constants        
+        #region String Constants
 
         /// <summary>
         /// Gets the table type name.
@@ -39,27 +39,27 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// <summary>
         /// Gets or sets the column query.
         /// </summary>
-        private Query<CqlColumn> ColumnQuery { get; set; }
+        private Query<CqlColumn> ColumnQuery { get; }
 
         /// <summary>
         /// Gets or sets the constraint query.
         /// </summary>
-        private Query<CqlConstraint> ConstraintQuery { get; set; }
+        private Query<CqlConstraint> ConstraintQuery { get; }
 
 
         /// <summary>
         /// Gets or sets the view query.
         /// </summary>
-        private Query<CqlView> ViewQuery { get; set; }
+        private Query<CqlView> ViewQuery { get; }
 
         /// <summary>
         /// Gets or sets the table query.
         /// </summary>
-        private Query<CqlTable> TableQuery { get; set; }
+        private Query<CqlTable> TableQuery { get; }
 
         #endregion
 
-        #region Constructor        
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CqlSchemaProvider"/> class.
@@ -80,22 +80,6 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         #region Public Methods
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.ConstraintQuery?.Dispose();
-            this.ColumnQuery?.Dispose();
-            this.ViewQuery?.Dispose();
-            this.TableQuery?.Dispose();
-
-            this.ConstraintQuery = null;
-            this.ColumnQuery = null;
-            this.ViewQuery = null;
-            this.TableQuery = null;
-        }
-
-        /// <summary>
         /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return.
         /// </summary>
         /// <param name="database">The database name.</param>
@@ -106,8 +90,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         public List<ITable> GetTables(string database, params string[] filter)
         {
             return this.TableQuery
-                .Execute(this.GetTableWhere(database, TableType, filter))
-                .Where(x => x.Type == "Standard" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Execute(this.GetTableWhere(database))
+                .Where(x => x.Type == TableType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
                 .Cast<ITable>().ToList();
         }
 
@@ -122,8 +106,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         public List<IView> GetViews(string database, params string[] filter)
         {
             return this.ViewQuery
-                .Execute(this.GetTableWhere(database, ViewType, filter))
-                .Where(x => x.Type == "View" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Execute(this.GetTableWhere(database))
+                .Where(x => x.Type == ViewType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
                 .Cast<IView>().ToList();
         }
 
@@ -152,7 +136,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         {
             var columns = this.ColumnQuery.Execute($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'").ToList();
 
-            foreach(var column in columns)
+            foreach (var column in columns)
             {
                 column.DataType = CqlDbStringTypeConverter.ValidatorToDbType(column.DataType);
             }
@@ -202,23 +186,11 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         #region Private Methods
 
         /// <summary>
-        /// Creates a IN (..,..,..) group string from a collection of values.
-        /// </summary>
-        /// <param name="values">Array of values to include inside the IN sentence.</param>
-        /// <returns>A sql IN clause string.</returns>
-        private string GetStringInGroup(IEnumerable<string> values)
-        {
-            return string.Join(", ", values.Select(x => this.FormatProvider.GetColumnValue(x, typeof(string))));
-        }
-
-        /// <summary>
         /// Gets the table WHERE clause.
         /// </summary>
         /// <param name="database">The name of the database.</param>
-        /// <param name="type">The table type.</param>
-        /// <param name="filter">The table names that need to be retrieved.</param>
         /// <returns>A sql WHERE clause string.</returns>
-        private string GetTableWhere(string database, string type, string[] filter)
+        private string GetTableWhere(string database)
         {
             return $"\"keyspace_name\"={this.FormatProvider.GetColumnValue(database, typeof(string))}";
         }

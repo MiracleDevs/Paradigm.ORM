@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.PostgreSql.Schema.Structure
     /// <summary>
     /// Provides a database stored procedure schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IStoredProcedure" />
+    /// <seealso cref="IStoredProcedure" />
     [Table("routines", Catalog = "information_schema")]
     public class PostgreSqlStoredProcedure : IStoredProcedure
     {
@@ -29,10 +29,10 @@ namespace Paradigm.ORM.Data.PostgreSql.Schema.Structure
         public string SchemaName { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => $"Stored Procedure {this.SchemaName}.{this.Name}";
     }

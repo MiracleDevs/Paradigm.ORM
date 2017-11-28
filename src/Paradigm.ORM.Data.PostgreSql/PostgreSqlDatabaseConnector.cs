@@ -145,9 +145,6 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             this.Connection?.Dispose();
 
-            if (this.SchemaProvider?.IsValueCreated ?? false)
-                this.SchemaProvider.Value?.Dispose();
-
             if (this.Transactions != null)
             {
                 foreach (var transaction in this.Transactions.ToList())

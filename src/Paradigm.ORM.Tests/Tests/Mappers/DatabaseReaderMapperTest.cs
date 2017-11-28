@@ -33,10 +33,8 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
 
             var entity = fixture.CreateNewEntity();
 
-            using (var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType))
-            {
-                databaseAccess.Insert(entity);
-            }
+            var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
+            databaseAccess.Insert(entity);
 
             fixture.Connector.ExecuteReader(fixture.SelectStatement, reader =>
             {
@@ -55,7 +53,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
                     var retrievedValue = property.GetValue(retrievedEntity);
 
                     if (expectedValue is IEnumerable expectedCollection &&
-                        retrievedValue is IEnumerable retrievedCollection)                    
+                        retrievedValue is IEnumerable retrievedCollection)
                     {
                         var collection1 = expectedCollection.Cast<object>().ToList();
                         var collection2 = retrievedCollection.Cast<object>().ToList();
@@ -83,11 +81,9 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             fixture.Should().NotBeNull();
             fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
             fixture.CreateTable();
-            
-            using (var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType))
-            {
-                databaseAccess.Insert(new object[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
-            }
+
+            var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
+            databaseAccess.Insert(new object[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
 
             fixture.Connector.ExecuteReader(fixture.SelectStatement, reader =>
             {

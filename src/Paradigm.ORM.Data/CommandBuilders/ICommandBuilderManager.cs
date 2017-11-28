@@ -1,12 +1,10 @@
-using System;
-
 namespace Paradigm.ORM.Data.CommandBuilders
 {
     /// <summary>
     /// Provides an interface for command builder manager objects.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public interface ICommandBuilderManager: IDisposable
+    public interface ICommandBuilderManager
     {
         /// <summary>
         /// Gets the select one command builder.

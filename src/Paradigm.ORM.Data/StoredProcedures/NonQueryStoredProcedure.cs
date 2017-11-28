@@ -1,5 +1,7 @@
 using System;
+using System.Data;
 using Paradigm.ORM.Data.Database;
+using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.StoredProcedures
 {
@@ -39,7 +41,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="connector">The database connector.</param>
         public NonQueryStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector): base(serviceProvider, connector)
-        {           
+        {
         }
 
         #endregion
@@ -58,8 +60,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
             if (parameters == null)
                 throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
 
-            this.SetParametersValue(parameters);
-            return this.Command.ExecuteNonQuery();
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
+            {
+                this.PopulateParameters(command, parameters);
+                return command.ExecuteNonQuery();
+            }
         }
 
         #endregion

@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// <summary>
     /// Provides a database column schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IColumn" />
+    /// <seealso cref="IColumn" />
     [Table("schema_columns", Catalog = "system")]
     public class CqlColumn : IColumn
     {
@@ -74,10 +74,10 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
         public bool IsIdentity { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => $"Column [{this.TableName}].[{this.Name}]";
     }

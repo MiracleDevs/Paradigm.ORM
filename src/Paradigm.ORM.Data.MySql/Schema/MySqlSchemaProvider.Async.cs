@@ -5,7 +5,7 @@ using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.MySql.Schema
 {
-    public partial class MySqlSchemaProvider 
+    public partial class MySqlSchemaProvider
     {
         #region Public Methods
 

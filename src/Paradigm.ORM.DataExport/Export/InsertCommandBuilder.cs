@@ -1,18 +1,23 @@
+using System.Collections.Generic;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
-using Paradigm.ORM.Data.Extensions;
-using Paradigm.ORM.Data.MySql.CommandBuilders;
-using Paradigm.ORM.Data.ValueProviders;
 
 namespace Paradigm.ORM.DataExport.Export
 {
     /// <summary>
     /// Provides an implementation for mysql insert command builder objects.
     /// </summary>
-    /// <seealso cref="MySqlCommandBuilderBase" />
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.IInsertCommandBuilder" />
-    public class InsertCommandBuilder : MySqlCommandBuilderBase, IInsertCommandBuilder
+    /// <remarks>
+    /// This implementation is unique for the data export tool, and the difference
+    /// from the specific insert command builders for each database type, this will
+    /// try to insert all the columns. It wont work in every case, but the objective
+    /// of this tool is an easy and quick data export tool, not a tool to cover every
+    /// possible escenario.
+    /// </remarks>
+    /// <seealso cref="InsertCommandBuilderBase" />
+    /// <seealso cref="IInsertCommandBuilder" />
+    public class InsertCommandBuilder : InsertCommandBuilderBase
     {
         #region Constructor
 
@@ -23,44 +28,41 @@ namespace Paradigm.ORM.DataExport.Export
         /// <param name="descriptor">A table type descriptor.</param>
         public InsertCommandBuilder(IDatabaseConnector connector, ITableDescriptor descriptor): base(connector, descriptor)
         {
-            this.Initialize();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
         /// <summary>
-        /// Gets an insert command query ready to insert one entity.
+        /// Gets a list of column descriptors that must be used in the insert statement.
         /// </summary>
-        /// <param name="valueProvider"></param>
-        /// <returns>
-        /// An insert command already parametrized to insert the entity.
-        /// </returns>
-        public IDatabaseCommand GetCommand(IValueProvider valueProvider)
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// inserted due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        /// <returns>A list of column descriptors.</returns>
+        protected override List<IColumnDescriptor> GetInsertColumns()
         {
-            for (var i = 0; i < this.Descriptor.AllColumns.Count; i++)
-            {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]);
-            }
-
-            return this.Command;
+            return this.Descriptor.AllColumns;
         }
-
-        #endregion
-
-        #region Private Methods
 
         /// <summary>
-        /// Initializes the command builder.
+        /// Gets a list of column descriptors used to populate the command parameters.
         /// </summary>
-        private void Initialize()
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// inserted due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        /// <returns>A list of column descriptors.</returns>
+        protected override List<IColumnDescriptor> GetPopulableColumns()
         {
-            var columns = this.Descriptor.AllColumns;
-            this.Command = this.Connector.CreateCommand($"INSERT INTO {this.GetTableName()} ({this.GetPropertyNames(columns)}) VALUES ({this.GetDbParameterNames(columns)})");
-            this.PopulateParameters(columns);
+            return this.Descriptor.AllColumns;
         }
 
         #endregion
+
     }
 }

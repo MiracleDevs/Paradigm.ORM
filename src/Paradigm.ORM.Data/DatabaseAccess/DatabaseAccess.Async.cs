@@ -22,14 +22,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual async Task<object> SelectOneAsync(params object[] ids)
         {
-            // 1. get current entity.
-            var entity = await this.Connector.ExecuteReaderAsync(this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids), async reader => await this.Mapper.MapAsync(reader));
+            using (var command = this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids))
+            {
+                // 1. get current entity.
+                var entity = await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
 
-            // 2. get related entities.
-            foreach (var x in this.NavigationDatabaseAccesses)
-                await x.SelectAsync(entity);
+                // 2. get related entities.
+                foreach (var x in this.NavigationDatabaseAccesses)
+                    await x.SelectAsync(entity);
 
-            return entity.FirstOrDefault();
+                return entity.FirstOrDefault();
+            }
         }
 
         /// <summary>
@@ -56,14 +59,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual async Task<List<object>> SelectAsync(string whereClause, params object[] parameters)
         {
-            // 1. get the current entities.
-            var entities = await this.Connector.ExecuteReaderAsync(this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters), async reader => await this.Mapper.MapAsync(reader));
+            using (var command = this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters))
+            {
+                // 1. get the current entities.
+                var entities = await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
 
-            // 2. get related entities.
-            foreach (var x in this.NavigationDatabaseAccesses)
-                await x.SelectAsync(entities);
+                // 2. get related entities.
+                foreach (var x in this.NavigationDatabaseAccesses)
+                    await x.SelectAsync(entities);
 
-            return entities;
+                return entities;
+            }
         }
 
         /// <summary>
@@ -122,14 +128,20 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 // is not really async right now.
                 while (valueProvider.MoveNext())
                 {
-                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
+                    using (var command = this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider))
+                    {
+                        batchManager.Add(new CommandBatchStep(command));
+                    }
 
                     // if the entity has an auto incremental property,
                     // queue a command to retrieve the id from the last insertion.
                     if (this.Descriptor.IdentityProperty != null)
                     {
                         var entity = valueProvider.CurrentEntity;
-                        batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), async reader => await this.SetEntityIdAsync(entity, reader)));
+                        using (var command = this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand())
+                        {
+                            batchManager.Add(new CommandBatchStep(command, async reader => await this.SetEntityIdAsync(entity, reader)));
+                        }
                     }
                 }
 
@@ -201,7 +213,10 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 while (valueProvider.MoveNext())
                 {
-                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
+                    using (var command = this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider))
+                    {
+                        batchManager.Add(new CommandBatchStep(command));
+                    }
                 }
 
                 await batchManager.ExecuteAsync();
@@ -259,7 +274,10 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 await x.DeleteBeforeAsync(entityList);
 
             var valueProvider = new ClassValueProvider(this.Connector, entityList);
-            await this.Connector.ExecuteNonQueryAsync(this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider));
+            using (var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider))
+            {
+                await this.Connector.ExecuteNonQueryAsync(command);
+            }
 
             foreach (var x in this.NavigationDatabaseAccesses)
                 await x.DeleteAfterAsync(entityList);

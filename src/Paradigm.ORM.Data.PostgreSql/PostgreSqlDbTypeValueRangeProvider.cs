@@ -14,7 +14,7 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         /// <remarks>
         /// The expected data type names are:
-        /// smallint, samllserial, integer, serial, bigint, bigserial, date, timestamp, timestamp without time zone, 
+        /// smallint, samllserial, integer, serial, bigint, bigserial, date, timestamp, timestamp without time zone,
         /// timestamp with time zone, interval, time ,time without time zone, time with time zone.
         /// </remarks>
         public object GetMaxValue(string dataType)
@@ -67,7 +67,7 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         /// <remarks>
         /// The expected data type names are:
-        /// smallint, samllserial, integer, serial, bigint, bigserial, date, timestamp, timestamp without time zone, 
+        /// smallint, samllserial, integer, serial, bigint, bigserial, date, timestamp, timestamp without time zone,
         /// timestamp with time zone, interval, time ,time without time zone, time with time zone.
         /// </remarks>
         public object GetMinValue(string dataType)

@@ -28,13 +28,12 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.PostgreSql
             Fixture.CreateChildTable();
             Fixture.CreateStoredProcedures();
 
-            using (var databaseAccess = new DatabaseAccess(Fixture.Connector, typeof(SingleKeyParentTable)))
-            {
-                databaseAccess.Insert(Fixture.CreateNewActiveEntity());
-                databaseAccess.Insert(Fixture.CreateNewActiveEntity());
-                databaseAccess.Insert(Fixture.CreateNewInactiveEntity());
-                databaseAccess.Insert(Fixture.CreateNewInactiveEntity());
-            }
+            var databaseAccess = new DatabaseAccess(Fixture.Connector, typeof(SingleKeyParentTable));
+
+            databaseAccess.Insert(Fixture.CreateNewActiveEntity());
+            databaseAccess.Insert(Fixture.CreateNewActiveEntity());
+            databaseAccess.Insert(Fixture.CreateNewInactiveEntity());
+            databaseAccess.Insert(Fixture.CreateNewInactiveEntity());
         }
 
         [Test]

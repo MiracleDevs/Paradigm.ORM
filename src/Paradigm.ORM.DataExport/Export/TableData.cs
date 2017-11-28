@@ -42,7 +42,6 @@ namespace Paradigm.ORM.DataExport.Export
 
         public void Dispose()
         {
-            this.SelectCommandBuilder?.Dispose();
             this.Reader?.Dispose();
         }
 

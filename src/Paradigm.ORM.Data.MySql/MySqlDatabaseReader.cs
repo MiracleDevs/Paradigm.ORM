@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Data.MySql
     /// <summary>
     ///  Reads a forward-only stream of rows from a data source.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.IDatabaseReader" />
+    /// <seealso cref="IDatabaseReader" />
     internal partial class MySqlDatabaseReader : IDatabaseReader
     {
         #region Properties

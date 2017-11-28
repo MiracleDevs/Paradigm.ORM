@@ -2,7 +2,6 @@
 
 namespace Paradigm.ORM.Data.MySql.Converters
 {
-    /// <inheritdoc />
     /// <summary>
     /// Provides methods to convert from database objects to .net types.
     /// </summary>

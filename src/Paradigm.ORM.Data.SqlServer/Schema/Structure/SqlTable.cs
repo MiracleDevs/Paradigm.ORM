@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.SqlServer.Schema.Structure
     /// <summary>
     /// Provides a database table schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.ITable" />
+    /// <seealso cref="ITable" />
     [Table("tables", Catalog = "information_schema")]
     public class SqlTable: ITable
     {
@@ -35,10 +35,10 @@ namespace Paradigm.ORM.Data.SqlServer.Schema.Structure
         public string SchemaName { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => $"Table [{this.SchemaName}].[{this.Name}]";
     }

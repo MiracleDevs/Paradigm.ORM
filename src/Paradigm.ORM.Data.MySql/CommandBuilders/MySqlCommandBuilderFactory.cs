@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.MySql.CommandBuilders
     /// <summary>
     /// Provides an implementation to instantiate all the standard command builders.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ICommandBuilderFactory" />
+    /// <seealso cref="ICommandBuilderFactory" />
     public class MySqlCommandBuilderFactory : ICommandBuilderFactory
     {
         /// <summary>
@@ -77,9 +77,9 @@ namespace Paradigm.ORM.Data.MySql.CommandBuilders
         /// Creates the last insert identifier command builder.
         /// </summary>
         /// <returns></returns>
-        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder()
+        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder(ITableDescriptor descriptor)
         {
-            return new MySqlLastInsertIdCommandBuilder(this.Connector);
+            return new MySqlLastInsertIdCommandBuilder(this.Connector, descriptor);
         }
     }
 }

@@ -1,13 +1,15 @@
 using System;
+using System.Text;
 using Paradigm.ORM.Data.CommandBuilders;
+using Paradigm.ORM.Data.Descriptors;
 
 namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
 {
     /// <summary>
     /// Provides an implementation of a command format provider for Cql databases.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ICommandFormatProvider" />
-    public class CqlCommandFormatProvider : ICommandFormatProvider
+    /// <seealso cref="ICommandFormatProvider" />
+    public class CqlCommandFormatProvider : CommandFormatProviderBase
     {
         /// <summary>
         /// Gets the name of an object (table, view, column, etc) escaped with the proper characters.
@@ -16,7 +18,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <returns>
         /// Scaped name.
         /// </returns>
-        public string GetEscapedName(string name)
+        public override string GetEscapedName(string name)
         {
             return $"\"{name}\"";
         }
@@ -29,7 +31,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// A formatted representation of the name.
         /// </returns>
         /// <exception cref="NotImplementedException"></exception>
-        public string GetParameterName(string name)
+        public override string GetParameterName(string name)
         {
             return $":{name}";
         }
@@ -42,7 +44,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <returns>
         /// Formatted value.
         /// </returns>
-        public string GetColumnValue(object value, Type type)
+        public override string GetColumnValue(object value, Type type)
         {
             if (value == null)
                 return "null";
@@ -51,7 +53,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
                 value = Convert.ToBase64String(bytes);
 
             if (value is DateTime)
-                value = ((DateTime)value).ToString("yyyy-MM-dd hh:mm:ss");   
+                value = ((DateTime)value).ToString("yyyy-MM-dd hh:mm:ss");
 
             if (type == typeof(Nullable<>))
                 type = type.GenericTypeArguments[0];
@@ -85,7 +87,7 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <param name="value">The value to format.</param>
         /// <param name="dataType">The type of the value.</param>
         /// <returns>Formatted value.</returns>
-        public string GetColumnValue(object value, string dataType)
+        public override string GetColumnValue(object value, string dataType)
         {
             if (value == null)
                 return "null";
@@ -120,9 +122,34 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <returns>
         /// The database query separator, normally ';'.
         /// </returns>
-        public string GetQuerySeparator()
+        public override string GetQuerySeparator()
         {
             return ";";
         }
+
+        /// <summary>
+        /// Gets the name of the table already escaped.
+        /// </summary>
+        /// <param name="descriptor">A reference to a table descriptor.</param>
+        /// <returns>
+        /// An escaped table name.
+        /// </returns>
+        public override string GetTableName(ITableDescriptor descriptor)
+        {
+            ////////////////////////////////////////////////////////////////////////////////////////
+            // overrides the base method to prevent the schema info to be rendered.
+            // Cql database does not have 3 level entities, only keyspace (catalog) and column families (tables).
+            ////////////////////////////////////////////////////////////////////////////////////////
+
+            var builder = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(descriptor.CatalogName))
+                builder.AppendFormat("{0}.", this.GetEscapedName(descriptor.CatalogName));
+
+            builder.Append(this.GetEscapedName(descriptor.TableName));
+
+            return builder.ToString();
+        }
+
     }
 }

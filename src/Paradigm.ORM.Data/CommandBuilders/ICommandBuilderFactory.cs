@@ -45,7 +45,8 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <summary>
         /// Creates the last insert identifier command builder.
         /// </summary>
+        /// <param name="descriptor">The table descriptor.</param>
         /// <returns></returns>
-        ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder();
+        ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder(ITableDescriptor descriptor);
     }
 }

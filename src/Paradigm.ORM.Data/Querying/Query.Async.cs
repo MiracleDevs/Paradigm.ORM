@@ -18,7 +18,10 @@ namespace Paradigm.ORM.Data.Querying
         /// </returns>
         public async Task<List<TResultType>> ExecuteAsync(string whereClause = null, params object[] parameters)
         {
-            return await this.Connector.ExecuteReaderAsync(this.SelectCommandBuilder.GetCommand(whereClause, parameters), async reader => await this.Mapper.MapAsync(reader));
+            using (var command = this.SelectCommandBuilder.GetCommand(whereClause, parameters))
+            {
+                return await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
+            }
         }
 
         #endregion

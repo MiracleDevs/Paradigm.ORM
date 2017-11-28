@@ -1,18 +1,17 @@
+using System.Collections.Generic;
 using System.Linq;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
-using Paradigm.ORM.Data.ValueProviders;
-using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
 {
     /// <summary>
     /// Provides an implementation for mysql update command builder objects.
     /// </summary>
-    /// <seealso cref="CqlCommandBuilderBase" />
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.IUpdateCommandBuilder" />
-    public class CqlUpdateCommandBuilder : CqlCommandBuilderBase, IUpdateCommandBuilder
+    /// <seealso cref="UpdateCommandBuilderBase" />
+    /// <seealso cref="IUpdateCommandBuilder" />
+    public class CqlUpdateCommandBuilder : UpdateCommandBuilderBase
     {
         #region Constructor
 
@@ -23,45 +22,42 @@ namespace Paradigm.ORM.Data.Cassandra.CommandBuilders
         /// <param name="descriptor">A table type descriptor.</param>
         public CqlUpdateCommandBuilder(IDatabaseConnector connector, ITableDescriptor descriptor): base(connector, descriptor)
         {
-            this.Initialize();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
         /// <summary>
-        /// Gets an update command query ready to update one entity.
+        /// Gets a list of column descriptors that must be used in the update statement.
         /// </summary>
-        /// <param name="valueProvider"></param>
         /// <returns>
-        /// An update command already parametrized to update the entity.
+        /// A list of column descriptors.
         /// </returns>
-        public IDatabaseCommand GetCommand(IValueProvider valueProvider)
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// updated due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        protected override List<IColumnDescriptor> GetUpdateableColumns()
         {
-            for (var i = 0; i < this.Descriptor.AllColumns.Count; i++)
-            {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.Descriptor.AllColumns[i]);
-            }
-
-            return this.Command;
+            return this.Descriptor.AllColumns.Where(x => !this.Descriptor.PrimaryKeyColumns.Contains(x)).ToList();
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
-        /// Initializes the command builder.
+        /// Gets a list of column descriptors used to populate the command parameters.
         /// </summary>
-        private void Initialize()
+        /// <returns>
+        /// A list of column descriptors.
+        /// </returns>
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// updated due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        protected override List<IColumnDescriptor> GetPopulableColumns()
         {
-            var properties = this.Descriptor.AllColumns.ToList();
-            var withoutPrimary = properties.ToList();
-            withoutPrimary.RemoveAll(x => this.Descriptor.PrimaryKeyColumns.Contains(x));
-
-            this.Command = this.Connector.CreateCommand($"UPDATE {this.GetTableName()} SET {this.GetDbParameterNamesAndValues(withoutPrimary)} WHERE {this.GetDbParameterNamesAndValues(this.Descriptor.PrimaryKeyColumns, " AND ")}");
-            this.PopulateParameters(properties);
+            return this.Descriptor.AllColumns;
         }
 
         #endregion

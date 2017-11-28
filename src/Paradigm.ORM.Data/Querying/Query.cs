@@ -17,8 +17,8 @@ namespace Paradigm.ORM.Data.Querying
     /// to reuse them if neccessary.
     /// </remarks>
     /// <remarks>
-    /// The <see cref="Paradigm.ORM.Data.Database.IDatabaseConnector"/> contains extensions to create
-    /// query objects in a single method call. See <see cref="Paradigm.ORM.Data.Extensions.DatabaseConnectorExtensions.Query{TResultType}"/>
+    /// The <see cref="IDatabaseConnector"/> contains extensions to create
+    /// query objects in a single method call. See <see cref="DatabaseConnectorExtensions.Query{TResultType}"/>
     /// </remarks>
     /// <typeparam name="TResultType">The type containing or referencing the mapping information, that will be returned after executing the query.</typeparam>
     /// <seealso cref="IQuery{TResultType}" />
@@ -30,17 +30,17 @@ namespace Paradigm.ORM.Data.Querying
         /// <summary>
         /// Gets the select command builder.
         /// </summary>
-        protected ISelectCommandBuilder SelectCommandBuilder { get; private set; }
+        protected ISelectCommandBuilder SelectCommandBuilder { get; }
 
         /// <summary>
         /// Gets the database connector.
         /// </summary>
-        protected IDatabaseConnector Connector { get; private set; }
+        protected IDatabaseConnector Connector { get; }
 
         /// <summary>
         /// Gets the table type descriptor.
         /// </summary>
-        protected ITableTypeDescriptor Descriptor { get; private set; }
+        protected ITableTypeDescriptor Descriptor { get; }
 
         /// <summary>
         /// Gets or sets the database reader mapper.
@@ -49,7 +49,7 @@ namespace Paradigm.ORM.Data.Querying
 
         #endregion
 
-        #region Constructor 
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Query{TResultType}"/> class.
@@ -77,18 +77,6 @@ namespace Paradigm.ORM.Data.Querying
         #region Public Methods
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.SelectCommandBuilder?.Dispose();
-            this.Connector = null;
-            this.Descriptor = null;
-            this.SelectCommandBuilder = null;
-            this.Mapper = null;
-        }
-
-        /// <summary>
         /// Executes the specified query and returns a list of <see cref="TResultType" />.
         /// </summary>
         /// <param name="whereClause">A where filter clause. Do not add the "WHERE" keyword to it. If you need to pass parameters, pass using @1, @2, @3.</param>
@@ -98,7 +86,10 @@ namespace Paradigm.ORM.Data.Querying
         /// </returns>
         public List<TResultType> Execute(string whereClause = null, params object[] parameters)
         {
-            return this.Connector.ExecuteReader(this.SelectCommandBuilder.GetCommand(whereClause, parameters), reader => this.Mapper.Map(reader));
+            using (var command = this.SelectCommandBuilder.GetCommand(whereClause, parameters))
+            {
+                return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
+            }
         }
 
         #endregion

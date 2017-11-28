@@ -28,11 +28,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             this.Fixture.CreateParentTable();
             this.Fixture.CreateChildTable();
 
-            using (var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable)))
-            {
-                databaseAccess.Insert(this.Fixture.CreateNewEntity());
-                databaseAccess.Insert(this.Fixture.CreateNewEntity2());
-            }
+            var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable));
+
+            databaseAccess.Insert(this.Fixture.CreateNewEntity());
+            databaseAccess.Insert(this.Fixture.CreateNewEntity2());
         }
 
         [Test]
@@ -100,15 +99,13 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Should().HaveSameCount(result);
-
-            queryAsync.Dispose();
         }
 
         [Test]
         [Order(6)]
         public async Task WhereClauseShouldNotRemainInObjectAsync()
         {
-            var queryAsync =  new Query<SingleKeyParentTable>(this.Fixture.Connector);
+            var queryAsync = new Query<SingleKeyParentTable>(this.Fixture.Connector);
 
             var result = await queryAsync.ExecuteAsync();
             var result2 = await queryAsync.ExecuteAsync(this.Fixture.WhereClause);
@@ -116,8 +113,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            queryAsync.Dispose();
         }
 
         [Test]
@@ -132,30 +127,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            queryAsync.Dispose();
-        }
-
-        [Test]
-        [Order(8)]
-        public void DisposingTwoTimesShouldBeOkAsync()
-        {
-            var queryAsync = new Query<SingleKeyParentTable>(this.Fixture.Connector);
-
-            queryAsync.Dispose();
-            queryAsync.Dispose();
-        }
-
-        [Test]
-        [Order(9)]
-        public void ShouldNotUseDisposedQueryAsyncObjectAsync()
-        {
-            var queryAsync = new Query<SingleKeyParentTable>(this.Fixture.Connector);
-
-            queryAsync.Dispose();
-
-            Func<Task> executeQueryAsync = async () => await queryAsync.ExecuteAsync();
-            executeQueryAsync.ShouldThrow<NullReferenceException>();
         }
 
         [OneTimeTearDown]

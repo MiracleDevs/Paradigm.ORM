@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Exceptions;
@@ -23,7 +24,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
     /// <typeparam name="TResult5">The type of the fifth result.</typeparam>
     /// <seealso cref="Paradigm.ORM.Data.StoredProcedures.StoredProcedureBase{TParameters}" />
     /// <seealso cref="IReaderStoredProcedure{TParameters,TResult1,TResult2,TResult3,TResult4,TResult5}" />
-    public partial class ReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5> : 
+    public partial class ReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5> :
         StoredProcedureBase<TParameters>,
         IReaderStoredProcedure<TParameters, TResult1, TResult2, TResult3, TResult4, TResult5>
     {
@@ -64,6 +65,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="serviceProvider">The service provider.</param>
         public ReaderStoredProcedure(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -72,6 +74,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="connector">The database connector.</param>
         public ReaderStoredProcedure(IDatabaseConnector connector) : base(connector)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -81,6 +84,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="connector">The database connector.</param>
         public ReaderStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector) : base(serviceProvider, connector)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -93,8 +97,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="mapper4">The fourth result mapper.</param>
         /// <param name="mapper5">The fifth result mapper.</param>
         public ReaderStoredProcedure(
-            IDatabaseConnector connector, 
-            IDatabaseReaderMapper<TResult1> mapper1, 
+            IDatabaseConnector connector,
+            IDatabaseReaderMapper<TResult1> mapper1,
             IDatabaseReaderMapper<TResult2> mapper2,
             IDatabaseReaderMapper<TResult3> mapper3,
             IDatabaseReaderMapper<TResult4> mapper4,
@@ -106,7 +110,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
             this.Mapper4 = mapper4;
             this.Mapper5 = mapper5;
         }
-
 
         /// <summary>
         /// Initializes a new instance of the ReaderStoredProcedure.
@@ -150,21 +153,24 @@ namespace Paradigm.ORM.Data.StoredProcedures
             if (parameters == null)
                 throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
 
-            this.SetParametersValue(parameters);
-
-            using (var reader = this.Command.ExecuteReader())
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
             {
-                var result1 = this.Mapper1.Map(reader);
-                reader.NextResult();
-                var result2 = this.Mapper2.Map(reader);
-                reader.NextResult();
-                var result3 = this.Mapper3.Map(reader);
-                reader.NextResult();
-                var result4 = this.Mapper4.Map(reader);
-                reader.NextResult();
-                var result5 = this.Mapper5.Map(reader);
+                this.PopulateParameters(command, parameters);
 
-                return new Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>>(result1, result2, result3, result4, result5);
+                using (var reader = command.ExecuteReader())
+                {
+                    var result1 = this.Mapper1.Map(reader);
+                    reader.NextResult();
+                    var result2 = this.Mapper2.Map(reader);
+                    reader.NextResult();
+                    var result3 = this.Mapper3.Map(reader);
+                    reader.NextResult();
+                    var result4 = this.Mapper4.Map(reader);
+                    reader.NextResult();
+                    var result5 = this.Mapper5.Map(reader);
+
+                    return new Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>>(result1, result2, result3, result4, result5);
+                }
             }
         }
 
@@ -175,9 +181,10 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <summary>
         /// Executes after the initialization.
         /// </summary>
-        protected override void AfterInitialize()
+        protected void Initialize()
         {
-            base.AfterInitialize();
+            if (this.ServiceProvider == null)
+                return;
 
             this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector, new TableTypeDescriptor(typeof(TResult1))));
             this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector, new TableTypeDescriptor(typeof(TResult2))));

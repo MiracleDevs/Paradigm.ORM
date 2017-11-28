@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Exceptions;
@@ -39,7 +40,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         public ReaderStoredProcedure(IServiceProvider serviceProvider) : base(serviceProvider)
-        { 
+        {
+            this.Initialize();
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="connector">The database connector.</param>
         public ReaderStoredProcedure(IDatabaseConnector connector) : base(connector)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="connector">The database connector.</param>
         public ReaderStoredProcedure(IServiceProvider serviceProvider, IDatabaseConnector connector): base(serviceProvider, connector)
         {
+            this.Initialize();
         }
 
         /// <summary>
@@ -76,8 +80,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <param name="connector">The database connector.</param>
         /// <param name="mapper">The result mapper.</param>
         public ReaderStoredProcedure(
-            IServiceProvider serviceProvider, 
-            IDatabaseConnector connector, 
+            IServiceProvider serviceProvider,
+            IDatabaseConnector connector,
             IDatabaseReaderMapper<TResult> mapper) : base(serviceProvider, connector)
         {
             this.Mapper = mapper;
@@ -99,11 +103,14 @@ namespace Paradigm.ORM.Data.StoredProcedures
             if (parameters == null)
                 throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
 
-            this.SetParametersValue(parameters);
-
-            using (var reader = this.Command.ExecuteReader())
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
             {
-                return this.Mapper.Map(reader);
+                this.PopulateParameters(command, parameters);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    return this.Mapper.Map(reader);
+                }
             }
         }
 
@@ -114,9 +121,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// <summary>
         /// Executes after the initialization.
         /// </summary>
-        protected override void AfterInitialize()
+        protected void Initialize()
         {
-            base.AfterInitialize();
+            if (this.ServiceProvider == null)
+                return;
+
             this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector, new TableTypeDescriptor(typeof(TResult))));
 
             if (this.Mapper == null)

@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.MySql.Converters
     /// <summary>
     /// Provides an interface to convert from database types or database schema tables to .net types.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
+    /// <seealso cref="IDbStringTypeConverter" />
     public class MySqlDbStringTypeConverter : IDbStringTypeConverter
     {
         /// <summary>

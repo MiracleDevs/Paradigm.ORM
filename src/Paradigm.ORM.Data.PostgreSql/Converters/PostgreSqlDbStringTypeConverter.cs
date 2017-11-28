@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
     /// <summary>
     /// Provides an interface to convert from database types or database schema tables to .net types.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
+    /// <seealso cref="IDbStringTypeConverter" />
     public class PostgreSqlDbStringTypeConverter : IDbStringTypeConverter
     {
         /// <summary>
@@ -117,7 +117,7 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
         /// <returns></returns>
         private Type GetNativeType(string dbType)
         {
-            /* 
+            /*
             http://www.npgsql.org/doc/types/basic.html#type-mappings-when-reading-values-sent-from-the-backend
 
             PostgreSQL type	  |  Default .NET type	          | Provider-specific type	  | Other .NET types
@@ -187,9 +187,9 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
                 // ADO.NET does not have support for BitArray type
                 case "boolean":
                 case "bool":
-                case "bit": 
+                case "bit":
                     return typeof(bool);
-               
+
                 case "varbit":
                     return typeof(BitArray);
 
@@ -200,7 +200,7 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
                 case "integer":
                 case "smallint":
                 case "serial4":
-                    return typeof(int);                
+                    return typeof(int);
 
                 case "float":
                     return typeof(float);
@@ -216,7 +216,7 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
 
                 case "real":
                     return typeof(float);
-                
+
                 case "date":
                 case "timestamp":
                 case "timestamp without time zone":

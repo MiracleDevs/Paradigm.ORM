@@ -26,12 +26,10 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
-            using (var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription))
-            {
-                selectCommand.GetCommand().CommandText.Should().Be(fixture.SelectQuery);
-            }
+            var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription);
+            selectCommand.GetCommand().CommandText.Should().Be(fixture.SelectQuery);
         }
-        
+
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
@@ -41,11 +39,8 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
-
-            using (var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription))
-            {
-                selectCommand.GetCommand(fixture.SelectWhereClause).CommandText.Should().Be(fixture.SelectWithWhereQuery);
-            }
+            var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription);
+            selectCommand.GetCommand(fixture.SelectWhereClause).CommandText.Should().Be(fixture.SelectWithWhereQuery);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
@@ -58,14 +53,13 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
-            using (var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription))
-            {
-                var command = selectCommand.GetCommand(723);
-                var parameters = command.Parameters.ToList();
-                command.CommandText.Should().Be(fixture.SelectOneQuery);
-                parameters.Should().HaveCount(1);
-                parameters[0].Value.Should().Be(723);
-            }
+            var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
+
+            var command = selectCommand.GetCommand(723);
+            var parameters = command.Parameters.ToList();
+            command.CommandText.Should().Be(fixture.SelectOneQuery);
+            parameters.Should().HaveCount(1);
+            parameters[0].Value.Should().Be(723);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
@@ -78,15 +72,14 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
-            using (var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription))
-            { 
-                var command = selectCommand.GetCommand(723, 23);
-                var parameters = command.Parameters.ToList();
-                command.CommandText.Should().Be(fixture.SelectWithTwoPrimaryKeysQuery);
-                parameters.Should().HaveCount(2);
-                parameters[0].Value.Should().Be(723);
-                parameters[1].Value.Should().Be(23);
-            }
+            var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
+
+            var command = selectCommand.GetCommand(723, 23);
+            var parameters = command.Parameters.ToList();
+            command.CommandText.Should().Be(fixture.SelectWithTwoPrimaryKeysQuery);
+            parameters.Should().HaveCount(2);
+            parameters[0].Value.Should().Be(723);
+            parameters[1].Value.Should().Be(23);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
@@ -98,12 +91,10 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
-            using (var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription))
-            {
-                Action select = () => selectCommand.GetCommand(null);
-                select.ShouldThrow<ArgumentNullException>();
-            }
+            Action select = () => selectCommand.GetCommand(null);
+            select.ShouldThrow<ArgumentNullException>();
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
@@ -116,11 +107,10 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
-            using (var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription))
-            {
-                Action select = () => selectCommand.GetCommand(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-                select.ShouldThrow<ArgumentException>();
-            }
+            var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
+
+            Action select = () => selectCommand.GetCommand(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            select.ShouldThrow<ArgumentException>();
         }
 
 
@@ -131,11 +121,10 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
+            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
 
-            using (var lastIdCommand = commandBuilderFactory.CreateLastInsertIdCommandBuilder())
-            {
-                lastIdCommand.GetCommand().CommandText.Should().Be(fixture.LastInsertIdQuery);
-            }
+            var lastIdCommand = commandBuilderFactory.CreateLastInsertIdCommandBuilder(tableDescription);
+            lastIdCommand.GetCommand().CommandText.Should().Be(fixture.LastInsertIdQuery);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
@@ -150,29 +139,28 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.Entity1 });
             valueProvider.MoveNext();
 
-            using (var insertCommand = commandBuilderFactory.CreateInsertCommandBuilder(tableDescription))
-            {
-                var command = insertCommand.GetCommand(valueProvider);
-                var parameters = command.Parameters.ToList();
-                command.CommandText.Should().Be(fixture.InsertQuery);
+            var insertCommand = commandBuilderFactory.CreateInsertCommandBuilder(tableDescription);
 
-                if (fixtureType == typeof(CqlCommandBuilderFixture))
-                {
-                    parameters.Should().HaveCount(5);
-                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                    parameters[0].Value.Should().Be(3600m);
-                    parameters[3].Value.Should().Be(true);
-                    parameters[4].Value.Should().Be("John Doe");
-                }
-                else
-                {
-                    parameters.Should().HaveCount(4);
-                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                    parameters[0].Value.Should().Be(3600m);
-                    parameters[1].Value.Should().Be(new DateTime(2017, 5, 23, 13, 55, 43, 0));
-                    parameters[2].Value.Should().Be(true);
-                    parameters[3].Value.Should().Be("John Doe");
-                }
+            var command = insertCommand.GetCommand(valueProvider);
+            var parameters = command.Parameters.ToList();
+            command.CommandText.Should().Be(fixture.InsertQuery);
+
+            if (fixtureType == typeof(CqlCommandBuilderFixture))
+            {
+                parameters.Should().HaveCount(5);
+                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                parameters[0].Value.Should().Be(3600m);
+                parameters[3].Value.Should().Be(true);
+                parameters[4].Value.Should().Be("John Doe");
+            }
+            else
+            {
+                parameters.Should().HaveCount(4);
+                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                parameters[0].Value.Should().Be(3600m);
+                parameters[1].Value.Should().Be(new DateTime(2017, 5, 23, 13, 55, 43, 0));
+                parameters[2].Value.Should().Be(true);
+                parameters[3].Value.Should().Be("John Doe");
             }
         }
 
@@ -188,10 +176,8 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var entitiesToDelete = new[] { fixture.Entity1 };
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
-            using (var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription))
-            {
-                deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQuery);
-            }
+            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
+            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQuery);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
@@ -206,10 +192,8 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var entitiesToDelete = new[] { fixture.Entity1, fixture.Entity2 };
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
-            using (var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription))
-            {
-                deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQuery);
-            }
+            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
+            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQuery);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
@@ -226,34 +210,32 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             entityToUpdate.Name = "John Doe Junior";
             entityToUpdate.Amount = 7200m;
 
-            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object>{entityToUpdate});
+            var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { entityToUpdate });
             valueProvider.MoveNext();
 
-            using (var updateCommand = commandBuilderFactory.CreateUpdateCommandBuilder(tableDescription))
-            {
-                var command = updateCommand.GetCommand(valueProvider);
-                var parameters = command.Parameters.ToList();
-                command.CommandText.Should().Be(fixture.UpdateQuery);
+            var updateCommand = commandBuilderFactory.CreateUpdateCommandBuilder(tableDescription);
+            var command = updateCommand.GetCommand(valueProvider);
+            var parameters = command.Parameters.ToList();
+            command.CommandText.Should().Be(fixture.UpdateQuery);
 
-                if (fixtureType == typeof(CqlCommandBuilderFixture))
-                {
-                    parameters.Should().HaveCount(5);
-                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                    parameters[0].Value.Should().Be(7200m);
-                    parameters[2].Value.Should().Be(fixture.Entity1.Id);
-                    parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
-                    parameters[4].Value.Should().Be("John Doe Junior");
-                }
-                else
-                {
-                    parameters.Should().HaveCount(5);
-                    parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
-                    parameters[0].Value.Should().Be(7200m);
-                    parameters[1].Value.Should().Be(fixture.Entity1.CreatedDate);
-                    parameters[2].Value.Should().Be(fixture.Entity1.Id);
-                    parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
-                    parameters[4].Value.Should().Be("John Doe Junior");
-                }
+            if (fixtureType == typeof(CqlCommandBuilderFixture))
+            {
+                parameters.Should().HaveCount(5);
+                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                parameters[0].Value.Should().Be(7200m);
+                parameters[2].Value.Should().Be(fixture.Entity1.Id);
+                parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
+                parameters[4].Value.Should().Be("John Doe Junior");
+            }
+            else
+            {
+                parameters.Should().HaveCount(5);
+                parameters.Sort((x, y) => string.CompareOrdinal(x.ParameterName, y.ParameterName));
+                parameters[0].Value.Should().Be(7200m);
+                parameters[1].Value.Should().Be(fixture.Entity1.CreatedDate);
+                parameters[2].Value.Should().Be(fixture.Entity1.Id);
+                parameters[3].Value.Should().Be(fixture.Entity1.IsActive);
+                parameters[4].Value.Should().Be("John Doe Junior");
             }
         }
     }

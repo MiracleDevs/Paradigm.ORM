@@ -1,5 +1,3 @@
-using System;
-
 namespace Paradigm.ORM.Data.CommandBuilders
 {
     /// <summary>
@@ -7,7 +5,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
     /// The ORM uses the command builders to create and cache
     /// regular CRUD commands.
     /// </summary>
-    public interface ICommandBuilder: IDisposable
+    public interface ICommandBuilder
     {
     }
 }

@@ -18,7 +18,7 @@ namespace Paradigm.ORM.Data.MySql
     /// <summary>
     /// Provides a connection to a MySql Server database.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.IDatabaseConnector" />
+    /// <seealso cref="IDatabaseConnector" />
     public partial class MySqlDatabaseConnector : IDatabaseConnector
     {
         #region Properties
@@ -144,9 +144,6 @@ namespace Paradigm.ORM.Data.MySql
         public void Dispose()
         {
             this.Connection?.Dispose();
-
-            if (this.SchemaProvider?.IsValueCreated ?? false)
-                this.SchemaProvider.Value?.Dispose();
 
             if (this.Transactions != null)
             {

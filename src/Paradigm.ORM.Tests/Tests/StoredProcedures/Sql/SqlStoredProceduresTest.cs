@@ -28,13 +28,12 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
             this.Fixture.CreateChildTable();
             this.Fixture.CreateStoredProcedures();
 
-            using (var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable)))
-            {
-                databaseAccess.Insert(this.Fixture.CreateNewActiveEntity());
-                databaseAccess.Insert(this.Fixture.CreateNewActiveEntity());
-                databaseAccess.Insert(this.Fixture.CreateNewInactiveEntity());
-                databaseAccess.Insert(this.Fixture.CreateNewInactiveEntity());
-            }
+            var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable));
+
+            databaseAccess.Insert(this.Fixture.CreateNewActiveEntity());
+            databaseAccess.Insert(this.Fixture.CreateNewActiveEntity());
+            databaseAccess.Insert(this.Fixture.CreateNewInactiveEntity());
+            databaseAccess.Insert(this.Fixture.CreateNewInactiveEntity());
         }
 
         [Test]

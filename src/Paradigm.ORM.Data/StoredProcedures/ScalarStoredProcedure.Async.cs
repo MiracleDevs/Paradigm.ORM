@@ -1,4 +1,6 @@
+using Paradigm.ORM.Data.Extensions;
 using System;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace Paradigm.ORM.Data.StoredProcedures
@@ -19,8 +21,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
             if (parameters == null)
                 throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
 
-            this.SetParametersValue(parameters);
-            return (TResult) await this.Command.ExecuteScalarAsync();
+            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
+            {
+                this.PopulateParameters(command, parameters);
+                return (TResult)await command.ExecuteScalarAsync();
+            }
         }
 
         #endregion

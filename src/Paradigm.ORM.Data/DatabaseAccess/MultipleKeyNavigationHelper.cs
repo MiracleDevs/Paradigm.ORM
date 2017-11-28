@@ -72,7 +72,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </summary>
         /// <param name="mainEntity">The main entity.</param>
         /// <param name="referencedEntities">The referenced entities.</param>
-        /// <param name="referencerProperty">Property in the main entity that references the related entity.</param>   
+        /// <param name="referencerProperty">Property in the main entity that references the related entity.</param>
         public void PopulateReferenced(object mainEntity, IList referencedEntities, PropertyInfo referencerProperty)
         {
             var navigationDescriptors = this.NavigationPropertyDescriptor.NavigationKeyDescriptors.ToList();

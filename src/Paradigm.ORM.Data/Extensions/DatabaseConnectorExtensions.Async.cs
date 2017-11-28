@@ -21,10 +21,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <seealso cref="Querying.Query{TResultType}"/>
         public static async Task<List<TResultType>> QueryAsync<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class
         {
-            using (var query = new Query<TResultType>(connector))
-            {
-                return await query.ExecuteAsync(whereClause, parameters);
-            }
+            return await new Query<TResultType>(connector).ExecuteAsync(whereClause, parameters);
         }
 
         /// <summary>
@@ -39,10 +36,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <seealso cref="Querying.CustomQuery{TResultType}"/>
         public static async Task<List<TResultType>> CustomQueryAsync<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class
         {
-            using (var customQuery = new CustomQuery<TResultType>(connector, query))
-            {
-                return await customQuery.ExecuteAsync(whereClause, parameters);
-            }
+            return await new CustomQuery<TResultType>(connector, query).ExecuteAsync(whereClause, parameters);
         }
 
         /// <summary>

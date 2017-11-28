@@ -27,17 +27,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <summary>
         /// Gets the service provider.
         /// </summary>
-        protected IServiceProvider ServiceProvider { get; private set; }
+        protected IServiceProvider ServiceProvider { get; }
 
         /// <summary>
         /// Gets the database connector.
         /// </summary>
-        protected IDatabaseConnector Connector { get; private set; }
+        protected IDatabaseConnector Connector { get; }
 
         /// <summary>
         /// Gets the table type descriptor.
         /// </summary>
-        protected ITableTypeDescriptor Descriptor { get; private set; }
+        protected ITableTypeDescriptor Descriptor { get; }
 
         /// <summary>
         /// Gets the command builder manager.
@@ -122,22 +122,6 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         #region Public Methods
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public virtual void Dispose()
-        {
-            this.NavigationDatabaseAccesses?.ForEach(x => x?.Dispose());
-            this.CommandBuilderManager?.Dispose();
-
-            this.ServiceProvider = null;
-            this.Connector = null;
-            this.Mapper = null;
-            this.CommandBuilderManager = null;
-            this.Descriptor = null;
-            this.NavigationDatabaseAccesses?.Clear();
-        }
-
-        /// <summary>
         /// Selects one element from the database.
         /// </summary>
         /// <param name="ids">Array of id values.</param>
@@ -146,14 +130,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual object SelectOne(params object[] ids)
         {
-            // 1. get current entity.
-            var entities = this.Connector.ExecuteReader(this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids), reader => this.Mapper.Map(reader));
+            using (var command = this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids))
+            {
+                // 1. get current entity.
+                var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
 
-            // 2. get related entities.
-            foreach (var x in this.NavigationDatabaseAccesses)
-                x.Select(entities);
+                // 2. get related entities.
+                foreach (var x in this.NavigationDatabaseAccesses)
+                    x.Select(entities);
 
-            return entities.FirstOrDefault();
+                return entities.FirstOrDefault();
+            }
 
         }
 
@@ -181,21 +168,24 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual List<object> Select(string whereClause, params object[] parameters)
         {
-            // 1. get the current entities.
-            var entities = this.Connector.ExecuteReader(this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters), reader => this.Mapper.Map(reader));
+            using (var command = this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters))
+            {
+                // 1. get the current entities.
+                var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
 
-            // 2. get related entities.
-            foreach (var x in this.NavigationDatabaseAccesses)
-                x.Select(entities);
+                // 2. get related entities.
+                foreach (var x in this.NavigationDatabaseAccesses)
+                    x.Select(entities);
 
-            return entities;
+                return entities;
+            }
         }
 
         /// <summary>
         /// Inserts an object into the table or view.
         /// </summary>
         /// <param name="entity">Object to insert.</param>
-        /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
+        /// <exception cref="ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to insert, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Insert(System.Collections.Generic.IEnumerable{System.Object})" />
         /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
@@ -212,7 +202,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// Inserts a list of objects into the table or view.
         /// </summary>
         /// <param name="entities">List of entities to insert.</param>
-        /// <exception cref="System.ArgumentNullException">entities can not be null.</exception>
+        /// <exception cref="ArgumentNullException">entities can not be null.</exception>
         /// <remarks>
         /// This method utilizes batching to prevent unnecessary roundtrips to the database.
         /// </remarks>
@@ -243,14 +233,21 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 while(valueProvider.MoveNext())
                 {
-                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider)));
+                    using (var command = this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider))
+                    {
+                        batchManager.Add(new CommandBatchStep(command));
+                    }
 
                     // if the entity has an auto incremental property,
                     // queue a command to retrieve the id from the last insertion.
                     if (this.Descriptor.IdentityProperty != null)
                     {
                         var entity = valueProvider.CurrentEntity;
-                        batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand(), reader => this.SetEntityId(entity, reader)));
+
+                        using (var command = this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand())
+                        {
+                            batchManager.Add(new CommandBatchStep(command, reader => this.SetEntityId(entity, reader)));
+                        }
                     }
                 }
 
@@ -319,7 +316,10 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 while (valueProvider.MoveNext())
                 {
-                    batchManager.Add(new CommandBatchStep(this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider)));
+                    using (var command = this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider))
+                    {
+                        batchManager.Add(new CommandBatchStep(command));
+                    }
                 }
 
                 batchManager.Execute();
@@ -375,7 +375,11 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                 x.DeleteBefore(entityList);
 
             var valueProvider = new ClassValueProvider(this.Connector, entityList);
-            this.Connector.ExecuteNonQuery(this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider));
+
+            using (var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider))
+            {
+                this.Connector.ExecuteNonQuery(command);
+            }
 
             foreach (var x in this.NavigationDatabaseAccesses)
                 x.DeleteAfter(entityList);

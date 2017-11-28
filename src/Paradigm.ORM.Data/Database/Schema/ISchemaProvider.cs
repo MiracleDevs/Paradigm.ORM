@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.Database.Schema
@@ -7,10 +6,10 @@ namespace Paradigm.ORM.Data.Database.Schema
     /// <summary>
     /// Provides an interface to retrieve schema information from the database.
     /// </summary>
-    public partial interface ISchemaProvider : IDisposable
+    public partial interface ISchemaProvider
     {
         /// <summary>
-        /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return. 
+        /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of table names you want to retrieve.</param>
@@ -18,7 +17,7 @@ namespace Paradigm.ORM.Data.Database.Schema
         List<ITable> GetTables(string database, params string[] filter);
 
         /// <summary>
-        /// Gets the schema of database views specifying the database, and allowing to filter which views to return. 
+        /// Gets the schema of database views specifying the database, and allowing to filter which views to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of view names you want to retrieve.</param>
@@ -26,7 +25,7 @@ namespace Paradigm.ORM.Data.Database.Schema
         List<IView> GetViews(string database, params string[] filter);
 
         /// <summary>
-        /// Gets the schema of stored procedures specifying the database, and allowing to filter which stored procedures to return. 
+        /// Gets the schema of stored procedures specifying the database, and allowing to filter which stored procedures to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of stored procedure names you want to retrieve.</param>

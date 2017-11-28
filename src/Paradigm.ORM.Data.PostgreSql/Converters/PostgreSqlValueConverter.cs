@@ -6,8 +6,8 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
     /// <summary>
     /// Provides methods to convert from database objects to .net types.
     /// </summary>
-    /// <seealso cref="T:Paradigm.ORM.Data.Converters.IValueConverter" />
-    /// <seealso cref="T:Paradigm.ORM.Data.Converters.ValueConverterBase" />
+    /// <seealso cref="IValueConverter" />
+    /// <seealso cref="ValueConverterBase" />
     public class PostgreSqlValueConverter: ValueConverterBase
     {
     }

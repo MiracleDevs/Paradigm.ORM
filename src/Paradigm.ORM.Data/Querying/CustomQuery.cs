@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
@@ -38,28 +39,23 @@ namespace Paradigm.ORM.Data.Querying
         protected string CommandText { get; }
 
         /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        protected IDatabaseCommand Command { get; set; }
-
-        /// <summary>
         /// Gets the database connector.
         /// </summary>
-        protected IDatabaseConnector Connector { get; private set; }
+        protected IDatabaseConnector Connector { get; }
 
         /// <summary>
         /// Gets the custom type descriptor.
         /// </summary>
-        protected ICustomTypeDescriptor Descriptor { get; private set; }
+        protected ICustomTypeDescriptor Descriptor { get; }
 
         /// <summary>
         /// Gets the database reader mapper.
         /// </summary>
-        protected IDatabaseReaderMapper<TResultType> Mapper { get; private set; }
+        protected IDatabaseReaderMapper<TResultType> Mapper { get; }
 
         #endregion
 
-        #region Constructor 
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomQuery{TResultType}"/> class.
@@ -81,26 +77,12 @@ namespace Paradigm.ORM.Data.Querying
             this.Connector = connector;
             this.Descriptor = descriptor;
             this.CommandText = query;
-            this.Command = connector.CreateCommand();
-            this.Command.CommandText = query;
             this.Mapper = new DatabaseReaderMapper<TResultType>(connector, descriptor);
         }
 
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.Command?.Dispose();
-            this.Connector = null;
-            this.Descriptor = null;
-            this.Command = null;
-            this.Mapper = null;
-        }
 
         /// <summary>
         /// Executes the specified query and returns a list of <see cref="TResultType" />.
@@ -112,25 +94,26 @@ namespace Paradigm.ORM.Data.Querying
         /// </returns>
         public List<TResultType> Execute(string whereClause = null, params object[] parameters)
         {
+            var builder = new StringBuilder(this.CommandText);
+
             if (!string.IsNullOrWhiteSpace(whereClause))
+                builder.AppendFormat(" WHERE {0}", whereClause);
+
+            using (var command = this.Connector.CreateCommand(this.CommandText))
             {
-                this.Command.CommandText = $"{this.CommandText} WHERE {whereClause}";
-
-                this.Command.ClearParameters();
-
                 if (parameters != null)
                 {
                     for (var index = 0; index < parameters.Length; index++)
                     {
                         var parameter = parameters[index];
                         var type = parameter == null ? typeof(object) : parameter.GetType();
-                        var commandParameter = this.Command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
+                        var commandParameter = command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
                         commandParameter.Value = parameter ?? DBNull.Value;
                     }
                 }
-            }
 
-            return this.Connector.ExecuteReader(this.Command, reader => this.Mapper.Map(reader));
+                return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
+            }
         }
 
         #endregion

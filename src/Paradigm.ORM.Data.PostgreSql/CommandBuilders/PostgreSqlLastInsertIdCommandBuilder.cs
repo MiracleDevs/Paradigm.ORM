@@ -1,32 +1,25 @@
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
-using Paradigm.ORM.Data.Extensions;
+using Paradigm.ORM.Data.Descriptors;
 
 namespace Paradigm.ORM.Data.PostgreSql.CommandBuilders
 {
     /// <summary>
     /// Provides an implementation for postgresql select last inserted id command builder objects.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ILastInsertIdCommandBuilder" />
-    public class PostgreSqlLastInsertIdCommandBuilder : ILastInsertIdCommandBuilder
+    /// <seealso cref="LastInsertIdCommandBuilderBase" />
+    /// <seealso cref="ILastInsertIdCommandBuilder" />
+    public class PostgreSqlLastInsertIdCommandBuilder : LastInsertIdCommandBuilderBase
     {
-        #region Columns
+        #region Properties
 
         /// <summary>
-        /// Gets the database connector.
+        /// Gets the command text.
         /// </summary>
         /// <value>
-        /// The connector.
+        /// The command text.
         /// </value>
-        private IDatabaseConnector Connector { get; set; }
-
-        /// <summary>
-        /// Gets or sets the command.
-        /// </summary>
-        /// <value>
-        /// The command.
-        /// </value>
-        private IDatabaseCommand Command { get; set; }
+        protected override string CommandText => "SELECT LASTVAL()";
 
         #endregion
 
@@ -35,48 +28,10 @@ namespace Paradigm.ORM.Data.PostgreSql.CommandBuilders
         /// <summary>
         /// Initializes a new instance of the <see cref="PostgreSqlLastInsertIdCommandBuilder"/> class.
         /// </summary>
-        /// <param name="connector">The database connector.</param>
-        public PostgreSqlLastInsertIdCommandBuilder(IDatabaseConnector connector)
+        /// <param name="connector">The connector.</param>
+        /// <param name="descriptor">The table descriptor.</param>
+        public PostgreSqlLastInsertIdCommandBuilder(IDatabaseConnector connector, ITableDescriptor descriptor): base(connector, descriptor)
         {
-            this.Connector = connector;
-            this.Initialize();
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.Command?.Dispose();
-            this.Command = null;
-            this.Connector = null;
-        }
-
-        /// <summary>
-        /// Gets a command to retrieve the last inserted id.
-        /// </summary>
-        /// <returns>
-        /// a command already parametrized to retrieve the last inserted id.
-        /// </returns>
-        public IDatabaseCommand GetCommand()
-        {
-            return this.Command;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        private void Initialize()
-        {
-            this.Command = this.Connector.CreateCommand("SELECT LASTVAL()");
         }
 
         #endregion

@@ -34,21 +34,20 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
         {
             var builder = new StringBuilder();
 
-            using (var insertCommandBuilder = new InsertCommandBuilder(this.Connector, tableData.TableDescriptor))
+            var insertCommandBuilder = new InsertCommandBuilder(this.Connector, tableData.TableDescriptor);
+
+            while (valueProvider.MoveNext())
             {
-                while (valueProvider.MoveNext())
+                var command = insertCommandBuilder.GetCommand(valueProvider);
+                var commandText = command.CommandText;
+
+                foreach (var parameter in command.Parameters)
                 {
-                    var command = insertCommandBuilder.GetCommand(valueProvider);
-                    var commandText = command.CommandText;
-
-                    foreach (var parameter in command.Parameters)
-                    {
-                        commandText = commandText.Replace(parameter.ParameterName, this.FormatProvider.GetColumnValue(parameter.Value, parameter.Value.GetType()));
-                    }
-
-                    builder.Append(commandText);
-                    builder.AppendLine(this.FormatProvider.GetQuerySeparator());
+                    commandText = commandText.Replace(parameter.ParameterName, this.FormatProvider.GetColumnValue(parameter.Value, parameter.Value.GetType()));
                 }
+
+                builder.Append(commandText);
+                builder.AppendLine(this.FormatProvider.GetQuerySeparator());
             }
 
             return builder.ToString();

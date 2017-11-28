@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
     /// <summary>
     /// Provides an implementation to instantiate all the standard command builders.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.ICommandBuilderFactory" />
+    /// <seealso cref="ICommandBuilderFactory" />
     public class SqlCommandBuilderFactory : ICommandBuilderFactory
     {
         /// <summary>
@@ -76,10 +76,11 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         /// <summary>
         /// Creates the last insert identifier command builder.
         /// </summary>
+        /// <param name="descriptor">The table descriptor.</param>
         /// <returns></returns>
-        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder()
+        public ILastInsertIdCommandBuilder CreateLastInsertIdCommandBuilder(ITableDescriptor descriptor)
         {
-            return new SqlLastInsertIdCommandBuilder(this.Connector);
+            return new SqlLastInsertIdCommandBuilder(this.Connector, descriptor);
         }
     }
 }

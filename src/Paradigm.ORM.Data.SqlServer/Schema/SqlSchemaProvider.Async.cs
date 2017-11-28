@@ -5,7 +5,7 @@ using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.SqlServer.Schema
 {
-    public partial class SqlSchemaProvider 
+    public partial class SqlSchemaProvider
     {
         #region Public Methods
 

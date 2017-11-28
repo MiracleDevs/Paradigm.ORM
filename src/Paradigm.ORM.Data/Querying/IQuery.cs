@@ -7,8 +7,8 @@ namespace Paradigm.ORM.Data.Querying
     /// Provides an interface for query objects.
     /// </summary>
     /// <typeparam name="TResultType">The type containing or referencing the mapping information, that will be returned after executing the query.</typeparam>
-    /// <seealso cref="System.IDisposable" />
-    public partial interface IQuery<TResultType> : IDisposable
+    /// <seealso cref="IDisposable" />
+    public partial interface IQuery<TResultType>
         where TResultType : class
     {
         /// <summary>

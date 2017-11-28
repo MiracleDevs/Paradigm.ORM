@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.MySql.Schema
     /// </summary>
     public partial class MySqlSchemaProvider : ISchemaProvider
     {
-        #region String Constants        
+        #region String Constants
 
         /// <summary>
         /// Gets the column schema query string.
@@ -94,36 +94,36 @@ namespace Paradigm.ORM.Data.MySql.Schema
         /// <summary>
         /// Gets or sets the column query.
         /// </summary>
-        private CustomQuery<MySqlColumn> ColumnQuery { get; set; }
+        private CustomQuery<MySqlColumn> ColumnQuery { get; }
 
         /// <summary>
         /// Gets or sets the constraint query.
         /// </summary>
-        private CustomQuery<MySqlConstraint> ConstraintQuery { get; set; }
+        private CustomQuery<MySqlConstraint> ConstraintQuery { get; }
 
         /// <summary>
         /// Gets or sets the parameter query.
         /// </summary>
-        private CustomQuery<MySqlParameter> ParameterQuery { get; set; }
+        private CustomQuery<MySqlParameter> ParameterQuery { get; }
 
         /// <summary>
         /// Gets or sets the view query.
         /// </summary>
-        private Query<MySqlView> ViewQuery { get; set; }
+        private Query<MySqlView> ViewQuery { get; }
 
         /// <summary>
         /// Gets or sets the table query.
         /// </summary>
-        private Query<MySqlTable> TableQuery { get; set; }
+        private Query<MySqlTable> TableQuery { get; }
 
         /// <summary>
         /// Gets or sets the stored procedure query.
         /// </summary>
-        private Query<MySqlStoredProcedure> StoredProcedureQuery { get; set; }
+        private Query<MySqlStoredProcedure> StoredProcedureQuery { get; }
 
         #endregion
 
-        #region Constructor        
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MySqlSchemaProvider"/> class.
@@ -144,26 +144,6 @@ namespace Paradigm.ORM.Data.MySql.Schema
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.ColumnQuery?.Dispose();
-            this.ConstraintQuery?.Dispose();
-            this.ParameterQuery?.Dispose();
-            this.ViewQuery?.Dispose();
-            this.TableQuery?.Dispose();
-            this.StoredProcedureQuery?.Dispose();
-
-            this.ColumnQuery = null;
-            this.ConstraintQuery = null;
-            this.ParameterQuery = null;
-            this.ViewQuery = null;
-            this.TableQuery = null;
-            this.StoredProcedureQuery = null;
-        }
 
         /// <summary>
         /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return.

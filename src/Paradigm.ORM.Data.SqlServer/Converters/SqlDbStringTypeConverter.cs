@@ -4,11 +4,10 @@ using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.SqlServer.Converters
 {
-    /// <inheritdoc />
     /// <summary>
     /// Provides an interface to convert from database types or database schema tables to .net types.
     /// </summary>
-    /// <seealso cref="T:Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
+    /// <seealso cref="IDbStringTypeConverter" />
     public class SqlDbStringTypeConverter : IDbStringTypeConverter
     {
         /// <summary>
@@ -122,48 +121,48 @@ namespace Paradigm.ORM.Data.SqlServer.Converters
         /// <returns></returns>
         private Type GetNativeType(string dbType)
         {
-            /* 
+            /*
                 SQL Type		    .NET Type
-                                    
+
                 bit				    Boolean
                 tinyint			    Byte
-                smallint		    Int16	
+                smallint		    Int16
                 int				    Int32
                 bigint			    Int64
-                                    
-                real			    Single	
+
+                real			    Single
                 float			    Double
                 money			    Decimal
                 numeric			    Decimal
                 decimal			    Decimal
                 smallmoney		    Decimal
-                                    
+
                 date			    DateTime
                 smalldatetime	    DateTime
                 datetime		    DateTime
                 datetime2		    DateTime
-                datetimeoffset	    DateTimeOffset	
-                time			    TimeSpan   (The documentation is wrong, and will throw a 
-                                               'Failed to convert parameter value from a TimeSpan to a DateTime.'. 
+                datetimeoffset	    DateTimeOffset
+                time			    TimeSpan   (The documentation is wrong, and will throw a
+                                               'Failed to convert parameter value from a TimeSpan to a DateTime.'.
                                                 The correct type is DateTime).
-                                    
+
                 char			    String
                 text			    String
                 varchar			    String
                 nchar			    String
                 ntext			    String
                 nvarchar		    String
-                                    
+
                 binary			    Byte[]
                 varbinary		    Byte[]
-                FILESTREAM  	    Byte[]	
+                FILESTREAM  	    Byte[]
                 image			    Byte[]
                 rowversion		    Byte[]
                 timestamp		    Byte[]
-                                    
-                sql_variant		    Object 
+
+                sql_variant		    Object
                 uniqueidentifier    Guid
-                xml				    Xml		
+                xml				    Xml
             */
 
             switch (dbType.ToLower())

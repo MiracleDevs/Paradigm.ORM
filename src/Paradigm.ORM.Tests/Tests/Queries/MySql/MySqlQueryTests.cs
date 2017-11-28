@@ -28,11 +28,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
             Fixture.CreateParentTable();
             Fixture.CreateChildTable();
 
-            using (var databaseAccess = new DatabaseAccess(Fixture.Connector, typeof(SingleKeyParentTable)))
-            {
-                databaseAccess.Insert(Fixture.CreateNewEntity());
-                databaseAccess.Insert(Fixture.CreateNewEntity2());
-            }
+            var databaseAccess = new DatabaseAccess(Fixture.Connector, typeof(SingleKeyParentTable));
+
+            databaseAccess.Insert(Fixture.CreateNewEntity());
+            databaseAccess.Insert(Fixture.CreateNewEntity2());
         }
 
         [Test]
@@ -95,8 +94,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Should().HaveSameCount(result);
-
-            query.Dispose();
         }
 
         [Test]
@@ -110,8 +107,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            query.Dispose();
         }
 
         [Test]
@@ -125,31 +120,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            query.Dispose();
-        }
-
-        [Test]
-        public void DisposingTwoTimesShouldBeOk()
-        {
-            var query = new Query<SingleKeyParentTable>(Fixture.Connector);
-
-            var result = query.Execute();
-            
-            query.Dispose();
-            query.Dispose();
-        }
-
-        [Test]
-        public void ShouldNotUseDisposedQueryObject()
-        {
-            var query = new Query<SingleKeyParentTable>(Fixture.Connector);
-
-            var result = query.Execute();
-            query.Dispose();
-
-            Action executeQuery = () => query.Execute();
-            executeQuery.ShouldThrow<NullReferenceException>();
         }
 
         [OneTimeTearDown]

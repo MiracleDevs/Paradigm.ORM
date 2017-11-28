@@ -26,11 +26,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             this.Fixture.CreateParentTable();
             this.Fixture.CreateChildTable();
 
-            using (var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable)))
-            {
-                databaseAccess.Insert(this.Fixture.CreateNewEntity());
-                databaseAccess.Insert(this.Fixture.CreateNewEntity2());
-            }
+            var databaseAccess = new DatabaseAccess(this.Fixture.Connector, typeof(SingleKeyParentTable));
+
+            databaseAccess.Insert(this.Fixture.CreateNewEntity());
+            databaseAccess.Insert(this.Fixture.CreateNewEntity2());
         }
 
         [Test]
@@ -93,8 +92,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Should().HaveSameCount(result);
-
-            query.Dispose();
         }
 
         [Test]
@@ -108,8 +105,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            query.Dispose();
         }
 
         [Test]
@@ -123,27 +118,6 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
             result2.Count.Should().NotBe(result.Count);
-
-            query.Dispose();
-        }
-
-        [Test]
-        public void DisposingTwoTimesShouldBeOk()
-        {
-            var query = new Query<SingleKeyParentTable>(this.Fixture.Connector);
-
-            query.Dispose();
-            query.Dispose();
-        }
-
-        [Test]
-        public void ShouldNotUseDisposedQueryObject()
-        {
-            var query = new Query<SingleKeyParentTable>(this.Fixture.Connector);
-
-            query.Dispose();
-            Action executeQuery = () => query.Execute();
-            executeQuery.ShouldThrow<NullReferenceException>();
         }
 
         [OneTimeTearDown]

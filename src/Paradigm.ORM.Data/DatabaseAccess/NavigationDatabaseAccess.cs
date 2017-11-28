@@ -30,7 +30,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <summary>
         /// Gets or sets the connector.
         /// </summary>
-        private IDatabaseConnector Connector { get; set; }
+        private IDatabaseConnector Connector { get; }
 
         /// <summary>
         /// Gets the end database access in the navigation relationships.
@@ -40,7 +40,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <summary>
         /// Gets the navigation property descriptor.
         /// </summary>
-        public INavigationPropertyDescriptor NavigationPropertyDescriptor { get; private set; }
+        public INavigationPropertyDescriptor NavigationPropertyDescriptor { get; }
 
         #endregion
 
@@ -62,18 +62,6 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.DatabaseAccess?.Dispose();
-            this.DatabaseAccess = null;
-            this.Connector = null;
-            this.NavigationPropertyDescriptor = null;
-            this.NavigationHelper = null;
-        }
 
         /// <summary>
         /// Initializes the navigation database access.

@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.SqlServer.Schema.Structure
     /// <summary>
     /// Provides a database column schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IColumn" />
+    /// <seealso cref="IColumn" />
     public class SqlColumn : IColumn
     {
         /// <summary>

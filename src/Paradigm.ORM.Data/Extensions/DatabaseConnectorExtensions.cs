@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using Paradigm.ORM.Data.Converters;
-using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Querying;
-using System.Linq;
 using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Extensions
@@ -24,10 +21,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <seealso cref="Querying.Query{TResultType}"/>
         public static List<TResultType> Query<TResultType>(this IDatabaseConnector connector, string whereClause = null, params object[] parameters) where TResultType : class
         {
-            using (var query = new Query<TResultType>(connector))
-            {
-                return query.Execute(whereClause, parameters);
-            }
+            return new Query<TResultType>(connector).Execute(whereClause, parameters);
         }
 
         /// <summary>
@@ -42,10 +36,7 @@ namespace Paradigm.ORM.Data.Extensions
         /// <seealso cref="Querying.CustomQuery{TResultType}"/>
         public static List<TResultType> CustomQuery<TResultType>(this IDatabaseConnector connector, string query, string whereClause = null, params object[] parameters) where TResultType : class
         {
-            using (var customQuery = new CustomQuery<TResultType>(connector, query))
-            {
-                return customQuery.Execute(whereClause, parameters);
-            }
+            return new CustomQuery<TResultType>(connector, query).Execute(whereClause, parameters);
         }
 
         /// <summary>
@@ -274,115 +265,17 @@ namespace Paradigm.ORM.Data.Extensions
         /// <summary>
         /// Creates a database command.
         /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="descriptor">The routine type descriptor.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, IRoutineTypeDescriptor descriptor)
-        {
-            return connector.CreateCommand<TParameters>(commandText, CommandType.StoredProcedure, descriptor);
-        }
-
-        /// <summary>
-        /// Creates a database command.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The databaseconnector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="commandType">Type of the command.</param>
-        /// <param name="descriptor">A routine type descriptor for the parameters.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, CommandType commandType, IRoutineTypeDescriptor descriptor)
-        {
-            var command = connector.CreateCommand(commandText);
-
-            command.CommandType = CommandType.StoredProcedure;
-            PopulateCommandParameters(connector, command, descriptor, default(TParameters), null);
-
-            return command;
-        }
-
-        /// <summary>
-        /// Creates a database command.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The databaseconnector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText)
-        {
-            return connector.CreateCommand(commandText, CommandType.Text, default(TParameters), null);
-        }
-
-        /// <summary>
-        /// Creates a database command.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
         /// <param name="connector">The database connector.</param>
         /// <param name="commandText">The command text.</param>
         /// <param name="commandType">Type of the command.</param>
         /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, CommandType commandType)
+        public static IDatabaseCommand CreateCommand(this IDatabaseConnector connector, string commandText, CommandType commandType)
         {
-            return connector.CreateCommand(commandText, commandType, default(TParameters), null);
-        }
+            var command = connector.CreateCommand();
 
-        /// <summary>
-        /// Creates a database command and populates the parameter values.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="parameters">The parameter type instance.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, TParameters parameters)
-        {
-            return connector.CreateCommand(commandText, CommandType.Text, parameters, null);
-        }
+            command.CommandText = commandText;
+            command.CommandType = commandType;
 
-        /// <summary>
-        /// Creates a database command and populates the parameter values.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="parameters">The parameter type instance.</param>
-        /// <param name="ignoreProperties">A list with properties to ignore.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, TParameters parameters, params string[] ignoreProperties)
-        {
-            return connector.CreateCommand(commandText, CommandType.Text, parameters, ignoreProperties);
-        }
-
-        /// <summary>
-        /// Creates a database command and populates the parameter values.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="commandType">Type of the command.</param>
-        /// <param name="parameters">The parameter type instance.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, CommandType commandType, TParameters parameters)
-        {
-            return connector.CreateCommand(commandText, parameters, null);
-        }
-
-        /// <summary>
-        /// Creates a database command and populates the parameter values.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of a class containing the parameters.</typeparam>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="commandText">The command text.</param>
-        /// <param name="commandType">Type of the command.</param>
-        /// <param name="parameters">The parameter type instance.</param>
-        /// <param name="ignoreProperties">A list with properties to ignore.</param>
-        /// <returns>A database command.</returns>
-        public static IDatabaseCommand CreateCommand<TParameters>(this IDatabaseConnector connector, string commandText, CommandType commandType, TParameters parameters, params string[] ignoreProperties)
-        {
-            var command = connector.CreateCommand(commandText);
-            PopulateCommandParameters(connector, command, parameters, ignoreProperties);
             return command;
         }
 
@@ -399,54 +292,6 @@ namespace Paradigm.ORM.Data.Extensions
             if (!connector.IsOpen())
             {
                 connector.Open();
-            }
-        }
-
-        /// <summary>
-        /// Populates the command parameters.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of the parameters.</typeparam>
-        /// <param name="connector">Reference to a database connector.</param>
-        /// <param name="command">The command.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <param name="ignoreProperties">The ignore properties.</param>
-        private static void PopulateCommandParameters<TParameters>(IDatabaseConnector connector, IDatabaseCommand command, TParameters parameters, string[] ignoreProperties)
-        {
-            var descriptor = new RoutineTypeDescriptor(typeof(TParameters));
-
-            PopulateCommandParameters(connector, command, descriptor, parameters, ignoreProperties);
-        }
-
-        /// <summary>
-        /// Populates the command parameters.
-        /// </summary>
-        /// <typeparam name="TParameters">The type of the parameters.</typeparam>
-        /// <param name="connector">Reference to a database connector.</param>
-        /// <param name="command">The command.</param>
-        /// <param name="descriptor">The routine type descriptor.</param>
-        /// <param name="parameters">The parameters.</param>
-        /// <param name="ignoreProperties">The ignore properties.</param>
-        /// <exception cref="System.ArgumentNullException">descriptor - descriptor</exception>
-        private static void PopulateCommandParameters<TParameters>(IDatabaseConnector connector, IDatabaseCommand command, IRoutineTypeDescriptor descriptor, TParameters parameters, string[] ignoreProperties)
-        {
-            if (descriptor == null)
-                throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
-
-            var formatProvider = connector.GetCommandFormatProvider();
-
-            foreach (var parameter in descriptor.Parameters)
-            {
-                if (ignoreProperties != null && ignoreProperties.Contains(parameter.ParameterName))
-                    continue;
-
-                var commandParameter = command.AddParameter(formatProvider.GetParameterName(parameter.ParameterName), DbTypeConverter.FromType(parameter.Type));
-                commandParameter.Direction = parameter.IsInput ? ParameterDirection.Input : ParameterDirection.Output;
-
-                if (parameters == null || parameters.Equals(default(TParameters)))
-                    continue;
-
-                var value = parameter.PropertyInfo.GetValue(parameters);
-                commandParameter.Value = value ?? DBNull.Value;
             }
         }
 

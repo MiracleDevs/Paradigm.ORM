@@ -3,30 +3,16 @@ using System.Linq;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
-using Paradigm.ORM.Data.Extensions;
-using Paradigm.ORM.Data.ValueProviders;
 
 namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
 {
     /// <summary>
     /// Provides an implementation for sql insert command builder objects.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.CommandBuilderBase" />
-    /// <seealso cref="Paradigm.ORM.Data.CommandBuilders.IInsertCommandBuilder" />
-    public class SqlInsertCommandBuilder : CommandBuilderBase, IInsertCommandBuilder
+    /// <seealso cref="CommandBuilderBase" />
+    /// <seealso cref="IInsertCommandBuilder" />
+    public class SqlInsertCommandBuilder : InsertCommandBuilderBase, IInsertCommandBuilder
     {
-        #region Columns
-
-        /// <summary>
-        /// Gets or sets the insertable properties.
-        /// </summary>
-        /// <value>
-        /// The insertable properties.
-        /// </value>
-        private List<IColumnDescriptor> InsertableColumns { get; set; }
-
-        #endregion
-
         #region Constructor
 
         /// <summary>
@@ -36,42 +22,26 @@ namespace Paradigm.ORM.Data.SqlServer.CommandBuilders
         /// <param name="descriptor">A table type descriptor.</param>
         public SqlInsertCommandBuilder(IDatabaseConnector connector, ITableDescriptor descriptor): base(connector, descriptor)
         {
-            this.Initialize();
         }
 
         #endregion
 
-        #region Public Methods
+        #region Protected Methods
 
         /// <summary>
-        /// Gets an insert command query ready to insert one entity.
+        /// Gets a list of column descriptors that must be used in the insert statement.
         /// </summary>
-        /// <param name="valueProvider"></param>
         /// <returns>
-        /// An insert command already parametrized to insert the entity.
+        /// A list of column descriptors.
         /// </returns>
-        public IDatabaseCommand GetCommand(IValueProvider valueProvider)
+        /// <remarks>
+        /// Some databases may impose restrictions or limitation to the columns that can be
+        /// inserted due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// can not be inserted nor updated.
+        /// </remarks>
+        protected override List<IColumnDescriptor> GetInsertColumns()
         {
-            for (var i = 0; i < this.InsertableColumns.Count; i++)
-            {
-                this.Command.GetParameter(i).Value = valueProvider.GetValue(this.InsertableColumns[i]);
-            }
-
-            return this.Command;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Initializes the command builder.
-        /// </summary>
-        private void Initialize()
-        {
-            this.InsertableColumns = this.Descriptor.SimpleColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
-            this.Command = this.Connector.CreateCommand($"INSERT INTO {this.GetTableName()} ({this.GetPropertyNames(this.InsertableColumns)}) VALUES ({this.GetDbParameterNames(this.InsertableColumns)})");
-            this.PopulateParameters(this.InsertableColumns);
+            return this.Descriptor.SimpleColumns.Where(x => x.DataType.ToLower() != "timestamp").ToList();
         }
 
         #endregion

@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
     /// Provides an interface to access a database table or view.
     /// </summary>
     /// <seealso cref="IDisposable"/>
-    public partial interface IDatabaseAccess : IDisposable
+    public partial interface IDatabaseAccess 
     {
         /// <summary>
         /// Selects one element from the database.

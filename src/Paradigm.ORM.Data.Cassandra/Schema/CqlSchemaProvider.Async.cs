@@ -6,7 +6,7 @@ using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.Cassandra.Schema
 {
-    public partial class CqlSchemaProvider 
+    public partial class CqlSchemaProvider
     {
         #region Public Methods
 
@@ -20,8 +20,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<ITable>> GetTablesAsync(string database, params string[] filter)
         {
-            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database, TableType, filter)))
-                .Where(x => x.Type == "Standard" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+            return (await this.TableQuery.ExecuteAsync(this.GetTableWhere(database)))
+                .Where(x => x.Type == TableType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
                 .Cast<ITable>().ToList();
         }
 
@@ -35,8 +35,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public async Task<List<IView>> GetViewsAsync(string database, params string[] filter)
         {
-            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database, ViewType, filter)))
-                .Where(x => x.Type == "View" && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+            return (await this.ViewQuery.ExecuteAsync(this.GetTableWhere(database)))
+                .Where(x => x.Type == ViewType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
                 .Cast<IView>().ToList();
         }
 

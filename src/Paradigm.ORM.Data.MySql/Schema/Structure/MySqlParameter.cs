@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.MySql.Schema.Structure
     /// <summary>
     /// Provides a database routine parameter schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IParameter" />
+    /// <seealso cref="IParameter" />
     public class MySqlParameter : IParameter
     {
         /// <summary>
@@ -64,10 +64,10 @@ namespace Paradigm.ORM.Data.MySql.Schema.Structure
         public bool IsInput { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => $"Parameter [{this.StoredProcedureName}].[{this.Name}]";
     }

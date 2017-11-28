@@ -125,23 +125,23 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
         {
             /*************************************************************************** 
             * boolean   | org.apache.cassandra.db.marshal.BooleanType
-            * 
+            *
             * tinyint   | org.apache.cassandra.db.marshal.ByteType
             * smallint  | org.apache.cassandra.db.marshal.ShortType
             * int       | org.apache.cassandra.db.marshal.Int32Type
             * bigint    | org.apache.cassandra.db.marshal.LongType
             * varint    | org.apache.cassandra.db.marshal.IntegerType
-            * 
+            *
             * float     | org.apache.cassandra.db.marshal.FloatType
             * double    | org.apache.cassandra.db.marshal.DoubleType
             * decimal   | org.apache.cassandra.db.marshal.DecimalType
-            * 
+            *
             * date      | org.apache.cassandra.db.marshal.SimpleDateType
             * time      | org.apache.cassandra.db.marshal.TimeType
             * timestamp | org.apache.cassandra.db.marshal.TimestampType
             * timeuuid  | org.apache.cassandra.db.marshal.TimeUUIDType
-            * 
-            * uuid      | org.apache.cassandra.db.marshal.UUIDType               
+            *
+            * uuid      | org.apache.cassandra.db.marshal.UUIDType
             * text      | org.apache.cassandra.db.marshal.UTF8Type
             * varchar   | org.apache.cassandra.db.marshal.UTF8Type
             * ascii     | org.apache.cassandra.db.marshal.AsciiType

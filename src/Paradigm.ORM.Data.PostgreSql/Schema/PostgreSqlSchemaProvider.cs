@@ -111,37 +111,37 @@ namespace Paradigm.ORM.Data.PostgreSql.Schema
         /// <summary>
         /// Gets or sets the column query.
         /// </summary>
-        private CustomQuery<PostgreSqlColumn> ColumnQuery { get; set; }
+        private CustomQuery<PostgreSqlColumn> ColumnQuery { get; }
 
         /// <summary>
         /// Gets or sets the constraint query.
         /// </summary>
-        private CustomQuery<PostgreSqlConstraint> ConstraintQuery { get; set; }
+        private CustomQuery<PostgreSqlConstraint> ConstraintQuery { get; }
 
         /// <summary>
         /// Gets or sets the parameter query.
         /// </summary>
-        private CustomQuery<PostgreSqlParameter> ParameterQuery { get; set; }
+        private CustomQuery<PostgreSqlParameter> ParameterQuery { get; }
 
         /// <summary>
         /// Gets or sets the view query.
         /// </summary>
-        private Query<PostgreSqlView> ViewQuery { get; set; }
+        private Query<PostgreSqlView> ViewQuery { get; }
 
         /// <summary>
         /// Gets or sets the table query.
         /// </summary>
-        private Query<PostgreSqlTable> TableQuery { get; set; }
+        private Query<PostgreSqlTable> TableQuery { get; }
 
         /// <summary>
         /// Gets or sets the stored procedure query.
         /// </summary>
-        private Query<PostgreSqlStoredProcedure> StoredProcedureQuery { get; set; }
+        private Query<PostgreSqlStoredProcedure> StoredProcedureQuery { get; }
 
         #endregion
 
-        #region Constructor        
-       
+        #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PostgreSqlSchemaProvider"/> class.
         /// </summary>
@@ -161,26 +161,6 @@ namespace Paradigm.ORM.Data.PostgreSql.Schema
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            this.ColumnQuery?.Dispose();
-            this.ConstraintQuery?.Dispose();
-            this.ParameterQuery?.Dispose();
-            this.ViewQuery?.Dispose();
-            this.TableQuery?.Dispose();
-            this.StoredProcedureQuery?.Dispose();
-
-            this.ColumnQuery = null;
-            this.ConstraintQuery = null;
-            this.ParameterQuery = null;
-            this.ViewQuery = null;
-            this.TableQuery = null;
-            this.StoredProcedureQuery = null;
-        }
 
         /// <summary>
         /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return.

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Paradigm.ORM.Data.Descriptors;
 
@@ -8,7 +7,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
     /// Provides an interface to manage navigation relationships between entities.
     /// </summary>
     /// <seealso cref="System.IDisposable" />
-    public partial interface INavigationDatabaseAccess: IDisposable
+    public partial interface INavigationDatabaseAccess
     {
         /// <summary>
         /// Gets the end database access in the navigation relationships.

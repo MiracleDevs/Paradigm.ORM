@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Data.MySql.Schema.Structure
     /// <summary>
     /// Provides a database view schema.
     /// </summary>
-    /// <seealso cref="Paradigm.ORM.Data.Database.Schema.Structure.IView" />
+    /// <seealso cref="IView" />
     [Table("tables", Catalog = "information_schema")]
     public class MySqlView: IView
     {
@@ -24,14 +24,14 @@ namespace Paradigm.ORM.Data.MySql.Schema.Structure
 
         /// <summary>
         /// Gets the name of the schema where the view resides.
-        /// </summary>        
+        /// </summary>
         public string SchemaName { get; set; }
 
         /// <summary>
-        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// Returns a <see cref="string" /> that represents this instance.
         /// </summary>
         /// <returns>
-        /// A <see cref="System.String" /> that represents this instance.
+        /// A <see cref="string" /> that represents this instance.
         /// </returns>
         public override string ToString() => $"View [{this.SchemaName}].[{this.Name}]";
     }
