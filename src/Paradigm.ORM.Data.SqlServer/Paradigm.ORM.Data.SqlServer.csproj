@@ -12,7 +12,7 @@
     <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
     <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>2.1.7</Version>
+    <Version>2.2.0</Version>
     <Product>Paradigm.ORM</Product>
   </PropertyGroup>
 
