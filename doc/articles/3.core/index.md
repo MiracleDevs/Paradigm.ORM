@@ -163,7 +163,7 @@ var selectCommandBuilder = factory.CreateSelectCommandBuilder(descriptor);
 var insertCommandBuilder = factory.CreateInsertCommandBuilder(descriptor);
 var updateCommandBuilder = factory.CreateUpdateCommandBuilder(descriptor);
 var deleteCommandBuilder = factory.CreateDeleteCommandBuilder(descriptor);
-var lastInsertIdCommandBuilder = factory.CreateLastInsertIdCommandBuilder();
+var lastInsertIdCommandBuilder = factory.CreateLastInsertIdCommandBuilder(descriptor);
 
 ```
 

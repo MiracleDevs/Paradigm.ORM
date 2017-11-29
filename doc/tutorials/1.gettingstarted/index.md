@@ -6,11 +6,11 @@ In this document we'll go over a basic overview of the ORM, how to use it, confi
 Let's start and use an existing database. We distribute Paradigm ORM with a DbFirst tool that will assist you with the process, but we think pointing out the manual process first will help you understand how all the pieces click together.
 
 ## Database Structure
-For this example we'll use 3 tables: 
- - Client 
+For this example we'll use 3 tables:
+ - Client
  - Client Additional Information
- - Address 
- 
+ - Address
+
  This is just an explanatory structure, and by no means should be taken as an optimal database model. We basically want a client entity with a list of addresses, and an optional information table.
 
 <p align="center">
@@ -25,13 +25,13 @@ CREATE TABLE IF NOT EXISTS `testdb`.`client` (
     `Name`                              NVARCHAR(200) NOT NULL,
     `ContactName`                       NVARCHAR(200),
     `ContactEmail`                      NVARCHAR(200),
-    `ContactPhone`                      NVARCHAR(200) NULL,   
-    `Notes`                             TEXT,   
+    `ContactPhone`                      NVARCHAR(200) NULL,
+    `Notes`                             TEXT,
     `Active`                            BOOLEAN NOT NULL,
     CONSTRAINT `PK_Client`              PRIMARY KEY (`Id` ASC),
     CONSTRAINT `UX_Client_Name`         UNIQUE (`Name`),
-    CONSTRAINT `FK_Client_ClientAdditionalInformation` 
-       FOREIGN KEY (`ClientAdditionalInformationId`) 
+    CONSTRAINT `FK_Client_ClientAdditionalInformation`
+       FOREIGN KEY (`ClientAdditionalInformationId`)
        REFERENCES `clientadditionalinformation` (`Id`),
 )  ENGINE=INNODB;
 
@@ -41,11 +41,11 @@ CREATE TABLE IF NOT EXISTS `testdb`.`clientadditionalinformation` (
     `Id`                    INT NOT NULL AUTO_INCREMENT,
     `CarrierId`             INT NOT NULL,
     `PaymentMethodId`       INT NOT NULL,
-    `Credit`                DECIMAL(20, 9) NOT NULL DEFAULT 0,  
-    CONSTRAINT `PK_ClientAdditionalInformation` PRIMARY KEY (`Id` ASC),  
-    CONSTRAINT `FK_ClientAdditionalInformation_CarrierId` 
+    `Credit`                DECIMAL(20, 9) NOT NULL DEFAULT 0,
+    CONSTRAINT `PK_ClientAdditionalInformation` PRIMARY KEY (`Id` ASC),
+    CONSTRAINT `FK_ClientAdditionalInformation_CarrierId`
        FOREIGN KEY (`CarrierId`) REFERENCES `carrier` (`Id`),
-    CONSTRAINT `FK_ClientAdditionalInformation_PaymentMethod` 
+    CONSTRAINT `FK_ClientAdditionalInformation_PaymentMethod`
        FOREIGN KEY (`PaymentMethodId`)  REFERENCES `paymentmethod` (`Id`)
 )  ENGINE=INNODB;
 
@@ -55,23 +55,23 @@ CREATE TABLE IF NOT EXISTS `testdb`.`address` (
     `Id`                    INT AUTO_INCREMENT NOT NULL,
     `ClientId`              INT NOT NULL,
     `Address1`              NVARCHAR(200) NOT NULL,
-    `Address2`              NVARCHAR(200) NULL, 
+    `Address2`              NVARCHAR(200) NULL,
     `City`                  NVARCHAR(200) NOT NULL,
     `State`                 NVARCHAR(200) NULL,
-    `Country`               NVARCHAR(200) NULL, 
+    `Country`               NVARCHAR(200) NULL,
     `Notes`                 TEXT NULL,
     CONSTRAINT `PK_Address`             PRIMARY KEY (`Id` ASC),
-    CONSTRAINT `FK_Address_ClientId`    FOREIGN KEY (`ClientId`)            
+    CONSTRAINT `FK_Address_ClientId`    FOREIGN KEY (`ClientId`)
                                         REFERENCES `client` (`Id`)
 )  ENGINE=INNODB;
 ```
 
 ## .NET Mappings
 The first step we need to take in order to retrieve data from the database, is determining how the table will be mapped to a .NET type. Paradigm ORM already provides a group of attributes for that purpose, and we're gonna decorate our classes with them.
-There are two ways to provide these mappings: either by decorating the class itself, or by decorating another class or interface. In the second case, we'll need to also decorate the class that we will use with the reference to the other class (where the mapping is). If this doesn't make sense now, it will surely do as we go over the examples.   
+There are two ways to provide these mappings: either by decorating the class itself, or by decorating another class or interface. In the second case, we'll need to also decorate the class that we will use with the reference to the other class (where the mapping is). If this doesn't make sense now, it will surely do as we go over the examples.
 
 ### Mapping the class
-We'll use the @Paradigm.ORM.Data.Attributes.TableAttribute to indicate that the classes will be mapped to specific database tables. 
+We'll use the @Paradigm.ORM.Data.Attributes.TableAttribute to indicate that the classes will be mapped to specific database tables.
 
 > [!TIP]
 > If your database allows catalogs and schemas, and you want to separate distinct sectors of your app using different schemas, you can also provide them as parameters.
@@ -102,7 +102,7 @@ For columns, we have various attributes we can use to provide information about 
  These properties will be called navigation properties from now on, and will be used to navigate between the aggregate root and the other entities.
 
 > [!NOTE]
-> Paradigm ORM was designed with a DDD (Domain-Driven Design) in mind, even if purposefully not built to be perfect or include every scenario possible. Having this in mind, when working with data models the main entity in the domain hierarchy will be called the [aggregate root](https://martinfowler.com/bliki/DDD_Aggregate.html). 
+> Paradigm ORM was designed with a DDD (Domain-Driven Design) in mind, even if purposefully not built to be perfect or include every scenario possible. Having this in mind, when working with data models the main entity in the domain hierarchy will be called the [aggregate root](https://martinfowler.com/bliki/DDD_Aggregate.html).
 
  <p align="center">
     <img src="../../images/ORM-tutorial-01-classes.png" />
@@ -278,7 +278,7 @@ public class Client: IClientTable
 > Suppose all your main transaction tables require audit information like `CreationUserId`, `CreationDate`, `ModificationUserId` and `ModificationDate`. Instead of mapping those fields on every single class, you could create an interface IAuditable with those fields, and their respective mappings. You can later implement that interface in each transaction class. Or even better, do a base abstract class with all the information, and just extend the functionalty. This is possible due to the flexibility of @Paradigm.ORM.Data.Descriptors.TableTypeDescriptor to create the mapping model, and allow complex hierarchy trees that will later be translated to the relational logic of the database.
 
 > [!TIP]
-> The ORM allows navigation properties with multiple primary / foreign keys. If you need to navigate using more than just one primary / foreign key, you need to add more 
+> The ORM allows navigation properties with multiple primary / foreign keys. If you need to navigate using more than just one primary / foreign key, you need to add more
 > `NavigationAttribute`to the navigation property:
 > ````csharp
 > [Navigation(typeof(SomeClass), "FirstSourceKey", "FirstReferencedKey")]
@@ -303,7 +303,7 @@ using(var connector = new MySqlDatabaseConnector("Server=localhost;Database=test
 }
 ```
 
-Ok, so we have the mappings, and an open connection to the database: we are ready to run some queries! All the ORM infrastructure is built around the `System.Data` interfaces, so we're going to start with ado-like queries, and move on to more advanced, and easier, queries using other aspects of Paradigm ORM. 
+Ok, so we have the mappings, and an open connection to the database: we are ready to run some queries! All the ORM infrastructure is built around the `System.Data` interfaces, so we're going to start with ado-like queries, and move on to more advanced, and easier, queries using other aspects of Paradigm ORM.
 
 ```csharp
 // creates a new database command.
@@ -322,12 +322,12 @@ using(var command = connector.CreateCommand())
 }
 ```
 
-The code above is mostly self explanatory. It opens a connection to the database, creates a command, and then executes the query. Using the `@Paradigm.ORM.Data.Mappers.Generic.DatabaseReaderMapper` class, it gets the resulting clients.
+The code above is mostly self explanatory. It opens a connection to the database, creates a command, and then executes the query. Using the @Paradigm.ORM.Data.Mappers.Generic.DatabaseReaderMapper`1 class, it gets the resulting clients.
 In the example above we went to the database and back, but it's still a good deal of code just to get data: it should be easier and cleaner to do such a standard task. We have several other ways to write this down, but internally this is basically what is happening behind the scenes.
 We'll see how to translate the code to make it easier to read. There are many ways to do this: the one you choose will depend on the situation and what you need to accomplish.
 
 ### Using Extension Methods
-The interface `@Paradigm.ORM.Data.Database.IDatabaseConnector` has various extension methods available for all the different database types that can help you with repetitive tasks, and is also in charge of disposing every disposable object for you. In particular, we want to use the executing extensions:
+The interface @Paradigm.ORM.Data.Database.IDatabaseConnector has various extension methods available for all the different database types that can help you with repetitive tasks, and is also in charge of disposing every disposable object for you. In particular, we want to use the executing extensions:
 - ExecuteReader
 - ExecuteNonQuery
 - ExecuteScalar
@@ -336,36 +336,32 @@ The interface `@Paradigm.ORM.Data.Database.IDatabaseConnector` has various exten
 > All the methods enumerated above have `sync` and `async` implementations. In general, most of the methods are both `sync` and `async`. We strongly recommend to use `async` whenever you can.
 
 ```csharp
-connector.ExecuteReader("SELECT * FROM Client", reader => 
+connector.ExecuteReader("SELECT * FROM Client", reader =>
 {
     var clients = new DatabaseReaderMapper<Client>().Map(reader);
 });
 ```
 
 ### Using Queries
-There are also a set of objects that can handle data retrieval operations for you, althought they are better suited for code re-use.
+There are also a set of objects that can handle data retrieval operations for you, although they are better suited for code re-use.
 
-| Query                                        | Description
-|----------------------------------------------|------------------------
-| @Paradigm.ORM.Data.Querying.Query         | Represents a `SELECT * Table` for a given type. You can provide a WHERE clause. All columns will be retrieved.
-| @Paradigm.ORM.Data.Querying.CustomQuery   | Represents a custom `SELECT` statement, where the user must provide the sentence. The selected columns must be configured (mapped) in the entity. 
+| Query                                        | Description            |
+|----------------------------------------------|------------------------|
+| [Query](xref:Paradigm.ORM.Data.Querying.Query`1)          | Represents a `SELECT * Table` for a given type. You can provide a WHERE clause. All columns will be retrieved.
+| [CustomQuery](xref:Paradigm.ORM.Data.Querying.Query`1)    | Represents a custom `SELECT` statement, where the user must provide the sentence. The selected columns must be configured (mapped) in the entity.
 
 **Query**
 
 ```csharp
-using(var query = new Query<Client>(connector))
-{
-    var clients = query.Execute();
-}
+var query = new Query<Client>(connector);
+var clients = query.Execute();
 ```
 
 **Custom Query**
 
 ```csharp
-using(var query = new CustomQuery<Client>(connector, $"SELECT `{nameof(Client.Id)}`, `{nameof(Client.Name)}` FROM `client`"))
-{
-    var clients = query.Execute();
-}
+var query = new CustomQuery<Client>(connector, $"SELECT `{nameof(Client.Id)}`, `{nameof(Client.Name)}` FROM `client`");
+var clients = query.Execute();
 ```
 
 **Extensions**
@@ -396,54 +392,54 @@ The `DatabaseAccess` class handles CRUD operations for a given type, including t
 > - (1 To Many) is fully supported.
 > - (Many To Many) is NOT supported.
 
-Internally, the database access will create an instance of a @Paradigm.ORM.Data.ITableTypeDescriptor, a @Paradigm.ORM.Data.Mappers.IDatabaseReaderMapper and a @Paradigm.ORM.Data.CommandBuilders.ICommandBuilderManager (other objects as well) and with them will operate the different data access operations. You can think of it as a Entity Framework DatabaseContext with only one publicly exposed DbSet. Internally they do completely different things, but the role for the end user is somewhat similar. 
+Internally, the database access will create an instance of a @Paradigm.ORM.Data.Descriptors.ITableTypeDescriptor a @Paradigm.ORM.Data.Mappers.IDatabaseReaderMapper and a @Paradigm.ORM.Data.CommandBuilders.ICommandBuilderManager (other objects as well) and with them will operate the different data access operations. You can think of it as a Entity Framework DatabaseContext with only one publicly exposed DbSet. Internally they do completely different things, but the role for the end user is somewhat similar.
 
 So, let's see how to use this class to do more interesting things than just retrieving data from a table:
 
 #### Inserting Data
 Let's create a new client, populate it with some addresses and store it into our database.
 ```csharp
-using(var databaseAccess = new DatabaseAccess<Client>())
+var databaseAccess = new DatabaseAccess<Client>();
+
+var client = new Client
 {
-    var client = new Client 
+    Name = "JS Logistics & Transport",
+    ContactName = "John Smith",
+    ContactEmail = "jsmith@jslt.com",
+    ContactPhone = "555-5452354",
+
+    ClientAdditionalInformation = new ClientAdditionalInformation
     {
-        Name = "JS Logistics & Transport",
-        ContactName = "John Smith",
-        ContactEmail = "jsmith@jslt.com",
-        ContactPhone = "555-5452354",
-    
-        ClientAdditionalInformation = new ClientAdditionalInformation
+        CarrierId = 1,
+        PaymentMethodId = 1
+        Credit = new Decimal(100.34),
+    },
+
+    Addresses = new List<Address>()
+    {
+        new Address
         {
-            CarrierId = 1,
-            PaymentMethodId = 1
-            Credit = new Decimal(100.34),
+            Address1 = "10034 Wallyswood ST",
+            City = "Texas City",
+            State = "Texas",
+            Country "USA"
         },
-
-        Addresses = new List<Address>() 
+        new Address
         {
-            new Address 
-            {
-                Address1 = "10034 Wallyswood ST",
-                City = "Texas City",
-                State = "Texas",
-                Country "USA"
-            },
-            new Address 
-            {
-                Address1 = "14012 Vineyard BLVD",
-                City = "Miami",
-                State = "Florida",
-                Country "USA"
-            }
+            Address1 = "14012 Vineyard BLVD",
+            City = "Miami",
+            State = "Florida",
+            Country "USA"
         }
-    };
+    }
+};
 
-    databaseAccess.Insert(client);
-}
+databaseAccess.Insert(client);
+
 ```
-After executing this code, you should find one new client, one new client additional information and two new addresses inserted in your tables. 
+After executing this code, you should find one new client, one new client additional information and two new addresses inserted in your tables.
 
-As you can see, it's a pretty straightforward process. As we'll find out later, the update and delete operations are pretty much the same. But it's important to note that the `DatabaseAccess` not only inserts the main class, but also inserts the childs and resolves the id of the newly created entites. 
+As you can see, it's a pretty straightforward process. As we'll find out later, the update and delete operations are pretty much the same. But it's important to note that the `DatabaseAccess` not only inserts the main class, but also inserts the childs and resolves the id of the newly created entites.
 
 > [!IMPORTANT]
 > If you are an Entity Framework user, you'll probably notice the lack of `SaveChanges` or other form of data commitment. Paradigm ORM **commits immediately**, so if you want to replicate Entity Framework's way of doing things, you will need to use transactions.
@@ -455,34 +451,31 @@ As you can see, it's a pretty straightforward process. As we'll find out later, 
 Selecting data from the database is also really simple, so lets retrieve the client we inserted in the previous point:
 
 ```csharp
-using(var databaseAccess = new DatabaseAccess<Client>(connector))
-{
-    var clients = databaseAccess.Select();
-}
+var databaseAccess = new DatabaseAccess<Client>(connector);
+var clients = databaseAccess.Select();
 ```
 We should have our client, additional information and addresses in the client collection.
 
 > [!Note]
-> The difference between the `DatabaseAccess.Select` and previous selection methods, is that this method will retrieve the client and all its related entities. So it's better suited for working with complex domain models. 
+> The difference between the `DatabaseAccess.Select` and previous selection methods, is that this method will retrieve the client and all its related entities. So it's better suited for working with complex domain models.
 
 #### Updating Data
 Let's open the client, and change some of the fields:
 ```csharp
-using(var databaseAccess = new DatabaseAccess<Client>())
-{
-    var client = databaseAccess
-                    .Select($"{nameof(Client.Name)}='JS Logistics & Transport'")
-                    .FirstOrDefault();
+var databaseAccess = new DatabaseAccess<Client>();
 
-    if (client == null)
-        throw new Exception("Client not found");
+var client = databaseAccess
+                .Select($"{nameof(Client.Name)}='JS Logistics & Transport'")
+                .FirstOrDefault();
 
-    client.Name = "JS Systems";
-    client.Addresses[0].State = "TX";
-    client.Addresses[1].State = "FL";
+if (client == null)
+    throw new Exception("Client not found");
 
-    databaseAccess.Update(client);
-}
+client.Name = "JS Systems";
+client.Addresses[0].State = "TX";
+client.Addresses[1].State = "FL";
+
+databaseAccess.Update(client);
 ```
 The client, additional information and addresses should have their new values updated. Like the insert before, the update runs inmediately.
 
@@ -495,18 +488,16 @@ The client, additional information and addresses should have their new values up
 #### Deleting Data
 Let's open the client, and change some of the fields:
 ```csharp
-using(var databaseAccess = new DatabaseAccess<Client>())
-{
-    databaseAccess.Delete(databaseAccess.Select());
-}
+var databaseAccess = new DatabaseAccess<Client>();
+databaseAccess.Delete(databaseAccess.Select());
 ```
 All the clients and their respective related entities should be deleted from your database.
 
 ## Stored Procedures
-One of the reasons behind our efforts with Paradigm ORM was to make stored procedures first class citizens. After years working with enterprise applications, using Entity Framework as our main database access, we always had to migrate one by one all the queries and complex procedures to the database. And that makes sense, Why would you move data from one server to another in order to process data when the first server is more capable to handle it? I know, there are other concerns here, like code maintenance, modularity, etc; but either way you're breaking all that taking the data out of its context to search and modify it, and that's never good for perfomance. So, as certain hippie 2000 years ago said: 
+One of the reasons behind our efforts with Paradigm ORM was to make stored procedures first class citizens. After years working with enterprise applications, using Entity Framework as our main database access, we always had to migrate one by one all the queries and complex procedures to the database. And that makes sense, Why would you move data from one server to another in order to process data when the first server is more capable to handle it? I know, there are other concerns here, like code maintenance, modularity, etc; but either way you're breaking all that taking the data out of its context to search and modify it, and that's never good for perfomance. So, as certain hippie 2000 years ago said:
 > *Render unto Caesar the things that are Caesar's, and unto God the things that are God's*
 
-The ORM supports 3 types of stored procedures. Like commands, you have reading operations, scalar operations and non queries. Each has its own class, and knows how to operate and do the call. 
+The ORM supports 3 types of stored procedures. Like commands, you have reading operations, scalar operations and non queries. Each has its own class, and knows how to operate and do the call.
 - @Paradigm.ORM.Data.StoredProcedures.ScalarStoredProcedure`2
 - @Paradigm.ORM.Data.StoredProcedures.NonQueryStoredProcedure`1
 - @Paradigm.ORM.Data.StoredProcedures.ReaderStoredProcedure`2
@@ -554,7 +545,7 @@ Let's see an example using the previous stored procedure:
 
 ```csharp
 [Routine("SearchClients")]
-public class SearchClientsParameters 
+public class SearchClientsParameters
 {
     [Parameter("ClientName", "varchar", true), Size(200)]
     public string ClientName { get; set; }
@@ -573,7 +564,7 @@ public class SearchClientsParameters
 > [!TIP]
 > Like the other attributes, if the parameter and property names are equals, you can ignore the rest of the parameters.
 
-So you just have to provide the stored procedure name, and the parameters mapping information. That's fine, but how do you execute that stored procedure? All the 3 types have an Execute and ExecuteAsync method, that will do the magic. Let's see an example for each one of the types. 
+So you just have to provide the stored procedure name, and the parameters mapping information. That's fine, but how do you execute that stored procedure? All the 3 types have an Execute and ExecuteAsync method, that will do the magic. Let's see an example for each one of the types.
 
 ### Reader
 
@@ -589,7 +580,7 @@ foreach (var client in results.Item1)
     client.Addresses = results.Item3.FindAll(x => x.ClientId == client.Id);
 }
 ```
- 
+
 In this case, our search procedure is searching for clients and their related entities, and it's returning three result sets. We want this call to be transparent, like a Select using the `DatabaseAccess`. So for each client in the first result set, we'll find all the addresses owned by this client and assign them to it.
 
 Working with the other two types of stored procedures is similar if not easier, because you don't have result sets but a scalar or no return at all.

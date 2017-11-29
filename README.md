@@ -43,7 +43,9 @@ Version `2.2.0`
 - Refactor command handling to allow parallel execution of the ORM without conflicting with some of the
   connectors. The orm does not cache a command inside the command builder any more.
 - Refactor command builders and moved shared functionality to the core classes, and removed the
-  duplication from the client implementations.
+  duplication from the client implementations. Now will be even easier to implement new clients.
+- Moved base protected methods from the CommandBuilderBase to the ICommandFormatProvider and added a new
+  base CommandFormatProviderBase with shared behavior for all the different format providers.
 - Removed IDisposable interface from most of the ORM core classes. The most notable are:
   - Database access
   - Query

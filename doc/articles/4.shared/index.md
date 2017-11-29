@@ -438,9 +438,7 @@ Let's see how to create and use a Database Access object.
 
 **Creating a new instance**
 ```csharp
-using(var databaseAccess = new DatabaseAccess<Client>(connector))
-{
-}
+var databaseAccess = new DatabaseAccess<Client>(connector);
 ```
 
 **Inserting a new clients**
@@ -455,7 +453,7 @@ var clients = databaseObject.Select();
 
 **Reading some of the clients**
 ```csharp
-var clients = databaseObject.Select($"`{nameof(Client.Name)}` LIKE '%{value}'");
+var clients = databaseObject.Select($"`{nameof(Client.Name)}` LIKE @1", $"%{value}%");
 ```
 
 **Updating clients**
@@ -557,10 +555,8 @@ So, as a brief summary:
 
 **Example**
 ```csharp
-using(var query = new Query<Client>(connector))
-{
-    var clients = query.Execute();
-}
+var query = new Query<Client>(connector);
+var clients = query.Execute();
 ```
 
 The standard query is a good match when you have to return a table or view that you already mapped. The query object is currently being used by the @Paradigm.ORM.Data.Database.Schema.ISchemaProvider to select the tables, views and stored procedures.
@@ -576,10 +572,8 @@ The custom query object, uses a @Paradigm.ORM.Data.Descriptors.ICustomTypeDescri
 **Example**
 
 ```csharp
-using(var query = new CustomQuery<Client>(connector, "SELECT * FROM `client`"))
-{
-    var clients = query.Execute();
-}
+var query = new CustomQuery<Client>(connector, "SELECT * FROM `client`");
+var clients = query.Execute();
 ```
 
 The custom query can be used when the `SELECT` requires more logic than only listing columns, for example using a `CASE WHEN` or call a function. The custom query object is currently being used by the @Paradigm.ORM.Data.Database.Schema.ISchemaProvider to select the columns, constraints and parameters.
@@ -658,22 +652,22 @@ caller.Execute(parameters);
 ## 4.7. Batch
 As we saw in [4.5](#44-database-access) the database access object will try to batch operations to avoid unnecessary roundtrips. Internally, each database access object will use an instance of @Paradigm.ORM.Data.Batching.BatchManager. The batch manager, as the name implies, manage one or more batches. Either because you explicitly told the manager to add a new batch, or because the manager realized the batch reached its maximum, there can be multiple batches to execute.
 
-A batch manager contains one or more @Paradigm.ORM.Data.Batching.CommandBatch which in time contains one or more @Paradigm.ORM.Data.Batching.CommandBatchStep. Each time you add a new command to be executed by the batch manager, the manager will try to add the command to the current command batch, if its full, it will create a new one to add the command.
+A batch manager contains one or more CommandBatch which in time contains one or more @Paradigm.ORM.Data.Batching.CommandBatchStep. Each time you add a new command to be executed by the batch manager, the manager will try to add the command to the current command batch, if its full, it will create a new one to add the command.
 
 But adding up commands is not the only thing a batch manager does. It also provides a way to react to the results of a batch execution either at a command level, or at a batch level. When adding new commands or asking for a new batch, you can pass a callback action to be called after the execution.
 
 ```csharp
-var batchManager = new BatchManager(connector);
+using(var batchManager = new BatchManager(connector))
+{
+    batchManager.Add(new CommandBatchStep(command1));
+    batchManager.Add(new CommandBatchStep(command2, reader => /* do something here */));
 
-batchManager.Add(new CommandBatchStep(command1));
-batchManager.Add(new CommandBatchStep(command2, reader => /* do something here */));
+    batchManager.AddNewBatch(() => /* do something after the first batch executed */);
 
-batchManager.AddNewBatch(() => /* do something after the first batch executed */);
+    batchManager.Add(new CommandBatchStep(command3, reader => /* do something here */));
 
-batchManager.Add(new CommandBatchStep(command3, reader => /* do something here */));
-
-batchManager.Execute();
-```
+    batchManager.Execute();
+}
 
 So, in this example, the batch manager will run two batches, one made of `command1` and `command2`, and then another batch made of `command3`.
 The manager will execute the batches in order. After executing the first batch, will see if their commands have a callback, and will call the action method passing the reader as parameter. Once the callback has been executed, the batch will move the reading cursor to the next result.
