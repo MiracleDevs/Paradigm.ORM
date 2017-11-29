@@ -39,6 +39,12 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.2.1`
+- Added a cache service for descriptors all over the orm, to prevent tons of small objects filling the heap.
+- Removed constructors receiving descriptors. Now all the ORM classes should refer to the cache for descriptors.
+- Descriptor constructors are now internal and can not be instantiated outside the ORM.
+
+
 Version `2.2.0`
 - Refactor command handling to allow parallel execution of the ORM without conflicting with some of the
   connectors. The orm does not cache a command inside the command builder any more.
