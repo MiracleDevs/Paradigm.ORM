@@ -12,8 +12,8 @@ namespace Paradigm.ORM.Data.Mappers.Generic
     /// which will be used to extract the result sets and registers from the database.
     /// The <see cref="IDatabaseReaderMapper"/> provides a way to automatically map one of the result sets to a known
     /// object type.
-    /// This mapper works by creating a <see cref="Descriptors.TableTypeDescriptor"/> from the TEntity type, 
-    /// and extracting the mapping information from the class attributes. 
+    /// This mapper works by creating a <see cref="Descriptors.TableTypeDescriptor"/> from the TEntity type,
+    /// and extracting the mapping information from the class attributes.
     /// </remarks>
     /// <seealso cref="IDatabaseReaderMapper"/>
     /// <seealso cref="Descriptors.TableTypeDescriptor"/>

@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <summary>
         /// Selects a list of all the elements in a table or view.
         /// </summary>
-        /// <remarks>To select filtering results, use the overloaded method <see cref="Select(string)"/>.</remarks>
+        /// <remarks>To select filtering results, use the overloaded method <see cref="SelectAsync(string,object[])"/>.</remarks>
         /// <returns>A list of objects that belong to the table or view.</returns>
         Task<List<object>> SelectAsync();
 

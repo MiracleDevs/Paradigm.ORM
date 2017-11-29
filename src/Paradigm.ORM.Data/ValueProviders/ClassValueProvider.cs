@@ -90,8 +90,8 @@ namespace Paradigm.ORM.Data.ValueProviders
         /// </returns>
         public object GetValue(IColumnDescriptor descriptor)
         {
-            return this.CurrentEntity == null 
-                ? null 
+            return this.CurrentEntity == null
+                ? null
                 : this.ValueConverter.ConvertFrom((descriptor as IColumnPropertyDescriptor)?.PropertyInfo.GetValue(this.CurrentEntity), descriptor.DataType);
         }
 

@@ -151,7 +151,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// A list of objects that belong to the table or view.
         /// </returns>
         /// <remarks>
-        /// To select filtering results, use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Select(System.String)" />.
+        /// To select filtering results, use the overloaded method <see cref="Select(string, object[])" />.
         /// </remarks>
         public virtual List<object> Select()
         {

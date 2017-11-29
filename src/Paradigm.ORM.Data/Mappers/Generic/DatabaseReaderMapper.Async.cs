@@ -19,6 +19,6 @@ namespace Paradigm.ORM.Data.Mappers.Generic
             return (await base.MapAsync(reader)).Cast<TEntity>().ToList();
         }
 
-        #endregion    
+        #endregion
     }
 }

@@ -48,6 +48,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// Gets a list of all the columns.
         /// </summary>
         List<IColumnDescriptor> AllColumns { get; }
+
         #endregion
     }
 }

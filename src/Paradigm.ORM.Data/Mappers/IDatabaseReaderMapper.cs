@@ -12,7 +12,7 @@ namespace Paradigm.ORM.Data.Mappers
     /// The <see cref="IDatabaseReaderMapper"/> provides a way to automatically map one of the result sets to a known
     /// object type.
     /// This mapper works by creating a <see cref="Descriptors.TableTypeDescriptor"/>, and extracting the mapping information
-    /// from the class attributes. 
+    /// from the class attributes.
     /// </remarks>
     /// <seealso cref="Descriptors.TableTypeDescriptor"/>
     /// <seealso cref="Attributes.TableTypeAttribute" />

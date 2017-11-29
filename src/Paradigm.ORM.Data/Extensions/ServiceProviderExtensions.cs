@@ -3,6 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Paradigm.ORM.Data.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="IServiceProvider"/> interface.
+    /// </summary>
     internal static class ServiceProviderExtensions
     {
         /// <summary>

@@ -30,6 +30,12 @@ namespace Paradigm.ORM.Data.Database
         /// </value>
         public int MaxCommandLength { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DatabaseConfiguration"/> class.
+        /// </summary>
+        /// <param name="maxCommandsPerBatch">The maximum commands per batch.</param>
+        /// <param name="maxParametersPerCommand">The maximum parameters per command.</param>
+        /// <param name="maxCommandSize">Maximum size of the command.</param>
         public DatabaseConfiguration(int maxCommandsPerBatch, int maxParametersPerCommand, int maxCommandSize)
         {
             this.MaxCommandsPerBatch = maxCommandsPerBatch;

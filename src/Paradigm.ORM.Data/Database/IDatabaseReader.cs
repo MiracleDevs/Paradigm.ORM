@@ -80,7 +80,7 @@ namespace Paradigm.ORM.Data.Database
         /// <param name="index">The zero-based column ordinal.</param>
         /// <returns>The value of the specified column.</returns>
         short GetInt16(int index);
-    
+
         /// <summary>
         /// Gets the value of the specified column as a <see cref="Int32" />.
         /// </summary>

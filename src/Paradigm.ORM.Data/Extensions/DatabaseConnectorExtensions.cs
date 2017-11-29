@@ -6,6 +6,9 @@ using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="IDatabaseConnector"/> interface.
+    /// </summary>
     public static partial class DatabaseConnectorExtensions
     {
         #region public static Methods

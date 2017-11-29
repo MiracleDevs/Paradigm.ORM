@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.Database.Schema
     public partial interface ISchemaProvider
     {
         /// <summary>
-        /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return. 
+        /// Gets the schema of database tables specifying the database, and allowing to filter which tables to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of table names you want to retrieve.</param>
@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.Database.Schema
         Task<List<ITable>> GetTablesAsync(string database, params string[] filter);
 
         /// <summary>
-        /// Gets the schema of database views specifying the database, and allowing to filter which views to return. 
+        /// Gets the schema of database views specifying the database, and allowing to filter which views to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of view names you want to retrieve.</param>
@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Data.Database.Schema
         Task<List<IView>> GetViewsAsync(string database, params string[] filter);
 
         /// <summary>
-        /// Gets the schema of stored procedures specifying the database, and allowing to filter which stored procedures to return. 
+        /// Gets the schema of stored procedures specifying the database, and allowing to filter which stored procedures to return.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="filter">An array of stored procedure names you want to retrieve.</param>
@@ -52,6 +52,6 @@ namespace Paradigm.ORM.Data.Database.Schema
         /// <param name="database">The database name.</param>
         /// <param name="routineName">The routine name.</param>
         /// <returns>A list of parameter schemas.</returns>
-        Task<List<IParameter>> GetParametersAsync(string database, string routineName);       
+        Task<List<IParameter>> GetParametersAsync(string database, string routineName);
     }
 }

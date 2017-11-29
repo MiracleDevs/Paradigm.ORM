@@ -39,6 +39,19 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.2.0`
+- Refactor command handling to allow parallel execution of the ORM without conflicting with some of the
+  connectors. The orm does not cache a command inside the command builder any more.
+- Refactor command builders and moved shared functionality to the core classes, and removed the
+  duplication from the client implementations.
+- Removed IDisposable interface from most of the ORM core classes. The most notable are:
+  - Database access
+  - Query
+  - Custom query
+  - All the stored procedure types
+  - Schema Provider
+- Removed extension methods for the IDatabaseConnector not used any more.
+
 Version `2.1.7`
 - Changed how the DatabaseAccess classes utilize the BatchManager to be thread safe.
 

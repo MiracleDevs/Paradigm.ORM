@@ -4,7 +4,7 @@ using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Mappers.Generic
 {
-    public partial interface IDatabaseReaderMapper<TEntity> 
+    public partial interface IDatabaseReaderMapper<TEntity>
     {
         /// <summary>
         /// Gets a list of <see cref="TEntity"/> from a <see cref="IDatabaseReader"/>.

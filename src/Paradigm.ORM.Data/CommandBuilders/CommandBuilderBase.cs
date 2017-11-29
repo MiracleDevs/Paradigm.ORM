@@ -51,8 +51,6 @@ namespace Paradigm.ORM.Data.CommandBuilders
 
         #region Protected Methods
 
-    
-
         /// <summary>
         /// Populates the command parameters using the collection of columns of the table type descriptor.
         /// </summary>

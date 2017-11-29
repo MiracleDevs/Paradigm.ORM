@@ -20,7 +20,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
         /// <summary>
         /// Selects a list of all the elements in a table or view.
         /// </summary>
-        /// <remarks>To select filtering results, use the overloaded method <see cref="Select(string)"/>.</remarks>
+        /// <remarks>To select filtering results, use the overloaded method <see cref="Select(string,object[])"/>.</remarks>
         /// <returns>A list of <see cref="TEntity"/>.</returns>
         new List<TEntity> Select();
 

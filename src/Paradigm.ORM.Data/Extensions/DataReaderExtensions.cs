@@ -4,6 +4,9 @@ using Paradigm.ORM.Data.Database;
 
 namespace Paradigm.ORM.Data.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="IDatabaseReader"/> interface.
+    /// </summary>
     public static class DataReaderExtensions
     {
         /// <summary>

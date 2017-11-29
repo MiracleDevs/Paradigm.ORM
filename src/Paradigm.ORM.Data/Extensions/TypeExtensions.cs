@@ -5,6 +5,9 @@ using System.Reflection;
 
 namespace Paradigm.ORM.Data.Extensions
 {
+    /// <summary>
+    /// Provides extension methods for the <see cref="Type"/> class.
+    /// </summary>
     public static class TypeExtensions
     {
         /// <summary>
@@ -110,19 +113,6 @@ namespace Paradigm.ORM.Data.Extensions
             }
 
             return types;
-        }
-    }
-
-    public static class TypeInfoExtensions
-    {
-        /// <summary>
-        /// Gets the default value of a given TypeInfo.
-        /// </summary>
-        /// <param name="typeInfo">The type information.</param>
-        /// <returns>Default Value.</returns>
-        public static object GetDefaultValue(this TypeInfo typeInfo)
-        {
-            return typeInfo.IsValueType ? Activator.CreateInstance(typeInfo.AsType()) : null;
         }
     }
 }

@@ -114,7 +114,7 @@ namespace Paradigm.ORM.Data.Batching
 
             if (this.MaxCount > 0 && this.CurrentCount >= this.MaxCount)
                 return null;
-            
+
             if (this.ParameterCount + step.Command.Parameters.Count() >= this.Connector.Configuration.MaxParametersPerCommand)
                 return null;
 
@@ -205,7 +205,7 @@ namespace Paradigm.ORM.Data.Batching
         //  3. Refresh the CommandText after generating and updating the batch command.
         /// </remarks>
         private void AddCommand(IDatabaseCommand command)
-        {           
+        {
             var builder = new StringBuilder();
 
             builder.Append(command.CommandText);

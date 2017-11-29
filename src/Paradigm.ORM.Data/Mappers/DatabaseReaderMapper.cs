@@ -66,9 +66,9 @@ namespace Paradigm.ORM.Data.Mappers
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
-        public DatabaseReaderMapper(IServiceProvider serviceProvider, Type type): this(serviceProvider.GetService<IDatabaseConnector>(), type)
+        public DatabaseReaderMapper(IServiceProvider serviceProvider, Type type) : this(serviceProvider.GetService<IDatabaseConnector>(), type)
         {
-            this.ServiceProvider = serviceProvider;    
+            this.ServiceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <param name="connector">A reference to a database connector.</param>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
         /// <exception cref="ArgumentNullException">descriptor can not be null.</exception>
-        public DatabaseReaderMapper(IDatabaseConnector connector, Type type): this(connector, new CustomTypeDescriptor(type))
+        public DatabaseReaderMapper(IDatabaseConnector connector, Type type) : this(connector, new CustomTypeDescriptor(type))
         {
         }
 
@@ -99,7 +99,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <exception cref="ArgumentNullException">descriptor can not be null.</exception>
         public DatabaseReaderMapper(IDatabaseConnector connector, IColumnPropertyDescriptorCollection descriptor)
         {
-            this.Connector = connector?? throw new ArgumentNullException(nameof(connector), $"{nameof(connector)} can not be null.");
+            this.Connector = connector ?? throw new ArgumentNullException(nameof(connector), $"{nameof(connector)} can not be null.");
             this.Descriptor = descriptor ?? throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
             this.ValueConverter = this.Connector.GetValueConverter();
         }
@@ -154,7 +154,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <remarks>This method do not advance the reading cursor.</remarks>
         protected virtual object MapRow(IDatabaseReader reader)
         {
-            // TODO: maybe we could add an option to allow map by index instead of name. Should be even faster.            
+            // TODO: maybe we could add an option to allow map by index instead of name. Should be even faster.
             var entity = Activator.CreateInstance(this.Descriptor.Type);
 
             foreach (var property in this.Descriptor.AllProperties)

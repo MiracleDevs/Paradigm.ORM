@@ -5,7 +5,6 @@
     /// </summary>
     public interface IColumnDescriptor
     {
-       
         /// <summary>
         /// Gets the name of the column.
         /// </summary>

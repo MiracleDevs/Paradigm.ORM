@@ -211,7 +211,7 @@ namespace Paradigm.ORM.Data.Descriptors
             if (!parentTypes.Contains(type))
                 parentTypes.Add(type);
 
-            // if the main type references another type using the TableTypeAttribute, 
+            // if the main type references another type using the TableTypeAttribute,
             // merges both in one hashset to avoid repeated types.
             if (tableType != null && tableType != type)
             {

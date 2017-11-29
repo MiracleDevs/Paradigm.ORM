@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
         /// <summary>
         /// Selects a list of all the elements in a table or view.
         /// </summary>
-        /// <remarks>To select filtering results, use the overloaded method <see cref="Select(string)"/>.</remarks>
+        /// <remarks>To select filtering results, use the overloaded method <see cref="SelectAsync(string, object[])"/>.</remarks>
         /// <returns>A list of <see cref="TEntity"/>.</returns>
         new Task<List<TEntity>> SelectAsync();
 
@@ -39,7 +39,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
 
         /// <summary>
         /// Inserts a list of <see cref="TEntity"/> into the table or view.
-        /// </summary> 
+        /// </summary>
         /// <remarks>
         /// This method utilizes batching to prevent unnecessary roundtrips to the database.
         /// </remarks>
@@ -58,7 +58,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
 
         /// <summary>
         /// Updates a list of <see cref="TEntity"/> stored in the table or view.
-        /// </summary> 
+        /// </summary>
         /// <remarks>
         /// This method utilizes batching to prevent unnecessary roundtrips to the database.
         /// </remarks>
@@ -77,7 +77,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess.Generic
 
         /// <summary>
         /// Deletes a list of <see cref="TEntity"/> from the table or view.
-        /// </summary> 
+        /// </summary>
         /// <remarks>
         /// This method utilizes batching to prevent unnecessary roundtrips to the database.
         /// </remarks>
