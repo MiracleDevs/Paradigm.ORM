@@ -27,7 +27,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// Initializes a new instance of the <see cref="CustomTypeDescriptor"/> class.
         /// </summary>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
-        public CustomTypeDescriptor(Type type)
+        internal CustomTypeDescriptor(Type type)
         {
             this.Type = type ?? throw new ArgumentNullException(nameof(type), $"The {nameof(type)} can not be null.");
             this.TypeName = this.Type.Name;

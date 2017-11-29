@@ -13,7 +13,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
     {
         #region Properties
 
-        private TableTypeDescriptor ClientTableTypeDescription { get; }
+        private ITableTypeDescriptor ClientTableTypeDescription { get; }
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         public TableTypeDescriptorTest()
         {
             // We set up this as a class property because we use it in almost every test (excepting one)
-            ClientTableTypeDescription = new TableTypeDescriptor(typeof(Client));
+            ClientTableTypeDescription = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(Client));
         }
 
         #endregion
@@ -32,7 +32,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         [Test]
         public void NoTableClassShouldThrowMissingTableException()
         {
-            Action newDescriptor = () => new TableTypeDescriptor(typeof(NoTableClass));
+            Action newDescriptor = () => DescriptorCache.Instance.GetTableTypeDescriptor(typeof(NoTableClass));
             newDescriptor.ShouldThrow<OrmMissingTableMappingException>();
         }
 
@@ -102,7 +102,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
             var addressNavigation = ClientTableTypeDescription.NavigationProperties.Find(x => x.PropertyName == "Address");
 
             addressNavigation.ToDescriptor.PrimaryKeyProperties.Count.Should().Be(1);
-            addressNavigation.ToDescriptor.PrimaryKeyProperties[0].PropertyName.Should().Be(nameof(Client.Id)); 
+            addressNavigation.ToDescriptor.PrimaryKeyProperties[0].PropertyName.Should().Be(nameof(Client.Id));
         }
 
         [Test]
@@ -157,8 +157,8 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         [Test]
         public void ShouldInheritPropertyMappings()
         {
-            var salesOrderDescriptor = new TableTypeDescriptor(typeof(SalesOrder));
-            var purchaseOrderDescriptor = new TableTypeDescriptor(typeof(PurchaseOrder));
+            var salesOrderDescriptor = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SalesOrder));
+            var purchaseOrderDescriptor = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(PurchaseOrder));
 
             salesOrderDescriptor.AllProperties.Should().HaveCount(7);
             purchaseOrderDescriptor.AllProperties.Should().HaveCount(7);

@@ -100,7 +100,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override ITableTypeDescriptor GetParentDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyParentTable));
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
         }
 
         public override void SetEntityId(object first, object second)

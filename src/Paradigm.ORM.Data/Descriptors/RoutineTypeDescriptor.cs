@@ -54,7 +54,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// Initializes a new instance of the <see cref="RoutineTypeDescriptor"/> class.
         /// </summary>
         /// <param name="type">The type.</param>
-        public RoutineTypeDescriptor(Type type)
+        internal RoutineTypeDescriptor(Type type)
         {
             this.Type = type ?? throw new ArgumentNullException(nameof(type), $"The {nameof(type)} can not be null.");
             this.Parameters = new List<IParameterPropertyDescriptor>();

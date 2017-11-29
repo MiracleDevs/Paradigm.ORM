@@ -112,7 +112,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
         /// <seealso cref="TableAttribute"/>
         /// <seealso cref="TableTypeAttribute"/>
-        public TableTypeDescriptor(Type type)
+        internal TableTypeDescriptor(Type type)
         {
             this.Type = type ?? throw new ArgumentNullException(nameof(type), $"The {nameof(type)} can not be null.");
             this.AllProperties = new List<IColumnPropertyDescriptor>();

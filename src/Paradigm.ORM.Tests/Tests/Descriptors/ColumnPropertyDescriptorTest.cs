@@ -11,7 +11,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
     {
         #region Properties
 
-        private TableTypeDescriptor ClientTableTypeDescription { get; }
+        private ITableTypeDescriptor ClientTableTypeDescription { get; }
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         {
             // We instantiate a TableTypeDescriptor object because ColumnPropertyDescriptor
             // is declared as internal, therefore we test it through TableTypeDescriptor
-            ClientTableTypeDescription = new TableTypeDescriptor(typeof(Client));
+            ClientTableTypeDescription = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(Client));
         }
 
         #endregion

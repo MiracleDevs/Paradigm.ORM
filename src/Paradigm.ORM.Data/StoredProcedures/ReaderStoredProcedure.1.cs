@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Paradigm.ORM.Data.Database;
-using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.Mappers.Generic;
@@ -123,7 +122,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector, new TableTypeDescriptor(typeof(TResult))));
+            this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector));
 
             if (this.Mapper == null)
                 throw new OrmException("The mapper can not be null.");

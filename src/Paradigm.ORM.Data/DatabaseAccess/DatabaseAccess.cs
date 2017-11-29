@@ -63,16 +63,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </summary>
         /// <param name="connector">A reference to the scoped database connector.</param>
         /// <param name="type">A type containing mapping information, or referencing typing information.</param>
-        public DatabaseAccess(IDatabaseConnector connector, Type type) : this(null, connector, new TableTypeDescriptor(type))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseAccess"/> class.
-        /// </summary>
-        /// <param name="connector">A reference to the scoped database connector.</param>
-        /// <param name="descriptor">The table type descriptor.</param>
-        public DatabaseAccess(IDatabaseConnector connector, ITableTypeDescriptor descriptor) : this(null, connector, descriptor)
+        public DatabaseAccess(IDatabaseConnector connector, Type type) : this(null, connector, type)
         {
         }
 
@@ -81,7 +72,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </summary>
         /// <param name="serviceProvider">A reference to the scoped service provider.</param>
         /// <param name="type">A type containing mapping information, or referencing typing information.</param>
-        public DatabaseAccess(IServiceProvider serviceProvider, Type type) : this(serviceProvider, serviceProvider.GetService<IDatabaseConnector>(), new TableTypeDescriptor(type))
+        public DatabaseAccess(IServiceProvider serviceProvider, Type type) : this(serviceProvider, serviceProvider.GetService<IDatabaseConnector>(), type)
         {
         }
 
@@ -91,17 +82,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="serviceProvider">A reference to the scoped service provider.</param>
         /// <param name="connector">A reference to the scoped database connector.</param>
         /// <param name="type">A type containing mapping information, or referencing typing information.</param>
-        public DatabaseAccess(IServiceProvider serviceProvider, IDatabaseConnector connector, Type type) : this(serviceProvider, connector, new TableTypeDescriptor(type))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseAccess"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="descriptor">The table type descriptor.</param>
-        public DatabaseAccess(IServiceProvider serviceProvider, IDatabaseConnector connector, ITableTypeDescriptor descriptor)
+        public DatabaseAccess(IServiceProvider serviceProvider, IDatabaseConnector connector, Type type)
         {
             this.ServiceProvider = serviceProvider;
 
@@ -109,7 +90,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             this.Connector = connector;
 
             // Sets the Table Type Descriptor with reflected info about the table behind the entity.
-            this.Descriptor = descriptor;
+            this.Descriptor = DescriptorCache.Instance.GetTableTypeDescriptor(type);
 
             // List of related data access entities.
             this.NavigationDatabaseAccesses = new List<INavigationDatabaseAccess>();

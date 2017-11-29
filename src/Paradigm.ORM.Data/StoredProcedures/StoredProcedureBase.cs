@@ -64,7 +64,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         {
             this.ServiceProvider = serviceProvider;
             this.Connector = connector;
-            this.Descriptor = new RoutineTypeDescriptor(typeof(TParameters));
+            this.Descriptor = DescriptorCache.Instance.GetRoutineTypeDescriptor(typeof(TParameters));
             this.FormatProvider = this.Connector.GetCommandFormatProvider();
         }
 

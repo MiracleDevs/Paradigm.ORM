@@ -110,7 +110,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(AllColumnsClass));
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(AllColumnsClass));
         }
 
         public string GetDatabaseName()

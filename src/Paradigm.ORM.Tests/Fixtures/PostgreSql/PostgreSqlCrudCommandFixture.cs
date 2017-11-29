@@ -43,7 +43,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
         {
             this.Connector.ExecuteNonQuery(
                 @"CREATE TABLE IF NOT EXISTS ""SingleKeyParentTable""(
-                    ""Id""            SERIAL, 
+                    ""Id""            SERIAL,
                     ""Name""          VARCHAR(200)     NOT NULL,
                     ""IsActive""      BOOLEAN          NOT NULL,
                     ""Amount""        DECIMAL(20,9)    NOT NULL,
@@ -94,7 +94,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 
         public override ITableTypeDescriptor GetParentDescriptor()
         {
-            return new TableTypeDescriptor(typeof(SingleKeyParentTable));
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
         }
 
         public override void SetEntityId(object first, object second)

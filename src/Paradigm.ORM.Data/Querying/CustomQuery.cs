@@ -62,22 +62,12 @@ namespace Paradigm.ORM.Data.Querying
         /// </summary>
         /// <param name="connector">The database connector.</param>
         /// <param name="query">The query.</param>
-        public CustomQuery(IDatabaseConnector connector, string query) : this(connector, query, new CustomTypeDescriptor(typeof(TResultType)))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomQuery{TResultType}"/> class.
-        /// </summary>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="descriptor">The custom type descriptor.</param>
-        public CustomQuery(IDatabaseConnector connector, string query, ICustomTypeDescriptor descriptor)
+        public CustomQuery(IDatabaseConnector connector, string query)
         {
             this.Connector = connector;
-            this.Descriptor = descriptor;
+            this.Descriptor = DescriptorCache.Instance.GetCustomTypeDescriptor(typeof(TResultType));
             this.CommandText = query;
-            this.Mapper = new DatabaseReaderMapper<TResultType>(connector, descriptor);
+            this.Mapper = new DatabaseReaderMapper<TResultType>(connector, this.Descriptor);
         }
 
         #endregion

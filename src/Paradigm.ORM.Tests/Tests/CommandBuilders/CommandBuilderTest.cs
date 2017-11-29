@@ -24,7 +24,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription);
             selectCommand.GetCommand().CommandText.Should().Be(fixture.SelectQuery);
@@ -38,7 +38,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
             var selectCommand = commandBuilderFactory.CreateSelectCommandBuilder(tableDescription);
             selectCommand.GetCommand(fixture.SelectWhereClause).CommandText.Should().Be(fixture.SelectWithWhereQuery);
         }
@@ -51,7 +51,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
@@ -70,7 +70,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
@@ -90,7 +90,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
             Action select = () => selectCommand.GetCommand(null);
@@ -105,7 +105,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
@@ -121,7 +121,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var lastIdCommand = commandBuilderFactory.CreateLastInsertIdCommandBuilder(tableDescription);
             lastIdCommand.GetCommand().CommandText.Should().Be(fixture.LastInsertIdQuery);
@@ -135,7 +135,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.Entity1 });
             valueProvider.MoveNext();
 
@@ -172,7 +172,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
             var entitiesToDelete = new[] { fixture.Entity1 };
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
@@ -188,7 +188,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
             var entitiesToDelete = new[] { fixture.Entity1, fixture.Entity2 };
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
@@ -204,7 +204,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = new TableTypeDescriptor(tableDescriptorType);
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
 
             var entityToUpdate = fixture.Entity1;
             entityToUpdate.Name = "John Doe Junior";

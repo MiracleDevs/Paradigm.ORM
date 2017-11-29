@@ -70,7 +70,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         {
             this.DatabaseAccess = this.ServiceProvider.GetServiceIfAvailable(
                 typeof(IDatabaseAccess<>).MakeGenericType(this.NavigationPropertyDescriptor.ToDescriptor.Type),
-                () => new DatabaseAccess(this.ServiceProvider, this.Connector, this.NavigationPropertyDescriptor.ToDescriptor)) as IDatabaseAccess;
+                () => new DatabaseAccess(this.ServiceProvider, this.Connector, this.NavigationPropertyDescriptor.ToDescriptor.Type)) as IDatabaseAccess;
 
             this.NavigationHelper = this.NavigationPropertyDescriptor.NavigationAttributes.Count > 1
                 ? (INavigationHelper)new MultipleKeyNavigationHelper(this.NavigationPropertyDescriptor, this.Connector.GetCommandFormatProvider())

@@ -130,7 +130,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 
         public override ITableTypeDescriptor GetDescriptor()
         {
-            return new TableTypeDescriptor(typeof(AllColumnsClass));
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(AllColumnsClass));
         }
     }
 }

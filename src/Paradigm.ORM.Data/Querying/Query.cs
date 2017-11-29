@@ -55,21 +55,12 @@ namespace Paradigm.ORM.Data.Querying
         /// Initializes a new instance of the <see cref="Query{TResultType}"/> class.
         /// </summary>
         /// <param name="connector">The database connector.</param>
-        public Query(IDatabaseConnector connector) : this(connector, new TableTypeDescriptor(typeof(TResultType)))
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Query{TResultType}"/> class.
-        /// </summary>
-        /// <param name="connector">The database connector.</param>
-        /// <param name="descriptor">The table type descriptor.</param>
-        public Query(IDatabaseConnector connector, ITableTypeDescriptor descriptor)
+        public Query(IDatabaseConnector connector)
         {
             this.Connector = connector;
-            this.Descriptor = descriptor;
-            this.SelectCommandBuilder = connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(descriptor);
-            this.Mapper = new DatabaseReaderMapper<TResultType>(connector, descriptor);
+            this.Descriptor = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(TResultType));
+            this.SelectCommandBuilder = connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(this.Descriptor);
+            this.Mapper = new DatabaseReaderMapper<TResultType>(connector, this.Descriptor);
         }
 
         #endregion

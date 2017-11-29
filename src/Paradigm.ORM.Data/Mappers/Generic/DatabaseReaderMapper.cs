@@ -30,37 +30,8 @@ namespace Paradigm.ORM.Data.Mappers.Generic
         /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="connector">A reference to a database connector.</param>
-        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
-        public DatabaseReaderMapper(IServiceProvider serviceProvider, IDatabaseConnector connector, IColumnPropertyDescriptorCollection descriptor) : base(serviceProvider, connector, descriptor)
-        {
-            if (descriptor == null)
-                throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
-
-            if (descriptor.Type != typeof(TEntity))
-                throw new ArgumentException($"The {nameof(TableTypeDescriptor)} inner {nameof(Type)} is not {nameof(TEntity)}.");
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
         public DatabaseReaderMapper(IServiceProvider serviceProvider) : base(serviceProvider.GetService<IDatabaseConnector>(), typeof(TEntity))
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
-        public DatabaseReaderMapper(IServiceProvider serviceProvider, IColumnPropertyDescriptorCollection descriptor) : base(serviceProvider.GetService<IDatabaseConnector>(), descriptor)
-        {
-            if (descriptor == null)
-                throw new ArgumentNullException(nameof(descriptor), $"{nameof(descriptor)} can not be null.");
-
-            if (descriptor.Type != typeof(TEntity))
-                throw new ArgumentException($"The {nameof(TableTypeDescriptor)} inner {nameof(Type)} is not {nameof(TEntity)}.");
         }
 
         /// <summary>
@@ -68,7 +39,7 @@ namespace Paradigm.ORM.Data.Mappers.Generic
         /// </summary>
         /// <param name="connector">The connector.</param>
         /// <inheritdoc />
-        public DatabaseReaderMapper(IDatabaseConnector connector) : base(connector, new CustomTypeDescriptor(typeof(TEntity)))
+        public DatabaseReaderMapper(IDatabaseConnector connector) : base(connector, typeof(TEntity))
         {
         }
 

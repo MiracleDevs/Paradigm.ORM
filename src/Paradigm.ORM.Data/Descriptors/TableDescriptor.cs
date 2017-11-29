@@ -79,7 +79,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <param name="constraints">The constraints schema.</param>
         /// <seealso cref="TableAttribute"/>
         /// <seealso cref="TableTypeAttribute"/>
-        public TableDescriptor(ITable table, List<IColumn> columns, List<IConstraint> constraints)
+        internal TableDescriptor(ITable table, List<IColumn> columns, List<IConstraint> constraints)
         {
             this.Table = table;
             this.Columns = columns;

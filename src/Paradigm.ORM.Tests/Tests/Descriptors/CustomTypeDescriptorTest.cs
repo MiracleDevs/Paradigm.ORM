@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
     {
         #region Properties
 
-        private CustomTypeDescriptor CustomTypeDescription { get; }
+        private ICustomTypeDescriptor CustomTypeDescription { get; }
 
         #endregion
 
@@ -19,7 +19,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         public CustomTypeDescriptorTest()
         {
             // We set up this as a class property because we use it in almost every test (excepting one)
-            CustomTypeDescription = new CustomTypeDescriptor(typeof(ICustomMappingTable));
+            CustomTypeDescription = DescriptorCache.Instance.GetCustomTypeDescriptor(typeof(ICustomMappingTable));
         }
 
         #endregion

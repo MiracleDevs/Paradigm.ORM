@@ -21,7 +21,7 @@ namespace Paradigm.ORM.DataExport.Export
 
         private IDatabaseReader Reader { get; set; }
 
-        public TableDescriptor TableDescriptor { get; set; }
+        public ITableDescriptor TableDescriptor { get; set; }
 
         #endregion
 

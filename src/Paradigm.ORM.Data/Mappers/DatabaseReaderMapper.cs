@@ -54,29 +54,8 @@ namespace Paradigm.ORM.Data.Mappers
         /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="connector">A reference to a database connector.</param>
-        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
-        public DatabaseReaderMapper(IServiceProvider serviceProvider, IDatabaseConnector connector, IColumnPropertyDescriptorCollection descriptor) : this(connector, descriptor)
-        {
-            this.ServiceProvider = serviceProvider;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
         public DatabaseReaderMapper(IServiceProvider serviceProvider, Type type) : this(serviceProvider.GetService<IDatabaseConnector>(), type)
-        {
-            this.ServiceProvider = serviceProvider;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseReaderMapper"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        /// <param name="descriptor">A column property descriptor collection to extract mapping information.</param>
-        public DatabaseReaderMapper(IServiceProvider serviceProvider, IColumnPropertyDescriptorCollection descriptor) : this(serviceProvider.GetService<IDatabaseConnector>(), descriptor)
         {
             this.ServiceProvider = serviceProvider;
         }
@@ -87,7 +66,7 @@ namespace Paradigm.ORM.Data.Mappers
         /// <param name="connector">A reference to a database connector.</param>
         /// <param name="type">The type containing the mapping information, or the reference to the mapping information.</param>
         /// <exception cref="ArgumentNullException">descriptor can not be null.</exception>
-        public DatabaseReaderMapper(IDatabaseConnector connector, Type type) : this(connector, new CustomTypeDescriptor(type))
+        public DatabaseReaderMapper(IDatabaseConnector connector, Type type) : this(connector, DescriptorCache.Instance.GetCustomTypeDescriptor(type))
         {
         }
 

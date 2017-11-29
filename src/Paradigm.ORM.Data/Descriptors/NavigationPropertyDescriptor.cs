@@ -146,7 +146,7 @@ namespace Paradigm.ORM.Data.Descriptors
             this.PropertyName = this.PropertyInfo.Name;
             this.PropertyType = this.PropertyInfo.PropertyType;
 
-            this.ToDescriptor = new TableTypeDescriptor(this.NavigationAttributes.First().ReferencedType);
+            this.ToDescriptor = DescriptorCache.Instance.GetTableTypeDescriptor(this.NavigationAttributes.First().ReferencedType);
 
             this.NavigationKeyDescriptors = this.NavigationAttributes.Select(x => new NavigationKeyDescriptor(this.FromDescriptor, this.ToDescriptor, x.SourceProperty, x.ReferencedProperty)).ToList();
             this.IsAggregateRoot = this.PropertyType != typeof(string) && (this.PropertyType.IsArray || typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(this.PropertyType));

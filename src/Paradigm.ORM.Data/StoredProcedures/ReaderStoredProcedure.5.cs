@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using Paradigm.ORM.Data.Database;
-using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.Mappers.Generic;
@@ -183,11 +182,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector, new TableTypeDescriptor(typeof(TResult1))));
-            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector, new TableTypeDescriptor(typeof(TResult2))));
-            this.Mapper3 = this.Mapper3 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(this.Connector, new TableTypeDescriptor(typeof(TResult3))));
-            this.Mapper4 = this.Mapper4 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(this.Connector, new TableTypeDescriptor(typeof(TResult4))));
-            this.Mapper5 = this.Mapper5 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(this.Connector, new TableTypeDescriptor(typeof(TResult5))));
+            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector));
+            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector));
+            this.Mapper3 = this.Mapper3 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(this.Connector));
+            this.Mapper4 = this.Mapper4 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(this.Connector));
+            this.Mapper5 = this.Mapper5 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(this.Connector));
 
             if (this.Mapper1 == null)
                 throw new OrmException("The first mapper can not be null.");

@@ -14,7 +14,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
     {
         #region Properties
 
-        private RoutineTypeDescriptor RoutineTypeDescription { get; }
+        private IRoutineTypeDescriptor RoutineTypeDescription { get; }
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         public RoutineDescriptorTest()
         {
             // We set up this as a class property because we use it in almost every test (excepting one)
-            RoutineTypeDescription = new RoutineTypeDescriptor(typeof(SearchTaskParameters));
+            RoutineTypeDescription = DescriptorCache.Instance.GetRoutineTypeDescriptor(typeof(SearchTaskParameters));
         }
 
         #endregion
@@ -33,7 +33,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         [Test]
         public void NoRoutineClassShouldThrowMissingRoutineException()
         {
-            Action newRoutine = () => new RoutineTypeDescriptor(typeof(NoRoutineClass));
+            Action newRoutine = () => DescriptorCache.Instance.GetRoutineTypeDescriptor(typeof(NoRoutineClass));
             newRoutine.ShouldThrow<OrmMissingRoutineMappingException>();
         }
 
