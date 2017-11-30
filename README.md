@@ -60,8 +60,10 @@ Version `2.2.0`
   - Schema Provider
 - Removed extension methods for the IDatabaseConnector not used any more.
 
+
 Version `2.1.7`
 - Changed how the DatabaseAccess classes utilize the BatchManager to be thread safe.
+
 
 Version `2.1.6`
 - Updated Paradigm.Core and other dependencies.
