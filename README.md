@@ -44,7 +44,7 @@ Version `2.2.2`
 - Changed how the CommandBatch replace parameter names, to prevent name collision.
 - Added tests for the command batch name replacement.
 - Changed how select parameters are replaced, from @Index to  @pIndex or :pIndex, depending on the database parameter naming conventions.
-- Updated nuget dependencies.
+- Updated NuGet dependencies.
 
 Version `2.2.1`
 - Added a cache service for descriptors all over the orm, to prevent tons of small objects filling the heap.
