@@ -43,7 +43,7 @@ Version `2.2.2`
 - Removed mandatory data type in ColumnAttribute. The orm will choose the default column types for each database type.
 - Changed how the CommandBatch replace parameter names, to prevent name collision.
 - Added tests for the command batch name replacement.
-
+- Changed how select parameters are replaced, from @Index to  @pIndex or :pIndex, depending on the database parameter naming conventions.
 
 Version `2.2.1`
 - Added a cache service for descriptors all over the orm, to prevent tons of small objects filling the heap.
