@@ -6,7 +6,7 @@ using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.Batching
 {
-    internal partial class CommandBatch
+    public partial class CommandBatch
     {
         #region Properties
 

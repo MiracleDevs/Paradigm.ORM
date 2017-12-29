@@ -6,8 +6,6 @@ namespace Paradigm.ORM.Tests.Fixtures
 {
     public abstract class CrudCommandFixtureBase : IDisposable
     {
-        protected abstract string ConnectionString { get; }
-
         public abstract string InsertParentStatement { get; }
 
         public abstract string LastInsertedIdStatement { get; }
@@ -21,7 +19,7 @@ namespace Paradigm.ORM.Tests.Fixtures
         public abstract string UpdateStatement { get; }
 
         public IDatabaseConnector Connector { get; }
-        
+
         protected CrudCommandFixtureBase()
         {
             this.Connector = this.CreateConnector();

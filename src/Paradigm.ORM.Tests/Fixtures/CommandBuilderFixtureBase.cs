@@ -5,8 +5,6 @@ namespace Paradigm.ORM.Tests.Fixtures
 {
     public abstract class CommandBuilderFixtureBase
     {
-        protected abstract string ConnectionString { get; }
-
         public IDatabaseConnector Connector { get; }
 
         protected abstract IDatabaseConnector CreateConnector();

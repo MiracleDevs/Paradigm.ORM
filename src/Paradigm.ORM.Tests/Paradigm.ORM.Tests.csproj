@@ -51,8 +51,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Fixtures\MySql\" />
-  </ItemGroup>
-
 </Project>

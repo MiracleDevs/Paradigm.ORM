@@ -85,6 +85,7 @@ namespace Paradigm.ORM.Data.Querying
         public List<TResultType> Execute(string whereClause = null, params object[] parameters)
         {
             var builder = new StringBuilder(this.CommandText);
+            var formatProvider = this.Connector.GetCommandFormatProvider();
 
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
@@ -95,10 +96,15 @@ namespace Paradigm.ORM.Data.Querying
                 {
                     for (var index = 0; index < parameters.Length; index++)
                     {
+                        var oldName = $"@{index + 1}";
+                        var newName = formatProvider.GetParameterName($"p{(index + 1)}");
+
+                        builder.Replace(oldName, newName);
+
                         var parameter = parameters[index];
                         var type = parameter == null ? typeof(object) : parameter.GetType();
-                        var commandParameter = command.AddParameter($"@{index + 1}", DbTypeConverter.FromType(type));
-                        commandParameter.Value = parameter ?? DBNull.Value;
+                        var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
+                        commandParameter.Value = parameter;
                     }
                 }
 

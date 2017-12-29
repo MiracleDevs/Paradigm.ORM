@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.Batching
     /// <seealso cref="System.IDisposable" />
     /// <seealso cref="IBatchManager"/>
     /// <seealso cref="ICommandBatchStep"/>
-    internal partial interface ICommandBatch : IDisposable
+    public partial interface ICommandBatch : IDisposable
     {
         #region Properties
 

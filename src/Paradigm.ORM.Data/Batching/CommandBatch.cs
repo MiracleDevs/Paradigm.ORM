@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Extensions;
@@ -19,7 +20,7 @@ namespace Paradigm.ORM.Data.Batching
     /// <seealso cref="ICommandBatch" />
     /// <seealso cref="IBatchManager"/>
     /// <seealso cref="ICommandBatchStep"/>
-    internal partial class CommandBatch : ICommandBatch
+    public partial class CommandBatch : ICommandBatch
     {
         #region Properties
 
@@ -49,6 +50,11 @@ namespace Paradigm.ORM.Data.Batching
         private ICommandFormatProvider FormatProvider { get; set; }
 
         /// <summary>
+        /// Gets a regular expression used to find parameters within commands.
+        /// </summary>
+        private Regex ParameterRegex { get; }
+
+        /// <summary>
         /// Gets the list of command steps.
         /// </summary>
         public List<ICommandBatchStep> Steps { get; }
@@ -64,7 +70,7 @@ namespace Paradigm.ORM.Data.Batching
         public int MaxCount { get; set; }
 
         /// <summary>
-        /// Gets or sets the current count.
+        /// Gets the current count.
         /// </summary>
         public int CurrentCount { get; private set; }
 
@@ -82,6 +88,7 @@ namespace Paradigm.ORM.Data.Batching
             this.FormatProvider = connector.GetCommandFormatProvider();
             this.Command = connector.CreateCommand();
             this.Steps = new List<ICommandBatchStep>();
+            this.ParameterRegex = new Regex($"{this.Connector.GetCommandFormatProvider().GetParameterName(string.Empty)}[a-zA-Z][a-zA-Z0-9_]*", RegexOptions.Compiled | RegexOptions.Multiline);
         }
 
         #endregion
@@ -200,9 +207,13 @@ namespace Paradigm.ORM.Data.Batching
         /// <param name="command">The command.</param>
         /// <remarks>
         /// 1. Concatenate the previous commands to the new one, and add a query separator.
-        //  2. Then iterate over the parameters in the new command, and replace the name for
-        //     for an incremental name, to be able to support many similar queries (Insert, Update, etc).
-        //  3. Refresh the CommandText after generating and updating the batch command.
+        /// 2. Then iterate over the parameters in the new command, and replace the name for
+        ///    for an incremental name, to be able to support many similar queries (Insert, Update, etc).
+        /// 3. Refresh the CommandText after generating and updating the batch command.
+        ///
+        /// We use regular expressions to match paramter names, due to a problem where parameters with
+        /// partial names can affect other parameters. For example, if you have Purchase and PurchaseNumber,
+        /// when replacing @Purchase by @p1, also @PurchaseNumber was replaced by @p1Number and that was an error.
         /// </remarks>
         private void AddCommand(IDatabaseCommand command)
         {
@@ -211,17 +222,29 @@ namespace Paradigm.ORM.Data.Batching
             builder.Append(command.CommandText);
             builder.Append(this.FormatProvider.GetQuerySeparator());
 
-            foreach (var parameter in command.Parameters)
+            var parameterNames = this.ParameterRegex
+                              .Matches(command.CommandText)
+                              .Cast<Match>()
+                              .OrderByDescending(x => x.Index)
+                              .ToList();
+
+            var parameterCount = ParameterCount + parameterNames.Count - 1;
+
+            foreach (var oldParameter in parameterNames)
             {
-                var oldName = parameter.ParameterName;
-                var newName = this.FormatProvider.GetParameterName($"p{this.ParameterCount++}");
+                var oldParameterName = oldParameter.Value;
+                var parameter = command.Parameters.FirstOrDefault(x => x.ParameterName == oldParameterName);
 
-                builder.Replace(oldName, newName);
+                if (parameter == null)
+                    throw new Exception($"Parameter {oldParameterName} not found inside the parameters collection.");
 
-                this.Command.AddParameter(newName, parameter.DbType, parameter.Size, parameter.Precision, parameter.Scale, parameter.IsNullable).Value = parameter.Value;
+                var newParameterName = this.FormatProvider.GetParameterName($"p{parameterCount--}");
+                builder.Replace(oldParameterName, newParameterName, oldParameter.Index, oldParameter.Length);
+                this.Command.AddParameter(newParameterName, parameter.DbType, parameter.Size, parameter.Precision, parameter.Scale, parameter.IsNullable).Value = parameter.Value;
             }
 
             this.CommandText = $"{this.CommandText}{builder}";
+            this.ParameterCount += parameterNames.Count;
         }
 
         #endregion

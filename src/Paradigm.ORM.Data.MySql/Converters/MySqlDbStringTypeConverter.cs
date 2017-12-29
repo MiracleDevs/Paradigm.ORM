@@ -119,7 +119,7 @@ namespace Paradigm.ORM.Data.MySql.Converters
         /// <returns></returns>
         private Type GetNativeType(string dbType)
         {
-            /* 
+            /*
             SQL Type of Received Value 	    buffer_type Value 	        Output Variable C Type
             TINYINT 	                    MYSQL_TYPE_TINY 	        signed char
             SMALLINT 	                    MYSQL_TYPE_SHORT 	        short int
@@ -173,6 +173,7 @@ namespace Paradigm.ORM.Data.MySql.Converters
 
                 case "time":
                     return typeof(TimeSpan);
+
                 case "date":
                 case "datetime":
                 case "timestamp":
@@ -194,6 +195,45 @@ namespace Paradigm.ORM.Data.MySql.Converters
                 case "blob":
                 case "mediumblob":
                 case "longblob":
+                    return typeof(byte[]);
+            }
+
+            switch (dbType)
+            {
+                case "Boolean":
+                    return typeof(bool);
+
+                case "Int16":
+                case "UInt16":
+                    return typeof(short);
+
+                case "Int32":
+                case "UInt32":
+                    return typeof(int);
+
+                case "Int64":
+                case "UInt64":
+                    return typeof(long);
+
+                case "Single":
+                    return typeof(float);
+
+                case "Double":
+                    return typeof(double);
+
+                case "Decimal":
+                    return typeof(decimal);
+
+                case "TimeSpan":
+                    return typeof(TimeSpan);
+
+                case "DateTime":
+                    return typeof(DateTime);
+
+                case "String":
+                    return typeof(string);
+
+                case "Byte[]":
                     return typeof(byte[]);
 
                 default:

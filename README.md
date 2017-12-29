@@ -39,6 +39,12 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.2.2`
+- Removed mandatory data type in ColumnAttribute. The orm will choose the default column types for each database type.
+- Changed how the CommandBatch replace parameter names, to prevent name collision.
+- Added tests for the command batch name replacement.
+
+
 Version `2.2.1`
 - Added a cache service for descriptors all over the orm, to prevent tons of small objects filling the heap.
 - Removed constructors receiving descriptors. Now all the ORM classes should refer to the cache for descriptors.

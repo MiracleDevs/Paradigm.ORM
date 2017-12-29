@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlQueryFixture: QueryFixtureBase
     {
-        protected override string ConnectionString => "Server=localhost;User Id=test;Password=test1234;Timeout=3";
+        private string ConnectionString => "Server=localhost;User Id=test;Password=test1234;Timeout=3";
 
         public override string WhereClause => "\"Name\" like 'Test Parent 1%'";
 

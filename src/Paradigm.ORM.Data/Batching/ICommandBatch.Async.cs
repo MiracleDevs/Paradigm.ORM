@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Paradigm.ORM.Data.Batching
 {
-    internal partial interface ICommandBatch
+    public partial interface ICommandBatch
     {
         /// <summary>
         /// Gets or sets a reference to an action that will be executed after the batch is executed.

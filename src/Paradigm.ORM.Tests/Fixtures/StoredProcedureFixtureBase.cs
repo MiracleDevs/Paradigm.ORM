@@ -6,8 +6,6 @@ namespace Paradigm.ORM.Tests.Fixtures
 {
     public abstract class StoredProcedureFixtureBase : IDisposable
     {
-        protected abstract string ConnectionString { get; }
-
         public IDatabaseConnector Connector { get; }
 
         protected StoredProcedureFixtureBase()

@@ -6,8 +6,6 @@ namespace Paradigm.ORM.Tests.Fixtures
 {
     public abstract class ReaderMapperFixtureBase : IDisposable
     {
-        protected abstract string ConnectionString { get; }
-
         public abstract string SelectStatement { get; }
 
         public IDatabaseConnector Connector { get; }

@@ -13,7 +13,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlReaderMapperFixture : ReaderMapperFixtureBase
     {
-        protected override string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
+        private string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
 
         public override string SelectStatement => @"SELECT * FROM ""test"".""allcolumns""";
 

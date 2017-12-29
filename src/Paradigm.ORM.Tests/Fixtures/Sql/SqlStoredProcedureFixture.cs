@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlStoredProcedureFixture: StoredProcedureFixtureBase
     {
-        protected override string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
+        private string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         protected override IDatabaseConnector CreateConnector()
         {

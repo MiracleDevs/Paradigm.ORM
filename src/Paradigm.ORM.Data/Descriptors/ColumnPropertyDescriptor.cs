@@ -162,7 +162,11 @@ namespace Paradigm.ORM.Data.Descriptors
                 return false;
 
             this.ColumnName = columnAttribute.Name ?? this.PropertyInfo.Name;
-            this.DataType = columnAttribute.Type ?? this.PropertyInfo.PropertyType.Name;
+
+            this.DataType = columnAttribute.Type ?? (this.PropertyInfo.PropertyType == typeof(Nullable<>)
+                ? this.PropertyInfo.PropertyType.GetGenericArguments().First().Name
+                : this.PropertyInfo.PropertyType.Name);
+
             this.PropertyName = this.PropertyInfo.Name;
 
             var sizeAttribute = this.PropertyDecoration.GetAttribute<SizeAttribute>();

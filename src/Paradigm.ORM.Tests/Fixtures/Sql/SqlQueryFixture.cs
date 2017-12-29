@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlQueryFixture: QueryFixtureBase
     {
-        protected override string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
+        private string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
         public override string WhereClause => "[Name] like 'Test Parent 1%'";
 

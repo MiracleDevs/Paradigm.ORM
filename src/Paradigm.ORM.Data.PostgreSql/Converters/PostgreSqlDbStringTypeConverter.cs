@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Net;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database.Schema.Structure;
 
@@ -107,6 +108,9 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
             if (type == typeof(byte[]))
                 return "bytea";
 
+            if (type == typeof(IPAddress))
+                return "inet";
+
             return null;
         }
 
@@ -178,12 +182,6 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
 
             switch (dbType.ToLower())
             {
-                case "bigint":
-                case "int8":
-                case "bigserial":
-                case "serial8":
-                    return typeof(long);
-
                 // ADO.NET does not have support for BitArray type
                 case "boolean":
                 case "bool":
@@ -196,15 +194,28 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
                 case "bytea":
                     return typeof(byte[]);
 
-                case "int":
-                case "integer":
+                case "int2":
                 case "smallint":
+                    return typeof(short);
+
+                case "int":
+                case "int4":
+                case "integer":
                 case "serial4":
                     return typeof(int);
 
+                case "bigint":
+                case "int8":
+                case "bigserial":
+                case "serial8":
+                    return typeof(long);
+
                 case "float":
+                case "float4":
+                case "real":
                     return typeof(float);
 
+                case "float8":
                 case "double":
                 case "double precision":
                     return typeof(double);
@@ -213,9 +224,6 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
                 case "decimal":
                 case "numeric":
                     return typeof(decimal);
-
-                case "real":
-                    return typeof(float);
 
                 case "date":
                 case "timestamp":
@@ -235,6 +243,52 @@ namespace Paradigm.ORM.Data.PostgreSql.Converters
                 case "character varying":
                 case "text":
                     return typeof(string);
+
+                case "inet":
+                    return typeof(IPAddress);
+            }
+
+            switch (dbType)
+            {
+                // ADO.NET does not have support for BitArray type
+                case "Boolean":
+                    return typeof(bool);
+
+                case "Byte[]":
+                    return typeof(byte[]);
+
+                case "Int16":
+                case "UInt16":
+                    return typeof(short);
+
+                case "Int32":
+                case "UInt32":
+                    return typeof(int);
+
+                case "Int64":
+                case "UInt64":
+                    return typeof(long);
+
+                case "Single":
+                    return typeof(float);
+
+                case "Double":
+                    return typeof(double);
+
+                case "Decimal":
+                    return typeof(decimal);
+
+                case "DateTime":
+                    return typeof(DateTime);
+
+                case "TimeSpan":
+                    return typeof(TimeSpan);
+
+                case "String":
+                    return typeof(string);
+
+                case "IPAddress":
+                    return typeof(IPAddress);
 
                 default:
                     return typeof(object);

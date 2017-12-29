@@ -6,8 +6,6 @@ namespace Paradigm.ORM.Tests.Fixtures
 {
     public abstract class QueryFixtureBase : IDisposable
     {
-        protected abstract string ConnectionString { get; }
-
         public abstract string WhereClause { get; }
 
         public abstract string SelectClause { get; }

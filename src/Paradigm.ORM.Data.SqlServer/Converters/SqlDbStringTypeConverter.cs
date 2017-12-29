@@ -231,6 +231,49 @@ namespace Paradigm.ORM.Data.SqlServer.Converters
 
                 case "sql_variant":
                     return typeof(object);
+            }
+
+            switch (dbType)
+            {
+                case "Boolean":
+                    return typeof(bool);
+
+                case "Byte":
+                case "SByte":
+                    return typeof(byte);
+
+                case "Int16":
+                case "UInt16":
+                    return typeof(short);
+
+                case "Int32":
+                case "UInt32":
+                    return typeof(int);
+
+                case "Int64":
+                case "UInt64":
+                    return typeof(long);
+
+                case "Single":
+                    return typeof(float);
+
+                case "Double":
+                    return typeof(double);
+
+                case "Decimal":
+                    return typeof(decimal);
+
+                case "DateTime":
+                    return typeof(DateTime);
+
+                case "DateTimeOffset":
+                    return typeof(DateTimeOffset);
+
+                case "String":
+                    return typeof(string);
+
+                case "Byte[]":
+                    return typeof(byte[]);
 
                 default:
                     return typeof(object);

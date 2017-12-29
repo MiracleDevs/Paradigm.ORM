@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlStoredProcedureFixture : StoredProcedureFixtureBase
     {
-        protected override string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
         protected override IDatabaseConnector CreateConnector()
         {

@@ -4,7 +4,6 @@ using System.Text;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Descriptors;
-using Paradigm.ORM.Data.Extensions;
 
 namespace Paradigm.ORM.Data.CommandBuilders
 {
@@ -61,20 +60,25 @@ namespace Paradigm.ORM.Data.CommandBuilders
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
 
-            var command = this.Connector.CreateCommand(builder.ToString());
+            var command = this.Connector.CreateCommand();
 
-            if (parameters == null || parameters.Length == 0)
-                return command;
-
-            for (var index = 0; index < parameters.Length; index++)
+            if (parameters != null)
             {
-                var parameter = parameters[index];
-                var name = this.FormatProvider.GetParameterName((index + 1).ToString());
-                var type = parameter == null ? typeof(object) : parameter.GetType();
-                var commandParameter = command.AddParameter(name, DbTypeConverter.FromType(type));
-                commandParameter.Value = parameter;
+                for (var index = 0; index < parameters.Length; index++)
+                {
+                    var oldName = $"@{index + 1}";
+                    var newName = this.FormatProvider.GetParameterName($"p{(index + 1)}");
+
+                    builder.Replace(oldName, newName);
+
+                    var parameter = parameters[index];
+                    var type = parameter == null ? typeof(object) : parameter.GetType();
+                    var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
+                    commandParameter.Value = parameter;
+                }
             }
 
+            command.CommandText = builder.ToString();
             return command;
         }
 

@@ -5,7 +5,7 @@ namespace Paradigm.ORM.Data.Attributes
     /// <summary>
     /// Indicates that the property maps to a database column.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class ColumnAttribute : Attribute
     {
@@ -24,6 +24,15 @@ namespace Paradigm.ORM.Data.Attributes
         /// </summary>
         public ColumnAttribute()
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ColumnAttribute"/> class.
+        /// </summary>
+        /// <param name="name">The name of the column.</param>
+        public ColumnAttribute(string name)
+        {
+            this.Name = name;
         }
 
         /// <summary>

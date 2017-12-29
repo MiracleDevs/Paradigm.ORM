@@ -123,7 +123,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
         /// </returns>
         public string GetDbStringType(Type type)
         {
-            /*************************************************************************** 
+            /***************************************************************************
             * boolean   | org.apache.cassandra.db.marshal.BooleanType
             *
             * tinyint   | org.apache.cassandra.db.marshal.ByteType
@@ -259,11 +259,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(Guid);
 
                 case "text":
-                    return typeof(string);
-
                 case "varchar":
-                    return typeof(string);
-
                 case "ascii":
                     return typeof(string);
 
@@ -271,6 +267,63 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return typeof(byte[]);
 
                 case "inet":
+                    return typeof(IPAddress);
+            }
+
+            switch (dbType)
+            {
+                case "Boolean":
+                    return typeof(bool);
+
+                case "SByte":
+                case "Byte":
+                    return typeof(sbyte);
+
+                case "Int16":
+                case "UInt16":
+                    return typeof(short);
+
+                case "Int32":
+                case "UInt32":
+                    return typeof(int);
+
+                case "Int64":
+                    return typeof(long);
+
+                case "BigInter":
+                    return typeof(BigInteger);
+
+                case "Single":
+                    return typeof(float);
+
+                case "Double":
+                    return typeof(double);
+
+                case "Decimal":
+                    return typeof(decimal);
+
+                case "Date":
+                    return typeof(DateTime);
+
+                case "TimeSpan":
+                    return typeof(TimeSpan);
+
+                case "DateTimeOffset":
+                    return typeof(DateTimeOffset);
+
+                case "TimeUuid":
+                    return typeof(TimeUuid);
+
+                case "Guid":
+                    return typeof(Guid);
+
+                case "String":
+                    return typeof(string);
+
+                case "Byte[]":
+                    return typeof(byte[]);
+
+                case "IPAddress":
                     return typeof(IPAddress);
 
                 default:
