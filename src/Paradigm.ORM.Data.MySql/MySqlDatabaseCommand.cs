@@ -4,6 +4,7 @@ using System.Data;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 using MySql.Data.MySqlClient;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.MySql
 {
@@ -104,9 +105,15 @@ namespace Paradigm.ORM.Data.MySql
         /// </returns>
         public IDatabaseReader ExecuteReader()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            this.Command.Prepare();
-            return new MySqlDatabaseReader(this.Command.ExecuteReader());
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return new MySqlDatabaseReader(this.Command.ExecuteReader());
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -118,8 +125,15 @@ namespace Paradigm.ORM.Data.MySql
         /// </returns>
         public int ExecuteNonQuery()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return this.Command.ExecuteNonQuery();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return this.Command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -132,8 +146,15 @@ namespace Paradigm.ORM.Data.MySql
         /// </returns>
         public object ExecuteScalar()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return this.Command.ExecuteScalar();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return this.Command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -297,7 +318,6 @@ namespace Paradigm.ORM.Data.MySql
         {
             var parameter = this.Command.Parameters.AddWithValue(name, DBNull.Value);
             parameter.DbType = type;
-
             return parameter;
         }
 

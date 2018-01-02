@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using Paradigm.ORM.Data.DatabaseAccess;
+using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.Querying;
 using Paradigm.ORM.Tests.Fixtures;
@@ -60,14 +61,14 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         public void ShouldThrowCqlException()
         {
             Func<Task> result = async () => await this.Fixture.Connector.QueryAsync<AllColumnsClass>();
-            result.ShouldThrow<Exception>();
+            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
         [Order(3)]
         public async Task QueryAsyncWithWhereAsync()
         {
-            var result = await this.Fixture.Connector.QueryAsync<SingleKeyParentTable>(this.Fixture.WhereClause);
+            var result = await this.Fixture.Connector.QueryAsync<SingleKeyParentTable>($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -82,7 +83,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Order(4)]
         public async Task QueryAsyncWithNotMatchingWhereAsync()
         {
-            var result = await this.Fixture.Connector.QueryAsync<SingleKeyParentTable>(@"""Id""=10");
+            var result = await this.Fixture.Connector.QueryAsync<SingleKeyParentTable>($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 10);
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }
@@ -108,7 +109,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             var queryAsync = new Query<SingleKeyParentTable>(this.Fixture.Connector);
 
             var result = await queryAsync.ExecuteAsync();
-            var result2 = await queryAsync.ExecuteAsync(this.Fixture.WhereClause);
+            var result2 = await queryAsync.ExecuteAsync($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
 
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
@@ -121,7 +122,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         {
             var queryAsync = new Query<SingleKeyParentTable>(this.Fixture.Connector);
 
-            var result = await queryAsync.ExecuteAsync(this.Fixture.WhereClause);
+            var result = await queryAsync.ExecuteAsync($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
             var result2 = await queryAsync.ExecuteAsync();
 
             result.Should().NotBeNull();

@@ -56,7 +56,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Test]
         public void QueryWithWhere()
         {
-            var result = this.Fixture.Connector.CustomQuery<SingleKeyParentTable>($"{this.Fixture.SelectClause} WHERE {this.Fixture.WhereClause}");
+            var result = this.Fixture.Connector.CustomQuery<SingleKeyParentTable>(this.Fixture.SelectClause,  $"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -70,7 +70,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Test]
         public void QueryWithNotMatchingWhere()
         {
-            var result = this.Fixture.Connector.CustomQuery<SingleKeyParentTable>($"{this.Fixture.SelectClause} WHERE \"Id\"=10");
+            var result = this.Fixture.Connector.CustomQuery<SingleKeyParentTable>(this.Fixture.SelectClause, $"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 10);
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }

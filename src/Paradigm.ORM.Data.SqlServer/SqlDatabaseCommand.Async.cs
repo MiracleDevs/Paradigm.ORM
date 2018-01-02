@@ -1,5 +1,7 @@
+using System;
 using System.Threading.Tasks;
 using Paradigm.ORM.Data.Database;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.SqlServer
 {
@@ -16,8 +18,15 @@ namespace Paradigm.ORM.Data.SqlServer
         /// </returns>
         public async Task<IDatabaseReader> ExecuteReaderAsync()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return new SqlDatabaseReader(await this.Command.ExecuteReaderAsync());
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return new SqlDatabaseReader(await this.Command.ExecuteReaderAsync());
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -29,8 +38,15 @@ namespace Paradigm.ORM.Data.SqlServer
         /// </returns>
         public async Task<int> ExecuteNonQueryAsync()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return await this.Command.ExecuteNonQueryAsync();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return await this.Command.ExecuteNonQueryAsync();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -43,8 +59,15 @@ namespace Paradigm.ORM.Data.SqlServer
         /// </returns>
         public async Task<object> ExecuteScalarAsync()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return await this.Command.ExecuteScalarAsync();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return await this.Command.ExecuteScalarAsync();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         #endregion

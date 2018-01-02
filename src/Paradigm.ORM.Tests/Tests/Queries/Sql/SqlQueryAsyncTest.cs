@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Paradigm.ORM.Data.DatabaseAccess;
@@ -9,6 +8,7 @@ using Paradigm.ORM.Tests.Fixtures;
 using Paradigm.ORM.Tests.Fixtures.Sql;
 using Paradigm.ORM.Tests.Mocks.Sql;
 using NUnit.Framework;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Tests.Tests.Queries.Sql
 {
@@ -61,14 +61,14 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         public void ShouldThrowSqlException()
         {
             Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
-            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.AllColumns'.");
+            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
         [Order(3)]
         public async Task QueryAsyncWithWhereAsync()
         {
-            var result = await Fixture.Connector.QueryAsync<SingleKeyParentTable>(Fixture.WhereClause);
+            var result = await Fixture.Connector.QueryAsync<SingleKeyParentTable>($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -83,7 +83,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         [Order(4)]
         public async Task QueryAsyncWithNotMatchingWhereAsync()
         {
-            var result = await Fixture.Connector.QueryAsync<SingleKeyParentTable>("[Name] like 'Non Existant Entity%'");
+            var result = await Fixture.Connector.QueryAsync<SingleKeyParentTable>($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Non Existing Entity%");
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }
@@ -109,7 +109,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
             var queryAsync = new Query<SingleKeyParentTable>(Fixture.Connector);
 
             var result = await queryAsync.ExecuteAsync();
-            var result2 = await queryAsync.ExecuteAsync(Fixture.WhereClause);
+            var result2 = await queryAsync.ExecuteAsync($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
 
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
@@ -122,7 +122,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         {
             var queryAsync = new Query<SingleKeyParentTable>(Fixture.Connector);
 
-            var result = await queryAsync.ExecuteAsync(Fixture.WhereClause);
+            var result = await queryAsync.ExecuteAsync($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
             var result2 = await queryAsync.ExecuteAsync();
 
             result.Should().NotBeNull();

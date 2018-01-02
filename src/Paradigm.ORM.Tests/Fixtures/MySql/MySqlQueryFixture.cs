@@ -12,8 +12,6 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
     {
         private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
-        public override string WhereClause => "`Name` like \"Test Parent 1%\"";
-
         public override string SelectClause => "SELECT * FROM `test`.`singlekeyparenttable`";
 
         protected override IDatabaseConnector CreateConnector()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using FluentAssertions;
 using Paradigm.ORM.Data.DatabaseAccess;
 using Paradigm.ORM.Data.Extensions;
@@ -8,6 +7,7 @@ using Paradigm.ORM.Tests.Fixtures;
 using Paradigm.ORM.Tests.Fixtures.Sql;
 using Paradigm.ORM.Tests.Mocks.Sql;
 using NUnit.Framework;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Tests.Tests.Queries.Sql
 {
@@ -58,13 +58,13 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         public void ShouldThrowSqlException()
         {
             Action result = () => Fixture.Connector.Query<AllColumnsClass>();
-            result.ShouldThrow<SqlException>().WithMessage("Invalid object name 'Test.dbo.AllColumns'.");
+            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
         public void QueryWithWhere()
         {
-            var result = Fixture.Connector.Query<SingleKeyParentTable>(Fixture.WhereClause);
+            var result = Fixture.Connector.Query<SingleKeyParentTable>($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -78,7 +78,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         [Test]
         public void QueryWithNotMatchingWhere()
         {
-            var result = Fixture.Connector.Query<SingleKeyParentTable>("\"Name\" like 'Non Existant Entity'");
+            var result = Fixture.Connector.Query<SingleKeyParentTable>($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Non Existing Entity%");
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }
@@ -102,7 +102,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
             var query = new Query<SingleKeyParentTable>(Fixture.Connector);
 
             var result = query.Execute();
-            var result2 = query.Execute(Fixture.WhereClause);
+            var result2 = query.Execute($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
 
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
@@ -114,7 +114,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Sql
         {
             var query = new Query<SingleKeyParentTable>(Fixture.Connector);
 
-            var result = query.Execute(Fixture.WhereClause);
+            var result = query.Execute($"[{nameof(SingleKeyParentTable.Name)}] LIKE @1", "Test Parent 1%");
             var result2 = query.Execute();
 
             result.Should().NotBeNull();

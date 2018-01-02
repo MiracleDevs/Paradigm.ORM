@@ -12,8 +12,6 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
     {
         private string ConnectionString => "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
-        public override string WhereClause => "[Name] like 'Test Parent 1%'";
-
         public override string SelectClause => "SELECT * FROM [Test].[dbo].[SingleKeyParentTable]";
 
         protected override IDatabaseConnector CreateConnector()

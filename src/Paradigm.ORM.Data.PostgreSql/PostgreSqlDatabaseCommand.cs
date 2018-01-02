@@ -4,6 +4,7 @@ using System.Data;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
 using Npgsql;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.PostgreSql
 {
@@ -102,8 +103,15 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDatabaseReader ExecuteReader()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return new PostgreSqlDatabaseReader(this.Command.ExecuteReader());
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return new PostgreSqlDatabaseReader(this.Command.ExecuteReader());
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -115,8 +123,15 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public int ExecuteNonQuery()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return this.Command.ExecuteNonQuery();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return this.Command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -129,8 +144,15 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public object ExecuteScalar()
         {
-            this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
-            return this.Command.ExecuteScalar();
+            try
+            {
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                return this.Command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>

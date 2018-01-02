@@ -19,7 +19,7 @@ namespace Paradigm.ORM.Tests.Tests
 
         private const string SqlConnectionString = "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
-        private const string CqlConnectionString = "Contact Points=192.168.2.240;Port=9042";
+        private const string CqlConnectionString = "Contact Points=192.168.2.221,192.168.2.223;Port=9042;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
 
         [Order(1)]
         [TestCase(typeof(MySqlDatabaseConnector))]

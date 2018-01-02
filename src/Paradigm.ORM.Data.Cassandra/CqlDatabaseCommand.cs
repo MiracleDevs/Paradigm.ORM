@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using Cassandra.Data;
 using Paradigm.ORM.Data.Database;
+using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.Cassandra
 {
@@ -104,10 +105,17 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public IDatabaseReader ExecuteReader()
         {
-            if (this.Connector.ActiveTransaction != null)
-                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+            try
+            {
+                if (this.Connector.ActiveTransaction != null)
+                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
 
-            return new CqlDatabaseReader(this.Command.ExecuteReader() as CqlReader);
+                return new CqlDatabaseReader(this.Command.ExecuteReader() as CqlReader);
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -119,10 +127,17 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public int ExecuteNonQuery()
         {
-            if (this.Connector.ActiveTransaction != null)
-                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+            try
+            {
+                if (this.Connector.ActiveTransaction != null)
+                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
 
-            return this.Command.ExecuteNonQuery();
+                return this.Command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -135,10 +150,17 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public object ExecuteScalar()
         {
-            if (this.Connector.ActiveTransaction != null)
-                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+            try
+            {
+                if (this.Connector.ActiveTransaction != null)
+                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
 
-            return this.Command.ExecuteScalar();
+                return this.Command.ExecuteScalar();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseCommandException(this, e);
+            }
         }
 
         /// <summary>
@@ -166,7 +188,7 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             var parameter = new CqlParameter
             {
-                ParameterName = name               
+                ParameterName = name
             };
 
             if (type == typeof(Nullable<>))
@@ -301,7 +323,7 @@ namespace Paradigm.ORM.Data.Cassandra
                 Value = null
             };
 
-            parameter.DbType = type;
+            this.Command.Parameters.Add(parameter);
             return parameter;
         }
 

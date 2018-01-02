@@ -12,8 +12,6 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
     {
         private string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
 
-        public override string WhereClause => @"""Id""=1";
-
         public override string SelectClause => @"SELECT * FROM ""test"".""singlekeyparenttable""";
 
         protected override IDatabaseConnector CreateConnector()

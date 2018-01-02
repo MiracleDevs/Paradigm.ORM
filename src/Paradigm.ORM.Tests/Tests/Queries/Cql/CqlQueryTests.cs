@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NUnit.Framework;
 using Paradigm.ORM.Data.DatabaseAccess;
+using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.Querying;
 using Paradigm.ORM.Tests.Fixtures.Cql;
@@ -56,13 +57,13 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         public void ShouldThrowCqlException()
         {
             Action result = () => this.Fixture.Connector.Query<AllColumnsClass>();
-            result.ShouldThrow<Exception>();
+            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
         public void QueryWithWhere()
         {
-            var result = this.Fixture.Connector.Query<SingleKeyParentTable>(this.Fixture.WhereClause);
+            var result = this.Fixture.Connector.Query<SingleKeyParentTable>($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -76,7 +77,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         [Test]
         public void QueryWithNotMatchingWhere()
         {
-            var result = this.Fixture.Connector.Query<SingleKeyParentTable>("\"Id\"=10");
+            var result = this.Fixture.Connector.Query<SingleKeyParentTable>($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 10);
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }
@@ -100,7 +101,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
             var query = new Query<SingleKeyParentTable>(this.Fixture.Connector);
 
             var result = query.Execute();
-            var result2 = query.Execute(this.Fixture.WhereClause);
+            var result2 = query.Execute($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
 
             result.Should().NotBeNull();
             result2.Should().NotBeNull();
@@ -112,7 +113,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
         {
             var query = new Query<SingleKeyParentTable>(this.Fixture.Connector);
 
-            var result = query.Execute(this.Fixture.WhereClause);
+            var result = query.Execute($"\"{nameof(SingleKeyParentTable.Id)}\"=@1", 1);
             var result2 = query.Execute();
 
             result.Should().NotBeNull();

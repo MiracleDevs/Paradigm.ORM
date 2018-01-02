@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database;
@@ -90,7 +89,7 @@ namespace Paradigm.ORM.Data.Querying
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
 
-            using (var command = this.Connector.CreateCommand(builder.ToString()))
+            using (var command = this.Connector.CreateCommand())
             {
                 if (parameters != null)
                 {
@@ -108,6 +107,7 @@ namespace Paradigm.ORM.Data.Querying
                     }
                 }
 
+                command.CommandText = builder.ToString();
                 return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
             }
         }

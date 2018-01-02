@@ -39,12 +39,23 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.2.3`
+- Added new DatabaseCommandException thrown when executing database commands. The DatabaseCommandException contains a reference to the
+  executing command, allowing for a better debugging experience.
+  Use Command.CommandText to observe the sql or cql query being executed.
+  Use Command.Parameters to observe the parameters bound to the query.
+- Fixed a bug in Cassandra connector not adding a parameter in one of the AddParameters methods.
+- Fixed a bug in CustomQuery sync execution not updated the command text after parameter replacement.
+- Improved and updated tests.
+
+
 Version `2.2.2`
 - Removed mandatory data type in ColumnAttribute. The orm will choose the default column types for each database type.
 - Changed how the CommandBatch replace parameter names, to prevent name collision.
 - Added tests for the command batch name replacement.
 - Changed how select parameters are replaced, from @Index to  @pIndex or :pIndex, depending on the database parameter naming conventions.
 - Updated NuGet dependencies.
+
 
 Version `2.2.1`
 - Added a cache service for descriptors all over the orm, to prevent tons of small objects filling the heap.

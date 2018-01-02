@@ -12,8 +12,6 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
     {
         private string ConnectionString => "Server=localhost;User Id=test;Password=test1234;Timeout=3";
 
-        public override string WhereClause => "\"Name\" like 'Test Parent 1%'";
-
         public override string SelectClause => "SELECT * FROM \"SingleKeyParentTable\"";
 
         protected override IDatabaseConnector CreateConnector()

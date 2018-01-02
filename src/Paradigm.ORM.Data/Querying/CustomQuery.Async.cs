@@ -45,7 +45,6 @@ namespace Paradigm.ORM.Data.Querying
                 }
 
                 command.CommandText = builder.ToString();
-
                 return await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
             }
         }

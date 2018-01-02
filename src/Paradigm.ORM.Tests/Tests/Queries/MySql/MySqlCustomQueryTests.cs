@@ -56,7 +56,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
         [Test]
         public void QueryWithWhere()
         {
-            var result = Fixture.Connector.CustomQuery<SingleKeyParentTable>($"{Fixture.SelectClause} WHERE {Fixture.WhereClause}");
+            var result = Fixture.Connector.CustomQuery<SingleKeyParentTable>(Fixture.SelectClause, $"`{nameof(SingleKeyParentTable.Name)}` LIKE @1", "Test Parent 1%");
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
 
@@ -70,7 +70,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
         [Test]
         public void QueryWithNotMatchingWhere()
         {
-            var result = Fixture.Connector.CustomQuery<SingleKeyParentTable>(Fixture.SelectClause, "`Name` like @1", "Non Existant Entity%");
+            var result = Fixture.Connector.CustomQuery<SingleKeyParentTable>(Fixture.SelectClause, $"`{nameof(SingleKeyParentTable.Name)}` LIKE @1", "Non Existing Entity%");
             result.Should().NotBeNull();
             result.Should().HaveCount(0);
         }
