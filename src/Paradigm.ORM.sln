@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Paradigm.ORM.Data", "Paradigm.ORM.Data\Paradigm.ORM.Data.csproj", "{8A4AA9BE-4198-4503-9698-43ABDA19800B}"
 EndProject
@@ -25,7 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01.Tools", "01.Tools", "{11
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02.Tests", "02.Tests", "{7FE04582-1753-47B9-8AC2-7EA8BF5FB88D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paradigm.ORM.Data.Cassandra", "Paradigm.ORM.Data.Cassandra\Paradigm.ORM.Data.Cassandra.csproj", "{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Paradigm.ORM.Data.Cassandra", "Paradigm.ORM.Data.Cassandra\Paradigm.ORM.Data.Cassandra.csproj", "{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Paradigm.ORM.Vb.Tests", "Paradigm.ORM.Vb.Tests\Paradigm.ORM.Vb.Tests.vbproj", "{45DE9288-FA0B-4C95-A4CC-C114840F3B6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,10 @@ Global
 		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45DE9288-FA0B-4C95-A4CC-C114840F3B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45DE9288-FA0B-4C95-A4CC-C114840F3B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45DE9288-FA0B-4C95-A4CC-C114840F3B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45DE9288-FA0B-4C95-A4CC-C114840F3B6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{A5EC2D4E-3F56-4889-BAA1-5E2268BC0F3F} = {1158448F-9938-4DB6-95E6-710B4A5BCAA1}
 		{98D10B41-4E98-4869-8255-F9E784C9CCFC} = {1158448F-9938-4DB6-95E6-710B4A5BCAA1}
 		{A3C1672E-BF22-4FA4-B1C7-300BDF41830E} = {D1D4C68F-B57A-4401-9883-3BA3D47337E4}
+		{45DE9288-FA0B-4C95-A4CC-C114840F3B6A} = {7FE04582-1753-47B9-8AC2-7EA8BF5FB88D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {65C1B0E6-490B-429F-BA7D-CD0A7B63C943}

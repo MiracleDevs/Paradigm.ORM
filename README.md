@@ -39,6 +39,11 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.2.4`
+- Added visual basic tests.
+- Updated nuget dependencies.
+
+
 Version `2.2.3`
 - Added new DatabaseCommandException thrown when executing database commands. The DatabaseCommandException contains a reference to the
   executing command, allowing for a better debugging experience.

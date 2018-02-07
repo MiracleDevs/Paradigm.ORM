@@ -152,7 +152,10 @@ namespace Paradigm.ORM.Data.Descriptors
                 return false;
 
             this.ParameterName = parameterAttribute.Name ?? this.PropertyInfo.Name;
-            this.DataType = parameterAttribute.Type ?? this.PropertyInfo.DeclaringType.Name;
+            this.DataType = parameterAttribute.Type ?? (Nullable.GetUnderlyingType(this.PropertyInfo.PropertyType) != null
+                                ? Nullable.GetUnderlyingType(this.PropertyInfo.PropertyType).Name
+                                : this.PropertyInfo.PropertyType.Name);
+
             this.IsInput = parameterAttribute.IsInput;
             this.PropertyName = this.PropertyInfo.Name;
 

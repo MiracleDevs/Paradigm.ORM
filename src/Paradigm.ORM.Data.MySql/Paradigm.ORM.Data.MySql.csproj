@@ -12,12 +12,12 @@
     <RepositoryType>git</RepositoryType>
     <Authors>Miracle Devs</Authors>
     <Company>Miracle Devs</Company>
-    <Version>2.2.3</Version>
+    <Version>2.2.4</Version>
     <Product>Paradigm.ORM</Product>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MySqlConnector" Version="0.33.2" />
+    <PackageReference Include="MySqlConnector" Version="0.35.0" />
   </ItemGroup>
 
   <ItemGroup>
