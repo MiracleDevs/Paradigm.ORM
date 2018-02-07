@@ -42,7 +42,7 @@ Change log
 Version `2.2.4`
 - Added visual basic tests.
 - Updated nuget dependencies.
-
+- Fixed a couple of bugs found with the vb tests.
 
 Version `2.2.3`
 - Added new DatabaseCommandException thrown when executing database commands. The DatabaseCommandException contains a reference to the
