@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlCrudCommandFixture: CrudCommandFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User Id=test;Password=test1234;Timeout=3";
+        private string ConnectionString => "Server=192.168.2.90;User Id=test;Password=test1234;Timeout=3;Database=test";
 
         public override string InsertParentStatement => @"INSERT INTO ""SingleKeyParentTable"" (""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 

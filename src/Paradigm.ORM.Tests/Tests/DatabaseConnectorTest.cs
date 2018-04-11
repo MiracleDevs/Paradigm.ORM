@@ -15,11 +15,11 @@ namespace Paradigm.ORM.Tests.Tests
     {
         private const string MySqlConnectionString = "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
 
-        private const string PostgreSqlConnectionString = "Server=localhost;User Id=test;Password=test1234;Timeout=3";
+        private const string PostgreSqlConnectionString = "Server=192.168.2.90;User Id=test;Password=test1234;Timeout=3";
 
-        private const string SqlConnectionString = "Server=localhost;User=test;Password=test1234;Connection Timeout=3600";
+        private const string SqlConnectionString = "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
 
-        private const string CqlConnectionString = "Contact Points=192.168.2.221,192.168.2.223;Port=9042;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
+        private const string CqlConnectionString = "Contact Points=192.168.2.223;Port=9042;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
 
         [Order(1)]
         [TestCase(typeof(MySqlDatabaseConnector))]
