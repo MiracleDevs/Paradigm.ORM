@@ -26,7 +26,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
         public void ShouldCreateTheSchemaProvider()
         {
             ISchemaProvider schemaProvider = null;
-            this.Fixture.Connector.Invoking(x => schemaProvider = x.GetSchemaProvider()).ShouldNotThrow();
+            this.Fixture.Connector.Invoking(x => schemaProvider = x.GetSchemaProvider()).Should().NotThrow();
             schemaProvider.Should().NotBeNull();
         }
 
@@ -36,7 +36,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<ITable> tables = null;
 
-            schemaProvider.Invoking(x => tables = x.GetTables(this.Fixture.GetDatabaseName())).ShouldNotThrow();
+            schemaProvider.Invoking(x => tables = x.GetTables(this.Fixture.GetDatabaseName())).Should().NotThrow();
             tables.Should().NotBeNull();
             tables.Count.Should().Be(3);
 
@@ -59,7 +59,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<ITable> tables = null;
 
-            schemaProvider.Invoking(x => tables = x.GetTables(this.Fixture.GetDatabaseName(), "table1")).ShouldNotThrow();
+            schemaProvider.Invoking(x => tables = x.GetTables(this.Fixture.GetDatabaseName(), "table1")).Should().NotThrow();
             tables.Should().NotBeNull();
             tables.Count.Should().Be(1);
 
@@ -74,7 +74,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IColumn> columns = null;
 
-            schemaProvider.Invoking(x => columns = x.GetColumns(this.Fixture.GetDatabaseName(), "table1")).ShouldNotThrow();
+            schemaProvider.Invoking(x => columns = x.GetColumns(this.Fixture.GetDatabaseName(), "table1")).Should().NotThrow();
 
             columns.Should().NotBeNull();
             columns.Count.Should().Be(19);
@@ -145,7 +145,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             columns[18].Name.Should().Be("column19");
             columns[18].DataType.Should().Be("varint");
 
-            schemaProvider.Invoking(x => columns = x.GetColumns(this.Fixture.GetDatabaseName(), "table3")).ShouldNotThrow();
+            schemaProvider.Invoking(x => columns = x.GetColumns(this.Fixture.GetDatabaseName(), "table3")).Should().NotThrow();
 
             columns.Should().NotBeNull();
             columns.Count.Should().Be(19);
@@ -223,7 +223,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IConstraint> constraints = null;
 
-            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table1")).ShouldNotThrow();
+            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table1")).Should().NotThrow();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(1);
@@ -236,7 +236,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             constraints[0].ToColumnName.Should().Be(null);
             constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
 
-            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table2")).ShouldNotThrow();
+            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table2")).Should().NotThrow();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(1);
@@ -249,7 +249,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             constraints[0].ToColumnName.Should().Be(null);
             constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
 
-            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table3")).ShouldNotThrow();
+            schemaProvider.Invoking(x => constraints = x.GetConstraints(this.Fixture.GetDatabaseName(), "table3")).Should().NotThrow();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(2);
@@ -279,7 +279,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IStoredProcedure> storedProcedures = null;
 
-            schemaProvider.Invoking(x => storedProcedures = x.GetStoredProcedures(this.Fixture.GetDatabaseName())).ShouldNotThrow();
+            schemaProvider.Invoking(x => storedProcedures = x.GetStoredProcedures(this.Fixture.GetDatabaseName())).Should().NotThrow();
 
             storedProcedures.Should().NotBeNull();
             storedProcedures.Count.Should().Be(0);
@@ -291,7 +291,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IParameter> parameters = null;
 
-            schemaProvider.Invoking(x => parameters = x.GetParameters(this.Fixture.GetDatabaseName(), "StoredProcedure")).ShouldNotThrow();
+            schemaProvider.Invoking(x => parameters = x.GetParameters(this.Fixture.GetDatabaseName(), "StoredProcedure")).Should().NotThrow();
 
             parameters.Should().NotBeNull();
             parameters.Count.Should().Be(0);

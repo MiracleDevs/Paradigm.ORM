@@ -28,7 +28,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
             fixture.CreateTable();
 
             var entity = fixture.CreateNewEntity();
@@ -79,7 +79,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
             fixture.CreateTable();
 
             var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
@@ -101,7 +101,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
             fixture.CreateTable();
 
             fixture.Connector.ExecuteReader(fixture.SelectStatement, reader =>
@@ -120,13 +120,13 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             var fixture = Activator.CreateInstance(fixtureType) as ReaderMapperFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
             fixture.CreateTable();
 
             fixture.Connector.ExecuteReader(fixture.SelectStatement, reader =>
             {
                 Action map = () => new DatabaseReaderMapper(fixture.Connector, mappedType).Map(null);
-                map.ShouldThrow<ArgumentNullException>();
+                map.Should().Throw<ArgumentNullException>();
             });
         }
 

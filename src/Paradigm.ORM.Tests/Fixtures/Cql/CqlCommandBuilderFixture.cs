@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        private string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
+        private string ConnectionString => "Contact Points=localhost;Port=9042";
 
         protected override IDatabaseConnector CreateConnector()
         {

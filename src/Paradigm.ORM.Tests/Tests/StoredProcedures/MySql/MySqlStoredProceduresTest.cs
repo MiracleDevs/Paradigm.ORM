@@ -91,22 +91,23 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
             results.Item2.Should().NotBeNull();
             results.Item2.Should().HaveCount(4);
 
-            var activeParentEntity = Fixture.CreateNewActiveEntity();
+            var activeParentEntity = Fixture.CreateNewActiveEntity() as SingleKeyParentTable;
+
             foreach (var entity in results.Item1)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
-                                                                                  .Excluding(o => o.Id)
-                                                                                  .Excluding(o => o.Childs));
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                                                                                     .Excluding(o => o.Id)
+                                                                                     .Excluding(o => o.Childs));
             }
 
-            var activeChildEntity = Fixture.CreateActiveChildEntity();
+            var activeChildEntity = Fixture.CreateActiveChildEntity() as SingleKeyChildTable;
             foreach (var entity in results.Item2)
             {
                 entity.Name.Should().StartWith("Test Child");
-                entity.ShouldBeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
-                                                                                 .Excluding(o => o.Id)
-                                                                                 .Excluding(o => o.ParentId));
+                entity.Should().BeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
+                                                                                    .Excluding(o => o.Id)
+                                                                                    .Excluding(o => o.ParentId));
             }
         }
 
@@ -124,11 +125,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
             results.Should().NotBeNull();
             results.Should().HaveCount(2);
 
-            var activeParentEntity = Fixture.CreateNewActiveEntity();
+            var activeParentEntity = Fixture.CreateNewActiveEntity() as SingleKeyParentTable;
             foreach (var entity in results)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
                                                                                   .Excluding(o => o.Id)
                                                                                   .Excluding(o => o.Childs));
             }
@@ -148,11 +149,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
             results.Should().NotBeNull();
             results.Should().HaveCount(2);
 
-            var activeParentEntity = Fixture.CreateNewInactiveEntity();
+            var activeParentEntity = Fixture.CreateNewInactiveEntity() as SingleKeyParentTable;
             foreach (var entity in results)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
                                                                                   .Excluding(o => o.Id)
                                                                                   .Excluding(o => o.Childs));
             }
@@ -185,7 +186,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
         public void ShouldThrowArgumentException()
         {
             Action results = () => new ReaderStoredProcedure<SearchParentTableParameters, SingleKeyParentTable>(Fixture.Connector).Execute(null);
-            results.ShouldThrow<ArgumentNullException>();
+            results.Should().Throw<ArgumentNullException>();
         }
 
         [OneTimeTearDown]

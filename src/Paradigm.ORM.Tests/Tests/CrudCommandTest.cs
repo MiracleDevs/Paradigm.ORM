@@ -26,8 +26,8 @@ namespace Paradigm.ORM.Tests.Tests
             var fixture = Activator.CreateInstance(fixtureType) as CrudCommandFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
-            fixture.Invoking(x => x.DropDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
+            fixture.Invoking(x => x.DropDatabase()).Should().NotThrow();
         }
 
         [Order(2)]
@@ -40,10 +40,10 @@ namespace Paradigm.ORM.Tests.Tests
             var fixture = Activator.CreateInstance(fixtureType) as CrudCommandFixtureBase;
 
             fixture.Should().NotBeNull();
-            fixture.Invoking(x => x.CreateDatabase()).ShouldNotThrow();
-            fixture.Invoking(x => x.CreateParentTable()).ShouldNotThrow();
-            fixture.Invoking(x => x.CreateChildTable()).ShouldNotThrow();
-            fixture.Invoking(x => x.DropDatabase()).ShouldNotThrow();
+            fixture.Invoking(x => x.CreateDatabase()).Should().NotThrow();
+            fixture.Invoking(x => x.CreateParentTable()).Should().NotThrow();
+            fixture.Invoking(x => x.CreateChildTable()).Should().NotThrow();
+            fixture.Invoking(x => x.DropDatabase()).Should().NotThrow();
         }
 
         [Order(3)]
@@ -249,7 +249,7 @@ namespace Paradigm.ORM.Tests.Tests
 
                 deleteCommand.Should().NotBeNull();
                 deleteCommand.CommandText.Should().Be(fixture.DeleteStatement);
-                deleteCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
+                deleteCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
             }
 
             var selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
@@ -316,13 +316,13 @@ namespace Paradigm.ORM.Tests.Tests
             var updateCommand = updateCommandBuilder.GetCommand(valueProvider);
             updateCommand.Should().NotBeNull();
             updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
-            updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
+            updateCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
 
             valueProvider.MoveNext();
             updateCommand = updateCommandBuilder.GetCommand(valueProvider);
             updateCommand.Should().NotBeNull();
             updateCommand.CommandText.Should().Be(fixture.UpdateStatement);
-            updateCommand.Invoking(c => c.ExecuteNonQuery()).ShouldNotThrow();
+            updateCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
 
             selectCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectCommandBuilder(fixture.GetParentDescriptor());
             selectCommand = selectCommandBuilder.GetCommand();

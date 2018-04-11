@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlCrudCommandFixture: CrudCommandFixtureBase
     {
-        private string ConnectionString => "Contact Points=192.168.2.240;Port=9042";
+        private string ConnectionString => "Contact Points=localhost;Port=9042";
 
         public override string InsertParentStatement => @"INSERT INTO ""test"".""singlekeyparenttable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
 

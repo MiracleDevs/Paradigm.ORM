@@ -58,7 +58,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.PostgreSql
         public void ShouldThrowPostgreSqlException()
         {
             Action result = () => Fixture.Connector.Query<AllColumnsClass>();
-            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
+            result.Should().Throw<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]

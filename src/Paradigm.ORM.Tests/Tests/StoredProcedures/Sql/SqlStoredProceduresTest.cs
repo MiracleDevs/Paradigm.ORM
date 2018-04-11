@@ -79,20 +79,20 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
             results.Item2.Should().NotBeNull();
             results.Item2.Should().HaveCount(4);
 
-            var activeParentEntity = this.Fixture.CreateNewActiveEntity();
+            var activeParentEntity = this.Fixture.CreateNewActiveEntity() as SingleKeyParentTable;
             foreach (var entity in results.Item1)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
                                                                                   .Excluding(o => o.Id)
                                                                                   .Excluding(o => o.Childs));
             }
 
-            var activeChildEntity = this.Fixture.CreateActiveChildEntity();
+            var activeChildEntity = this.Fixture.CreateActiveChildEntity() as SingleKeyChildTable;
             foreach (var entity in results.Item2)
             {
                 entity.Name.Should().StartWith("Test Child");
-                entity.ShouldBeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeChildEntity, options => options.Excluding(o => o.Name)
                                                                                  .Excluding(o => o.Id)
                                                                                  .Excluding(o => o.ParentId));
             }
@@ -112,11 +112,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
             results.Should().NotBeNull();
             results.Should().HaveCount(2);
 
-            var activeParentEntity = this.Fixture.CreateNewActiveEntity();
+            var activeParentEntity = this.Fixture.CreateNewActiveEntity() as SingleKeyParentTable;
             foreach (var entity in results)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
                                                                                   .Excluding(o => o.Id)
                                                                                   .Excluding(o => o.Childs));
             }
@@ -136,11 +136,11 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
             results.Should().NotBeNull();
             results.Should().HaveCount(2);
 
-            var activeParentEntity = this.Fixture.CreateNewInactiveEntity();
+            var activeParentEntity = this.Fixture.CreateNewInactiveEntity() as SingleKeyParentTable;
             foreach (var entity in results)
             {
                 entity.Name.Should().StartWith("Test Parent");
-                entity.ShouldBeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
+                entity.Should().BeEquivalentTo(activeParentEntity, options => options.Excluding(o => o.Name)
                                                                                   .Excluding(o => o.Id)
                                                                                   .Excluding(o => o.Childs));
             }
@@ -173,7 +173,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.Sql
         public void ShouldThrowArgumentException()
         {
             Action results = () => new ReaderStoredProcedure<SearchParentTableParameters, SingleKeyParentTable>(this.Fixture.Connector).Execute(null);
-            results.ShouldThrow<ArgumentNullException>();
+            results.Should().Throw<ArgumentNullException>();
         }
 
         [OneTimeTearDown]

@@ -94,7 +94,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
             Action select = () => selectCommand.GetCommand(null);
-            select.ShouldThrow<ArgumentNullException>();
+            select.Should().Throw<ArgumentNullException>();
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
@@ -110,7 +110,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
             Action select = () => selectCommand.GetCommand(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-            select.ShouldThrow<ArgumentException>();
+            select.Should().Throw<ArgumentException>();
         }
 
 

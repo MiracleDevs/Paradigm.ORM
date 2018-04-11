@@ -65,16 +65,16 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 connector.Should().NotBeNull();
 
-                connector.Invoking(x => x.IsOpen()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetCommandBuilderFactory()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetDbStringTypeConverter()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetCommandFormatProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetDbTypeValueRangeProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetValueConverter()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.GetSchemaProvider()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.CreateCommand()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.CreateTransaction()).ShouldNotThrow<OrmConnectorNotInitializedException>();
-                connector.Invoking(x => x.Close()).ShouldNotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.IsOpen()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetCommandBuilderFactory()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetDbStringTypeConverter()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetCommandFormatProvider()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetDbTypeValueRangeProvider()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetValueConverter()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.GetSchemaProvider()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.CreateCommand()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.CreateTransaction()).Should().NotThrow<OrmConnectorNotInitializedException>();
+                connector.Invoking(x => x.Close()).Should().NotThrow<OrmConnectorNotInitializedException>();
             }
         }
 
@@ -89,7 +89,7 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 connector.Should().NotBeNull();
 
-                connector.Invoking(x => x.Initialize("")).ShouldNotThrow();
+                connector.Invoking(x => x.Initialize("")).Should().NotThrow();
                 connector.IsOpen().Should().BeFalse();
 
                 connector.GetCommandBuilderFactory().Should().NotBeNull();
@@ -112,8 +112,8 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 connector.Should().NotBeNull();
 
-                connector.Invoking(x => x.Open()).ShouldThrow<OrmCanNotOpenConnectionException>();
-                connector.Awaiting(async x => await x.OpenAsync()).ShouldThrow<OrmCanNotOpenConnectionException>();
+                connector.Invoking(x => x.Open()).Should().Throw<OrmCanNotOpenConnectionException>();
+                connector.Awaiting(async x => await x.OpenAsync()).Should().Throw<OrmCanNotOpenConnectionException>();
             }
         }
 
@@ -128,11 +128,11 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 connector.Should().NotBeNull();
 
-                connector.Invoking(x => x.Open()).ShouldNotThrow<OrmCanNotOpenConnectionException>();
-                connector.Invoking(x => x.Close()).ShouldNotThrow<OrmCanNotCloseConnectionException>();
+                connector.Invoking(x => x.Open()).Should().NotThrow<OrmCanNotOpenConnectionException>();
+                connector.Invoking(x => x.Close()).Should().NotThrow<OrmCanNotCloseConnectionException>();
 
-                connector.Awaiting(async x => await x.OpenAsync()).ShouldNotThrow<OrmCanNotOpenConnectionException>();
-                connector.Awaiting(async x => await x.CloseAsync()).ShouldNotThrow<OrmCanNotCloseConnectionException>();
+                connector.Awaiting(async x => await x.OpenAsync()).Should().NotThrow<OrmCanNotOpenConnectionException>();
+                connector.Awaiting(async x => await x.CloseAsync()).Should().NotThrow<OrmCanNotCloseConnectionException>();
             }
         }
 

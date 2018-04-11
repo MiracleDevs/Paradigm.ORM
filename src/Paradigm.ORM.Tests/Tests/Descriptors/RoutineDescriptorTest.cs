@@ -34,7 +34,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         public void NoRoutineClassShouldThrowMissingRoutineException()
         {
             Action newRoutine = () => DescriptorCache.Instance.GetRoutineTypeDescriptor(typeof(NoRoutineClass));
-            newRoutine.ShouldThrow<OrmMissingRoutineMappingException>();
+            newRoutine.Should().Throw<OrmMissingRoutineMappingException>();
         }
 
         #endregion

@@ -33,7 +33,7 @@ namespace Paradigm.ORM.Tests.Tests.Descriptors
         public void NoTableClassShouldThrowMissingTableException()
         {
             Action newDescriptor = () => DescriptorCache.Instance.GetTableTypeDescriptor(typeof(NoTableClass));
-            newDescriptor.ShouldThrow<OrmMissingTableMappingException>();
+            newDescriptor.Should().Throw<OrmMissingTableMappingException>();
         }
 
         #endregion

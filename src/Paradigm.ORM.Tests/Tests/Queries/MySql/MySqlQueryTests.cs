@@ -58,7 +58,7 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
         public void ShouldThrowMySqlException()
         {
             Action result = () => Fixture.Connector.Query<AllColumnsClass>();
-            result.ShouldThrow<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
+            result.Should().Throw<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
