@@ -8,6 +8,7 @@
 *.log
 _ReSharper.*
 bin
+dist
 obj
 packages
 TestResults
