@@ -39,6 +39,11 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.3.0`
+- Upgraded the cql schema provider, to use the newer scylla "system_schema" keyspace.
+- Updated nuget dependencies.
+- Updated test cases.
+
 Version `2.2.4`
 - Added visual basic tests.
 - Updated nuget dependencies.
