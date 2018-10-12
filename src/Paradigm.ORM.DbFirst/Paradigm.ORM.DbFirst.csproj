@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <ApplicationIcon>dbfirst.ico</ApplicationIcon>
     <OutputTypeEx>exe</OutputTypeEx>
@@ -15,8 +15,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="AutoMapper" Version="7.0.1" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.1" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Paradigm.CodeGen.Input.Json.Models" Version="2.0.3" />
     <PackageReference Include="Paradigm.Core.Extensions" Version="2.0.3" />

@@ -15,7 +15,7 @@
     <Product>Paradigm.ORM</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="npgsql" Version="3.2.7" />
+    <PackageReference Include="npgsql" Version="4.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
