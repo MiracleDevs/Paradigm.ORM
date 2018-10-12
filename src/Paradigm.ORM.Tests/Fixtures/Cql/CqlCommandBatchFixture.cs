@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlCommandBatchFixture: CommandBatchFixtureBase
     {
-        private string ConnectionString => "Contact Points=192.168.2.223;Port=9042;Default Keyspace=equipcast;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
+        private string ConnectionString => "Contact Points=192.168.2.221;Port=9042;Default Keyspace=equipcast;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
 
         public override string CommandBatchText => @"INSERT INTO ""batch"" (""id"",""name"",""mobile"",""mobile_brand"",""mobile_number"") VALUES (:p0,:p1,:p2,:p3,:p4);";
 

@@ -7,19 +7,13 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// Provides a database view schema.
     /// </summary>
     /// <seealso cref="IView" />
-    [Table("schema_columnfamilies", Catalog = "system")]
+    [Table("views", Catalog = "system_schema")]
     public class CqlView : IView
     {
         /// <summary>
-        /// Gets the name of the constraint.
-        /// </summary>
-        [Column("type", "text")]
-        public string Type { get; set; }
-
-        /// <summary>
         /// Gets the name of the view.
         /// </summary>
-        [Column("columnfamily_name", "text")]
+        [Column("view_name", "text")]
         public string Name { get; set; }
 
         /// <summary>

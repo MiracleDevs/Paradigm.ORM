@@ -12,66 +12,7 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
     /// </summary>
     /// <seealso cref="Paradigm.ORM.Data.Converters.IDbStringTypeConverter" />
     public class CqlDbStringTypeConverter : IDbStringTypeConverter
-    {
-        public static string ValidatorToDbType(string validator)
-        {
-            if (validator.Contains("org.apache.cassandra.db.marshal.BooleanType"))
-                return "boolean";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.ByteType"))
-                return "tinyint";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.ShortType"))
-                return "smallint";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.Int32Type"))
-                return "int";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.LongType"))
-                return "bigint";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.IntegerType"))
-                return "varint";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.FloatType"))
-                return "float";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.DoubleType"))
-                return "double";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.DecimalType"))
-                return "decimal";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.SimpleDateType"))
-                return "date";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.TimeType"))
-                return "time";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.TimestampType"))
-                return "timestamp";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.TimeUUIDType"))
-                return "timeuuid";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.UUIDType"))
-                return "uuid";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.UTF8Type"))
-                return "text";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.AsciiType"))
-                return "ascii";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.BytesType"))
-                return "blob";
-
-            if (validator.Contains("org.apache.cassandra.db.marshal.InetAddressType"))
-                return "inet";
-
-            throw new Exception("CQL Validator not recognized.");
-        }
-
+    {      
         /// <summary>
         /// Gets the equivalent .net type from a database type.
         /// </summary>

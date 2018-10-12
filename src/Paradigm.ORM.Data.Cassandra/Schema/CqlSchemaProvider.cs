@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Paradigm.ORM.Data.Cassandra.Converters;
 using Paradigm.ORM.Data.Cassandra.Schema.Structure;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Database;
@@ -15,20 +14,6 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
     /// </summary>
     public partial class CqlSchemaProvider: ISchemaProvider
     {
-        #region String Constants
-
-        /// <summary>
-        /// Gets the table type name.
-        /// </summary>
-        private const string TableType = "Standard";
-
-        /// <summary>
-        /// Gets the view type name.
-        /// </summary>
-        private const string ViewType = "View";
-
-        #endregion
-
         #region Properties
 
         /// <summary>
@@ -91,7 +76,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         {
             return this.TableQuery
                 .Execute(this.GetTableWhere(database))
-                .Where(x => x.Type == TableType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Where(x => filter == null || filter.Length == 0 || filter.Contains(x.Name))
                 .Cast<ITable>().ToList();
         }
 
@@ -107,7 +92,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         {
             return this.ViewQuery
                 .Execute(this.GetTableWhere(database))
-                .Where(x => x.Type == ViewType && (filter == null || filter.Length == 0 || filter.Contains(x.Name)))
+                .Where(x => filter == null || filter.Length == 0 || filter.Contains(x.Name))
                 .Cast<IView>().ToList();
         }
 
@@ -134,18 +119,11 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         /// </returns>
         public List<IColumn> GetColumns(string database, string tableName)
         {
-            var columns = this.ColumnQuery.Execute($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'").ToList();
-
-            foreach (var column in columns)
-            {
-                column.DataType = CqlDbStringTypeConverter.ValidatorToDbType(column.DataType);
-            }
-
-            return columns.Cast<IColumn>().ToList();
+            return this.ColumnQuery.Execute($"\"keyspace_name\"='{database}' AND \"table_name\"='{tableName}'").Cast<IColumn>().ToList();
         }
 
         /// <summary>
-        /// Gets the schema of all the contraints of a table.
+        /// Gets the schema of all the constraints of a table.
         /// </summary>
         /// <param name="database">The database name.</param>
         /// <param name="tableName">The table name.</param>
@@ -155,8 +133,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         public List<IConstraint> GetConstraints(string database, string tableName)
         {
             var constraints = this.ConstraintQuery
-                .Execute($"\"keyspace_name\"='{database}' AND \"columnfamily_name\"='{tableName}'")
-                .Where(x => x.ColumnType == "partition_key")
+                .Execute($"\"keyspace_name\"='{database}' AND \"table_name\"='{tableName}'")
+                .Where(x => x.ColumnKind == "partition_key")
                 .ToList();
 
             foreach (var constraint in constraints)

@@ -7,19 +7,13 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// Provides a database table schema.
     /// </summary>
     /// <seealso cref="ITable" />
-    [Table("schema_columnfamilies", Catalog = "system")]
+    [Table("tables", Catalog = "system_schema")]
     public class CqlTable : ITable
     {
         /// <summary>
-        /// Gets the name of the constraint.
-        /// </summary>
-        [Column("type", "text")]
-        public string Type { get; set; }
-
-        /// <summary>
         /// Gets or sets the name.
         /// </summary>
-        [Column("columnfamily_name", "text")]
+        [Column("table_name", "text")]
         public string Name { get; set; }
 
         /// <summary>

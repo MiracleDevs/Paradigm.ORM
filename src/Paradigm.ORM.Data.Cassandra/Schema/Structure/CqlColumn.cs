@@ -7,7 +7,7 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
     /// Provides a database column schema.
     /// </summary>
     /// <seealso cref="IColumn" />
-    [Table("schema_columns", Catalog = "system")]
+    [Table("columns", Catalog = "system_schema")]
     public class CqlColumn : IColumn
     {
         /// <summary>
@@ -30,14 +30,23 @@ namespace Paradigm.ORM.Data.Cassandra.Schema.Structure
         /// <summary>
         /// Gets the name of the parent table or view.
         /// </summary>
-        [Column("columnfamily_name", "text")]
+        [Column("table_name", "text")]
         public string TableName { get; set; }
 
         /// <summary>
         /// Gets the data type of the column.
         /// </summary>
-        [Column("validator", "text")]
+        [Column("type", "text")]
         public string DataType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the kind of the column.
+        /// </summary>
+        /// <value>
+        /// The kind of the column.
+        /// </value>
+        [Column("kind", "text")]
+        public string ColumnKind { get; set; }
 
         /// <summary>
         /// Gets the maximum size of the field, or zero if the column doesn't have a variable size.
