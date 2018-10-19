@@ -21,20 +21,20 @@ If you are planning to use the tools in several projects, we recommend to add th
 
 | Tool | OS | Zip File |
 |-|-|-|
-| DbFirst | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbfirst.win-x86.zip) |
-| DbFirst | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbfirst.win-x64.zip) |
-| DbFirst | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbfirst.linux-x64.zip) |
-| DbFirst | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbfirst.osx-x64.zip) |
+| DbFirst | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbfirst.win-x86.zip) |
+| DbFirst | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbfirst.win-x64.zip) |
+| DbFirst | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbfirst.linux-x64.zip) |
+| DbFirst | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbfirst.osx-x64.zip) |
 ||||
-| DbPublisher | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbpublisher.win-x86.zip) |
-| DbPublisher | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbpublisher.win-x64.zip) |
-| DbPublisher | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbpublisher.linux-x64.zip) |
-| DbPublisher | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dbpublisher.osx-x64.zip) |
+| DbPublisher | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbpublisher.win-x86.zip) |
+| DbPublisher | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbpublisher.win-x64.zip) |
+| DbPublisher | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbpublisher.linux-x64.zip) |
+| DbPublisher | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dbpublisher.osx-x64.zip) |
 ||||
-| DataExport | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dataexport.win-x86.zip) |
-| DataExport | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dataexport.win-x64.zip) |
-| DataExport | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dataexport.linux-x64.zip) |
-| DataExport | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.0/dataexport.osx-x64.zip) |
+| DataExport | Windows x86 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.win-x86.zip) |
+| DataExport | Windows x64 | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.win-x64.zip) |
+| DataExport | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.linux-x64.zip) |
+| DataExport | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.osx-x64.zip) |
 
 Change log
 ---
