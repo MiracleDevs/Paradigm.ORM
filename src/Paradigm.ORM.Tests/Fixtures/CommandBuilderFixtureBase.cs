@@ -33,9 +33,13 @@ namespace Paradigm.ORM.Tests.Fixtures
 
         public abstract string InsertQuery { get; }
 
-        public abstract string DeleteOneEntityQuery { get; }
+        public abstract string DeleteOneEntityQuerySingleKey { get; }
 
-        public abstract string DeleteTwoEntitiesQuery { get; }
+        public abstract string DeleteTwoEntitiesQuerySingleKey { get; }
+
+        public abstract string DeleteOneEntityQueryMultipleKey { get; }
+
+        public abstract string DeleteTwoEntitiesQueryMultipleKey { get; }
 
         public abstract string UpdateQuery { get; }
 
@@ -44,5 +48,9 @@ namespace Paradigm.ORM.Tests.Fixtures
         public abstract ISimpleTable Entity1 { get; }
 
         public abstract ISimpleTable Entity2 { get; }
+
+        public abstract ITwoPrimaryKeyTable TwoPrimaryKeyEntity1 { get; }
+
+        public abstract ITwoPrimaryKeyTable TwoPrimaryKeyEntity2 { get; }
     }
 }

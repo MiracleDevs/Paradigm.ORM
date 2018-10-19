@@ -2,12 +2,12 @@
 
 namespace Paradigm.ORM.Tests.Mocks.Cql
 {
-    [Table]
+    [Table(Name = "TwoPrimaryKeyTable", Catalog = "test")]
     public class TwoPrimaryKeyTable : ITwoPrimaryKeyTable
     {
         [Column(Type = "int")]
         [PrimaryKey]
-        public int Id { get; set; }
+        public int Id1 { get; set; }
 
         [Column(Type = "int")]
         [PrimaryKey]

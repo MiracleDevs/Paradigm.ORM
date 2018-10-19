@@ -20,7 +20,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectSelectCommand(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateASelectCommand(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -34,7 +34,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectSelectCommandWithWhere(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateASelectCommandWithAWhereClause(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -47,7 +47,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectSelectOneCommand(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateASelectOneCommand(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -66,7 +66,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
-        public void CorrectSelectOneCommandWithMultipleIds(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateASelectOneCommandWithMultipleIds(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -86,7 +86,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
-        public void CorrectSelectOneCommandShouldThrowArgumentNullException(Type fixtureType, Type tableDescriptorType)
+        public void ShouldFailIWhenCreatingASelectOneCommandWithoutParameters(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -101,23 +101,21 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
-        public void CorrectSelectOneCommandShouldThrowArgumentException(Type fixtureType, Type tableDescriptorType)
+        public void ShouldFailWhenCreatingASelectOneCommandWithTooManyParameters(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
             var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
-
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
             Action select = () => selectCommand.GetCommand(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
             select.Should().Throw<ArgumentException>();
         }
 
-
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
-        public void CorrectLastIdCommand(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateALastIdCommand(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -131,7 +129,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectInsertCommand(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateAnInsertCommand(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -168,7 +166,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectDeleteCommandOneEntity(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateADeleteCommandForASingleEntityWithASingleKey(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -177,14 +175,14 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
             var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
-            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQuery);
+            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQuerySingleKey);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectDeleteCommandTwoEntities(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateADeleteCommandForTwoEntitiesWidthASingleKey(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
@@ -193,14 +191,52 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
 
             var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
-            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQuery);
+            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQuerySingleKey);
+        }
+
+        [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
+        public void ShouldCreateADeleteCommandForASingleEntityWithMultipleKeys(Type fixtureType, Type tableDescriptorType)
+        {
+            var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
+            var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
+            var entitiesToDelete = new[] { fixture.TwoPrimaryKeyEntity1 };
+            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
+
+            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
+            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQueryMultipleKey);
+        }
+
+        [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
+        [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
+        public void ShouldCreateADeleteCommandForTwoEntitiesWithMultipleKeys(Type fixtureType, Type tableDescriptorType)
+        {
+            var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
+            var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
+            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
+            var entitiesToDelete = new[] { fixture.TwoPrimaryKeyEntity1, fixture.TwoPrimaryKeyEntity2 };
+            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
+
+            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
+
+            if (fixtureType == typeof(CqlCommandBuilderFixture))
+            {
+                deleteCommand.Invoking(d => d.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQueryMultipleKey)).Should().Throw<NotSupportedException>();
+            }
+            else
+                deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQueryMultipleKey);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
         [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void CorrectUpdateCommand(Type fixtureType, Type tableDescriptorType)
+        public void ShouldCreateAUpdateCommand(Type fixtureType, Type tableDescriptorType)
         {
             var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();

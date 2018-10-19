@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Mocks.MySql
         [Column(Type = "int")]
         [PrimaryKey]
         [Identity]
-        public int Id { get; set; }
+        public int Id1 { get; set; }
 
         [Column(Type = "int")]
         [PrimaryKey]

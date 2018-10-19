@@ -12,17 +12,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
     {
         private string ConnectionString => "Server=192.168.2.90;User Id=test;Password=test1234;Timeout=3;Database=test";
 
-        public override string InsertParentStatement => @"INSERT INTO ""SingleKeyParentTable"" (""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
-
-        public override string LastInsertedIdStatement => "SELECT LASTVAL()";
-
-        public override string SelectStatement => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""SingleKeyParentTable""";
-
-        public override string SelectOneStatement =>@"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""SingleKeyParentTable"" WHERE ""Id""=@Id";
-
-        public override string DeleteStatement => @"DELETE FROM ""SingleKeyParentTable"" WHERE ""Id"" IN (1,2)";
-
-        public override string UpdateStatement => @"UPDATE ""SingleKeyParentTable"" SET ""Id""=@Id,""Name""=@Name,""IsActive""=@IsActive,""Amount""=@Amount,""CreatedDate""=@CreatedDate WHERE ""Id""=@Id";
+        public int Ids { get; set; }
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -37,9 +27,10 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
         {
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""SingleKeyChildTable"";");
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""SingleKeyParentTable"";");
+            this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""TwoPrimaryKeyTable"";");
         }
 
-        public override void CreateParentTable()
+        public override void CreateTables()
         {
             this.Connector.ExecuteNonQuery(
                 @"CREATE TABLE IF NOT EXISTS ""SingleKeyParentTable""(
@@ -52,10 +43,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                     CONSTRAINT ""PK_SingleKeyParentTable"" PRIMARY KEY (""Id""),
                     CONSTRAINT ""UX_SingleKeyParentTable_Name"" UNIQUE (""Name"")
                 );");
-        }
 
-        public override void CreateChildTable()
-        {
             this.Connector.ExecuteNonQuery(
                 @"CREATE TABLE IF NOT EXISTS ""SingleKeyChildTable""(
                     ""Id""            SERIAL,
@@ -68,6 +56,16 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                     CONSTRAINT ""PK_SingleKeyChildTable"" PRIMARY KEY (""Id""),
                     CONSTRAINT ""UX_SingleKeyChildTable_Name"" UNIQUE (""Name""),
                     CONSTRAINT ""FK_SingleKeyChildTable_Parent"" FOREIGN KEY (""ParentId"") REFERENCES ""SingleKeyParentTable"" (""Id"")
+                );");
+
+            this.Connector.ExecuteNonQuery(
+                @"CREATE TABLE IF NOT EXISTS ""TwoPrimaryKeyTable""
+                (
+                    ""Id1""           int,
+                    ""Id2""           int,
+                    ""Name""          text,
+
+                   CONSTRAINT ""PK_TwoPrimaryKeyTable"" PRIMARY KEY (""Id1"", ""Id2"")
                 );");
         }
 
@@ -92,9 +90,24 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
             };
         }
 
+        public override object CreateNewTwoKeysEntity()
+        {
+            return new TwoPrimaryKeyTable()
+            {
+                Id1 = ++this.Ids,
+                Id2 = ++this.Ids,
+                Name = "Test Parent " + Guid.NewGuid(),
+            };
+        }
+
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override ITableTypeDescriptor GetMultipleKeyDescriptor()
+        {
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(TwoPrimaryKeyTable));
         }
 
         public override void SetEntityId(object first, object second)

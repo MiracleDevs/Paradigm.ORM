@@ -89,7 +89,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// </summary>
         /// <remarks>
         /// Some databases may impose restrictions or limitation to the columns that can be
-        /// inserted due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// inserted due to type or other rules. For example, TIMESTAMP type in sql server
         /// can not be inserted nor updated.
         /// </remarks>
         /// <returns>A list of column descriptors.</returns>
@@ -103,7 +103,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// </summary>
         /// <remarks>
         /// Some databases may impose restrictions or limitation to the columns that can be
-        /// inserted due to type or other rules. For ejample, TIMESTAMP type in sql server
+        /// inserted due to type or other rules. For example, TIMESTAMP type in sql server
         /// can not be inserted nor updated.
         /// </remarks>
         /// <returns>A list of column descriptors.</returns>

@@ -23,13 +23,17 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override string SelectWithWhereQuery => $"{SelectQuery} WHERE {SelectWhereClause}";
 
-        public override string SelectWithTwoPrimaryKeysQuery => @"SELECT ""Id"",""Id2"",""Name"" FROM ""TwoPrimaryKeyTable"" WHERE ""Id""=:Id AND ""Id2""=:Id2";
+        public override string SelectWithTwoPrimaryKeysQuery => @"SELECT ""Id1"",""Id2"",""Name"" FROM ""test"".""TwoPrimaryKeyTable"" WHERE ""Id1""=:Id1 AND ""Id2""=:Id2";
 
         public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
 
-        public override string DeleteOneEntityQuery => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id})";
+        public override string DeleteOneEntityQuerySingleKey => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id})";
 
-        public override string DeleteTwoEntitiesQuery => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id},{Entity2.Id})";
+        public override string DeleteTwoEntitiesQuerySingleKey => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id},{Entity2.Id})";
+
+        public override string DeleteOneEntityQueryMultipleKey => $"DELETE FROM \"test\".\"TwoPrimaryKeyTable\" WHERE \"Id1\"={TwoPrimaryKeyEntity1.Id1} AND \"Id2\"={TwoPrimaryKeyEntity1.Id2}";
+
+        public override string DeleteTwoEntitiesQueryMultipleKey => $"DELETE FROM \"test\".\"TwoPrimaryKeyTable\" WHERE \"Id1\"={TwoPrimaryKeyEntity1.Id1} AND \"Id2\"={TwoPrimaryKeyEntity1.Id2}";
 
         public override string UpdateQuery => @"UPDATE ""SimpleTable"" SET ""Name""=:Name,""IsActive""=:IsActive,""Amount""=:Amount,""CreatedDate""=:CreatedDate WHERE ""Id""=:Id";
 
@@ -53,5 +57,18 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
             CreatedDate = new DateTime(2015, 9, 12)
         };
 
+        public override ITwoPrimaryKeyTable TwoPrimaryKeyEntity1 => new TwoPrimaryKeyTable
+        {
+            Id1 = 1,
+            Id2 = 2,
+            Name = "First Entity"
+        };
+
+        public override ITwoPrimaryKeyTable TwoPrimaryKeyEntity2 => new TwoPrimaryKeyTable
+        {
+            Id1 = 3,
+            Id2 = 4,
+            Name = "Second Entity"
+        };
     }
 }

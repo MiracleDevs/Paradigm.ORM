@@ -23,7 +23,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The command text.
         /// </value>
-        private string CommandText { get; set; }
+        protected string CommandText { get; private set; }
 
         /// <summary>
         /// Gets or sets the where clause.
@@ -31,7 +31,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// <value>
         /// The where clause.
         /// </value>
-        private string WhereClause { get; set; }
+        protected string WhereClause { get; private set; }
 
         #endregion
 
@@ -60,40 +60,63 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// </returns>
         public IDatabaseCommand GetCommand(IValueProvider valueProvider)
         {
+            return this.Connector.CreateCommand(this.Descriptor.PrimaryKeyColumns.Count == 1 ? GetSingleKeyCommand(valueProvider) : GetMultipleKeyCommand(valueProvider));
+        }
+
+        #endregion
+
+        #region Protected Methods
+
+        /// <summary>
+        /// Gets the delete command for single key tables.
+        /// </summary>
+        /// <param name="valueProvider">The value provider.</param>
+        protected string GetSingleKeyCommand(IValueProvider valueProvider)
+        {
             var builder = new StringBuilder();
 
             builder.Append(this.CommandText);
             builder.Append(" WHERE ");
 
-            if (this.Descriptor.PrimaryKeyColumns.Count == 1)
+            var primaryKey = this.Descriptor.PrimaryKeyColumns[0];
+
+            builder.Append(this.FormatProvider.GetEscapedName(primaryKey.ColumnName));
+            builder.Append(" IN (");
+
+            while (valueProvider.MoveNext())
             {
-                var primaryKey = this.Descriptor.PrimaryKeyColumns[0];
-
-                builder.Append(this.FormatProvider.GetEscapedName(primaryKey.ColumnName));
-                builder.Append(" IN (");
-
-                while(valueProvider.MoveNext())
-                {
-                    builder.Append(this.FormatProvider.GetColumnValue(valueProvider.GetValue(primaryKey), primaryKey.DataType));
-                    builder.Append(",");
-                }
-
-                builder.Remove(builder.Length - 1, 1);
-                builder.Append(")");
-            }
-            else
-            {
-                while(valueProvider.MoveNext())
-                {
-                    builder.Append("(");
-                    builder.AppendFormat(this.WhereClause, this.Descriptor.PrimaryKeyColumns.Select(x => this.FormatProvider.GetColumnValue(valueProvider.GetValue(x), x.DataType)).Cast<object>().ToArray());
-                    builder.Append(") OR");
-                }
-
-                builder.Remove(builder.Length - 3, 3);
+                builder.Append(this.FormatProvider.GetColumnValue(valueProvider.GetValue(primaryKey), primaryKey.DataType));
+                builder.Append(",");
             }
 
-            return this.Connector.CreateCommand(builder.ToString());
+            builder.Remove(builder.Length - 1, 1);
+            builder.Append(")");
+
+            return builder.ToString();
+        }
+
+
+        /// <summary>
+        /// Gets the delete command for multiple key tables.
+        /// </summary>
+        /// <param name="valueProvider">The value provider.</param>
+        protected virtual string GetMultipleKeyCommand(IValueProvider valueProvider)
+        {
+            var builder = new StringBuilder();
+
+            builder.Append(this.CommandText);
+            builder.Append(" WHERE ");
+
+            while (valueProvider.MoveNext())
+            {
+                builder.Append("(");
+                builder.AppendFormat(this.WhereClause, this.Descriptor.PrimaryKeyColumns.Select(x => this.FormatProvider.GetColumnValue(valueProvider.GetValue(x), x.DataType)).Cast<object>().ToArray());
+                builder.Append(") OR ");
+            }
+
+            builder.Remove(builder.Length - 4, 4);
+
+            return builder.ToString();
         }
 
         #endregion
@@ -115,10 +138,10 @@ namespace Paradigm.ORM.Data.CommandBuilders
             for (var i = 0; i < this.Descriptor.PrimaryKeyColumns.Count; i++)
             {
                 var primaryKey = this.Descriptor.PrimaryKeyColumns[i];
-                builder.AppendFormat("{0}={{{1}}} AND", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), i);
+                builder.AppendFormat("{0}={{{1}}} AND ", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), i);
             }
 
-            this.WhereClause = builder.Remove(builder.Length - 4, 4).ToString();
+            this.WhereClause = builder.Remove(builder.Length - 5, 5).ToString();
         }
 
         #endregion

@@ -12,18 +12,6 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
     {
         private string ConnectionString => "Contact Points=192.168.2.221;Port=9042;Default Keyspace=equipcast;Username=root;Password=Equ1pc45t_M1r4cl3D3v5!";
 
-        public override string InsertParentStatement => @"INSERT INTO ""test"".""singlekeyparenttable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
-
-        public override string LastInsertedIdStatement => "SELECT LAST_INSERT_ID()";
-
-        public override string SelectStatement => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""test"".""singlekeyparenttable""";
-
-        public override string SelectOneStatement => @"SELECT ""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"" FROM ""test"".""singlekeyparenttable"" WHERE ""Id""=:Id";
-
-        public override string DeleteStatement => @"DELETE FROM ""test"".""singlekeyparenttable"" WHERE ""Id"" IN (1,2)";
-
-        public override string UpdateStatement => @"UPDATE ""test"".""singlekeyparenttable"" SET ""Name""=:Name,""IsActive""=:IsActive,""Amount""=:Amount,""CreatedDate""=:CreatedDate WHERE ""Id""=:Id";
-
         public int Ids { get; set; }
 
         protected override IDatabaseConnector CreateConnector()
@@ -40,9 +28,10 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
         {
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""singlekeychildtable"";");
             this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""singlekeyparenttable"";");
+            this.Connector.ExecuteNonQuery(@"DROP TABLE IF EXISTS ""test"".""TwoPrimaryKeyTable"";");
         }
 
-        public override void CreateParentTable()
+        public override void CreateTables()
         {
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS ""test"".""singlekeyparenttable""
@@ -56,10 +45,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                    PRIMARY KEY (""Id"")
                 )
             ");
-        }
 
-        public override void CreateChildTable()
-        {
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS ""test"".""singlekeychildtable""
                 (
@@ -71,6 +57,17 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""CreatedDate""   date,
 
                    PRIMARY KEY (""Id"")
+                )
+            ");
+
+            this.Connector.ExecuteNonQuery(@"
+                CREATE TABLE IF NOT EXISTS ""test"".""TwoPrimaryKeyTable""
+                (
+                    ""Id1""           int,
+                    ""Id2""           int,
+                    ""Name""          text,
+
+                   PRIMARY KEY ((""Id1"", ""Id2""))
                 )
             ");
         }
@@ -98,9 +95,24 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
             };
         }
 
+        public override object CreateNewTwoKeysEntity()
+        {
+            return new TwoPrimaryKeyTable()
+            {
+                Id1 = ++this.Ids,
+                Id2 = ++this.Ids,
+                Name = "Test Parent " + Guid.NewGuid(),              
+            };
+        }
+
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override ITableTypeDescriptor GetMultipleKeyDescriptor()
+        {
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(TwoPrimaryKeyTable));
         }
 
         public override void SetEntityId(object first, object second)

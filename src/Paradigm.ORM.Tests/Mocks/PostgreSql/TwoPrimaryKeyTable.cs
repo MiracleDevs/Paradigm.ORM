@@ -7,12 +7,10 @@ namespace Paradigm.ORM.Tests.Mocks.PostgreSql
     {
         [Column(Type = "integer")]
         [PrimaryKey]
-        [Identity]
-        public int Id { get; set; }
+        public int Id1 { get; set; }
 
         [Column(Type = "integer")]
         [PrimaryKey]
-        [Identity]
         public int Id2 { get; set; }
 
         [Column(Type = "character varying")]

@@ -5,6 +5,7 @@ using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Tests.Mocks.MySql;
 using Paradigm.ORM.Data.MySql;
+using TwoPrimaryKeyTable = Paradigm.ORM.Tests.Mocks.Cql.TwoPrimaryKeyTable;
 
 namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
@@ -12,17 +13,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
     {
         private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
-        public override string InsertParentStatement => "INSERT INTO `test`.`singlekeyparenttable` (`Name`,`IsActive`,`Amount`,`CreatedDate`) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
-
-        public override string LastInsertedIdStatement => "SELECT LAST_INSERT_ID()";
-
-        public override string SelectStatement => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`singlekeyparenttable`";
-
-        public override string SelectOneStatement => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`singlekeyparenttable` WHERE `Id`=@Id";
-
-        public override string DeleteStatement => @"DELETE FROM `test`.`singlekeyparenttable` WHERE `Id` IN (1,2)";
-
-        public override string UpdateStatement => @"UPDATE `test`.`singlekeyparenttable` SET `Id`=@Id,`Name`=@Name,`IsActive`=@IsActive,`Amount`=@Amount,`CreatedDate`=@CreatedDate WHERE `Id`=@Id";
+        private int Ids { get; set; }
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -38,9 +29,10 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
         {
             this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeychildtable`;");
             this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeyparenttable`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `twoprimarykeytable`;");
         }
 
-        public override void CreateParentTable()
+        public override void CreateTables()
         {
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS `test`.`singlekeyparenttable`
@@ -56,10 +48,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
                 )ENGINE=INNODB;
             ");
-        }
 
-        public override void CreateChildTable()
-        {
             this.Connector.ExecuteNonQuery(@"
                 CREATE TABLE IF NOT EXISTS `test`.`singlekeychildtable`
                 (
@@ -74,6 +63,17 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 	                CONSTRAINT `UX_SingleKeyChildTable_Name` UNIQUE (`Name`),
                     CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `singlekeyparenttable` (`Id`)
 
+                )ENGINE=INNODB;
+            ");
+
+            this.Connector.ExecuteNonQuery(@"
+                CREATE TABLE IF NOT EXISTS `test`.`twoprimarykeytable`
+                (
+                    `Id1`            INT             NOT NULL,
+                    `Id2`            INT             NOT NULL,
+                    `Name`           NVARCHAR(200)   NOT NULL,
+
+                    CONSTRAINT `PK_TwoPrimaryKeyTable` PRIMARY KEY (`Id1` ASC, `Id2` ASC)
                 )ENGINE=INNODB;
             ");
         }
@@ -99,9 +99,24 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
             };
         }
 
+        public override object CreateNewTwoKeysEntity()
+        {
+            return new TwoPrimaryKeyTable()
+            {
+                Id1 = ++this.Ids,
+                Id2 = ++this.Ids,
+                Name = "Test Parent " + Guid.NewGuid(),
+            };
+        }
+
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override ITableTypeDescriptor GetMultipleKeyDescriptor()
+        {
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(TwoPrimaryKeyTable));
         }
 
         public override void SetEntityId(object first, object second)

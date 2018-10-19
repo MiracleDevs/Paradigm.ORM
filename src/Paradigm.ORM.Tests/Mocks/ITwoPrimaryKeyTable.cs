@@ -2,7 +2,7 @@
 {
     public interface ITwoPrimaryKeyTable
     {
-        int Id { get; set; }
+        int Id1 { get; set; }
 
         int Id2 { get; set; }
 

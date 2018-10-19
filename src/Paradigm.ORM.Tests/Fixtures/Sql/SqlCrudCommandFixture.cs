@@ -12,17 +12,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
     {
         private string ConnectionString => "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
 
-        public override string InsertParentStatement => "INSERT INTO [Test].[dbo].[SingleKeyParentTable] ([Name],[IsActive],[Amount],[CreatedDate]) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
-
-        public override string LastInsertedIdStatement => "SELECT SCOPE_IDENTITY()";
-
-        public override string SelectStatement => "SELECT [Id],[Name],[IsActive],[Amount],[CreatedDate] FROM [Test].[dbo].[SingleKeyParentTable]";
-
-        public override string SelectOneStatement => "SELECT [Id],[Name],[IsActive],[Amount],[CreatedDate] FROM [Test].[dbo].[SingleKeyParentTable] WHERE [Id]=@Id";
-
-        public override string DeleteStatement => @"DELETE FROM [Test].[dbo].[SingleKeyParentTable] WHERE [Id] IN (1,2)";
-
-        public override string UpdateStatement => @"UPDATE [Test].[dbo].[SingleKeyParentTable] SET [Name]=@Name,[IsActive]=@IsActive,[Amount]=@Amount,[CreatedDate]=@CreatedDate WHERE [Id]=@Id";
+        public int Ids { get; set; }
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -47,9 +37,13 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
             this.Connector.ExecuteNonQuery(@"
                 IF (OBJECT_ID('[dbo].[SingleKeyParentTable]') IS NOT NULL)
                     DROP TABLE [dbo].[SingleKeyParentTable]");
+
+            this.Connector.ExecuteNonQuery(@"
+                IF (OBJECT_ID('[dbo].[TwoPrimaryKeyTable]') IS NOT NULL)
+                    DROP TABLE [dbo].[TwoPrimaryKeyTable]");
         }
 
-        public override void CreateParentTable()
+        public override void CreateTables()
         {
             this.Connector.ExecuteNonQuery(@"
                 IF (OBJECT_ID('[dbo].[SingleKeyParentTable]') IS NULL)
@@ -65,10 +59,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 	                CONSTRAINT [UX_SingleKeyParentTable_Name] UNIQUE ([Name])
                 );
             ");
-        }
 
-        public override void CreateChildTable()
-        {
             this.Connector.ExecuteNonQuery(@"
                 IF (OBJECT_ID('[dbo].[SingleKeyChildTable]') IS NULL)
                 CREATE TABLE [SingleKeyChildTable]
@@ -83,6 +74,18 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
                     CONSTRAINT [PK_SingleKeyChildTable] PRIMARY KEY ([Id] ASC),
 	                CONSTRAINT [UX_SingleKeyChildTable_Name] UNIQUE ([Name]),
                     CONSTRAINT [FK_SingleKeyChildTable_Parent] FOREIGN KEY ([ParentId]) REFERENCES [SingleKeyParentTable] ([Id])
+                );
+            ");
+
+            this.Connector.ExecuteNonQuery(@"
+                IF (OBJECT_ID('[dbo].[TwoPrimaryKeyTable]') IS NULL)
+                CREATE TABLE [TwoPrimaryKeyTable]
+                (
+                    [Id1]            INT             NOT NULL,
+                    [Id2]            INT             NOT NULL,
+                    [Name]           NVARCHAR(200)   NOT NULL,
+
+                    CONSTRAINT [PK_TwoPrimaryKeyTable] PRIMARY KEY ([Id1] ASC, [Id2] ASC)
                 );
             ");
         }
@@ -108,9 +111,24 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
             };
         }
 
+        public override object CreateNewTwoKeysEntity()
+        {
+            return new TwoPrimaryKeyTable()
+            {
+                Id1 = ++this.Ids,
+                Id2 = ++this.Ids,
+                Name = "Test Parent " + Guid.NewGuid(),
+            };
+        }
+
         public override ITableTypeDescriptor GetParentDescriptor()
         {
             return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(SingleKeyParentTable));
+        }
+
+        public override ITableTypeDescriptor GetMultipleKeyDescriptor()
+        {
+            return DescriptorCache.Instance.GetTableTypeDescriptor(typeof(TwoPrimaryKeyTable));
         }
 
         public override void SetEntityId(object first, object second)
