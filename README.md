@@ -39,15 +39,24 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.3.1`
+- Added more tests for composite partition keys for cassandra/scylla connector.
+- Disabled the batch delete for cassandra/scylla due to cql constrains.
+- Fixed delete query for cassandra/scylla connector.
+- Updated nuget dependencies.
+
+
 Version `2.3.0`
 - Upgraded the cql schema provider, to use the newer scylla "system_schema" keyspace.
 - Updated nuget dependencies.
 - Updated test cases.
 
+
 Version `2.2.4`
 - Added visual basic tests.
 - Updated nuget dependencies.
 - Fixed a couple of bugs found with the vb tests.
+
 
 Version `2.2.3`
 - Added new DatabaseCommandException thrown when executing database commands. The DatabaseCommandException contains a reference to the
