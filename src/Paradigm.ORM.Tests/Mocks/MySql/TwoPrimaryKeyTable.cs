@@ -7,12 +7,10 @@ namespace Paradigm.ORM.Tests.Mocks.MySql
     {
         [Column(Type = "int")]
         [PrimaryKey]
-        [Identity]
         public int Id1 { get; set; }
 
         [Column(Type = "int")]
         [PrimaryKey]
-        [Identity]
         public int Id2 { get; set; }
 
         [Column(Type = "varchar")]

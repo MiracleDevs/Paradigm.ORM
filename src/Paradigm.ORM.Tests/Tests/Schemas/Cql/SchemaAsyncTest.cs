@@ -226,7 +226,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             schemaProvider.Awaiting(async x => constraints = await x.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table2")).Should().NotThrow();
 
             constraints.Should().NotBeNull();
-            constraints.Count.Should().Be(1);
+            constraints.Count.Should().Be(3);
             constraints[0].Name.Should().Be("column01");
             constraints[0].CatalogName.Should().Be("test");
             constraints[0].SchemaName.Should().Be(null);
@@ -239,7 +239,7 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             schemaProvider.Awaiting(async x => constraints = await x.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table3")).Should().NotThrow();
 
             constraints.Should().NotBeNull();
-            constraints.Count.Should().Be(2);
+            constraints.Count.Should().Be(4);
 
             constraints[0].Name.Should().Be("column01");
             constraints[0].CatalogName.Should().Be("test");

@@ -77,7 +77,8 @@ namespace Paradigm.ORM.Data.Cassandra.Schema
         {
             var constraints = (await this.ConstraintQuery
                 .ExecuteAsync($"\"keyspace_name\"='{database}' AND \"table_name\"='{tableName}'"))
-                .Where(x => x.ColumnKind == "partition_key")
+                .Where(x => x.ColumnKind == "partition_key" ||
+                            x.ColumnKind == "clustering")
                 .ToList();
 
             foreach (var constraint in constraints)

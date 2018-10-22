@@ -5,7 +5,6 @@ using Paradigm.ORM.Data.Descriptors;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Tests.Mocks.MySql;
 using Paradigm.ORM.Data.MySql;
-using TwoPrimaryKeyTable = Paradigm.ORM.Tests.Mocks.Cql.TwoPrimaryKeyTable;
 
 namespace Paradigm.ORM.Tests.Fixtures.MySql
 {

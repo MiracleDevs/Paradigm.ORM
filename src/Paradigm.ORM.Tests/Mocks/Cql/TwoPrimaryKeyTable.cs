@@ -1,4 +1,5 @@
-﻿using Paradigm.ORM.Data.Attributes;
+﻿using System;
+using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.Cql
 {
@@ -15,5 +16,9 @@ namespace Paradigm.ORM.Tests.Mocks.Cql
 
         [Column(Type = "text")]
         public string Name { get; set; }
+
+        [Column(Type = "timestamp")]
+        [PrimaryKey]
+        public DateTimeOffset Date { get; set; }
     }
 }

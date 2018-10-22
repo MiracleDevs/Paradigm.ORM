@@ -7,6 +7,5 @@
         int Id2 { get; set; }
 
         string Name { get; set; }
-        
     }
 }

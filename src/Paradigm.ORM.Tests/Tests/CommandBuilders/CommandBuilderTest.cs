@@ -74,10 +74,13 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
 
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
-            var command = selectCommand.GetCommand(723, 23);
+            var command = (fixtureType == typeof(CqlCommandBuilderFixture))
+                ? selectCommand.GetCommand(723, 23, DateTimeOffset.Now)
+                : selectCommand.GetCommand(723, 23);
+
             var parameters = command.Parameters.ToList();
             command.CommandText.Should().Be(fixture.SelectWithTwoPrimaryKeysQuery);
-            parameters.Should().HaveCount(2);
+            parameters.Should().HaveCount(fixtureType == typeof(CqlCommandBuilderFixture) ? 3 : 2);
             parameters[0].Value.Should().Be(723);
             parameters[1].Value.Should().Be(23);
         }

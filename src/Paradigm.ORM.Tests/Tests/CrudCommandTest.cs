@@ -14,7 +14,7 @@ using Paradigm.ORM.Data.Mappers;
 namespace Paradigm.ORM.Tests.Tests
 {
     [TestFixture]
-    public partial class CrudCommandTest
+    public class CrudCommandTest
     {
         [Order(1)]
         [TestCase(typeof(MySqlCrudCommandFixture))]
@@ -399,7 +399,9 @@ namespace Paradigm.ORM.Tests.Tests
             insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
 
             var selectOneCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectOneCommandBuilder(fixture.GetMultipleKeyDescriptor());
-            var selectCommand = selectOneCommandBuilder.GetCommand(1, 2);
+            var selectCommand = (fixtureType == typeof(CqlCrudCommandFixture))
+                ? selectOneCommandBuilder.GetCommand(1, 2, ((Mocks.Cql.TwoPrimaryKeyTable)first).Date)
+                : selectOneCommandBuilder.GetCommand(1, 2);
 
             using (var reader = selectCommand.ExecuteReader())
             {

@@ -66,8 +66,9 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                     ""Id1""           int,
                     ""Id2""           int,
                     ""Name""          text,
+                    ""Date""          timestamp,
 
-                   PRIMARY KEY ((""Id1"", ""Id2""))
+                   PRIMARY KEY ((""Id1"", ""Id2""), ""Date"")
                 )
             ");
         }
