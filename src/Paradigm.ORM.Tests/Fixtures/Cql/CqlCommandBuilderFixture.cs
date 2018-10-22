@@ -27,13 +27,9 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override string InsertQuery => @"INSERT INTO ""SimpleTable"" (""Id"",""Name"",""IsActive"",""Amount"",""CreatedDate"") VALUES (:Id,:Name,:IsActive,:Amount,:CreatedDate)";
 
-        public override string DeleteOneEntityQuerySingleKey => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id})";
+        public override string DeleteOneEntityQuerySingleKey => @"DELETE FROM ""SimpleTable"" WHERE ""Id""=:Id";
 
-        public override string DeleteTwoEntitiesQuerySingleKey => $"DELETE FROM \"SimpleTable\" WHERE \"Id\" IN ({Entity1.Id},{Entity2.Id})";
-
-        public override string DeleteOneEntityQueryMultipleKey => $"DELETE FROM \"test\".\"TwoPrimaryKeyTable\" WHERE \"Id1\"={TwoPrimaryKeyEntity1.Id1} AND \"Id2\"={TwoPrimaryKeyEntity1.Id2}";
-
-        public override string DeleteTwoEntitiesQueryMultipleKey => $"DELETE FROM \"test\".\"TwoPrimaryKeyTable\" WHERE \"Id1\"={TwoPrimaryKeyEntity1.Id1} AND \"Id2\"={TwoPrimaryKeyEntity1.Id2}";
+        public override string DeleteOneEntityQueryMultipleKey => @"DELETE FROM ""test"".""TwoPrimaryKeyTable"" WHERE ""Id1""=:Id1 AND ""Id2""=:Id2";
 
         public override string UpdateQuery => @"UPDATE ""SimpleTable"" SET ""Name""=:Name,""IsActive""=:IsActive,""Amount""=:Amount,""CreatedDate""=:CreatedDate WHERE ""Id""=:Id";
 

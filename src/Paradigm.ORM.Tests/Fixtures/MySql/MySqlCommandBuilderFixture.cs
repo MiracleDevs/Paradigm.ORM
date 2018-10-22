@@ -27,13 +27,9 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override string InsertQuery => "INSERT INTO `test`.`simpletable` (`Name`,`IsActive`,`Amount`,`CreatedDate`) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 
-        public override string DeleteOneEntityQuerySingleKey => $"DELETE FROM `test`.`simpletable` WHERE `Id` IN ({Entity1.Id})";
+        public override string DeleteOneEntityQuerySingleKey => "DELETE FROM `test`.`simpletable` WHERE `Id`=@Id";
 
-        public override string DeleteTwoEntitiesQuerySingleKey => $"DELETE FROM `test`.`simpletable` WHERE `Id` IN ({Entity1.Id},{Entity2.Id})";
-
-        public override string DeleteOneEntityQueryMultipleKey => $"DELETE FROM `test`.`twoprimarykeytable` WHERE (`Id1`={TwoPrimaryKeyEntity1.Id1} AND `Id2`={TwoPrimaryKeyEntity1.Id2})";
-
-        public override string DeleteTwoEntitiesQueryMultipleKey => $"DELETE FROM `test`.`twoprimarykeytable` WHERE (`Id1`={TwoPrimaryKeyEntity1.Id1} AND `Id2`={TwoPrimaryKeyEntity1.Id2}) OR (`Id1`={TwoPrimaryKeyEntity2.Id1} AND `Id2`={TwoPrimaryKeyEntity2.Id2})";
+        public override string DeleteOneEntityQueryMultipleKey => "DELETE FROM `test`.`twoprimarykeytable` WHERE `Id1`=@Id1 AND `Id2`=@Id2";
 
         public override string UpdateQuery => "UPDATE `test`.`simpletable` SET `Id`=@Id,`Name`=@Name,`IsActive`=@IsActive,`Amount`=@Amount,`CreatedDate`=@CreatedDate WHERE `Id`=@Id";
 

@@ -7,20 +7,6 @@ namespace Paradigm.ORM.Tests.Fixtures
     {
         public IDatabaseConnector Connector { get; }
 
-        protected abstract IDatabaseConnector CreateConnector();
-
-        protected CommandBuilderFixtureBase()
-        {
-            this.Connector = this.CreateConnector();
-            this.Connector.Open();
-        }
-
-        public void Dispose()
-        {
-            this.Connector.Close();
-            this.Connector?.Dispose();
-        }
-
         public abstract string SelectQuery { get; }
 
         public abstract string SelectWhereClause { get; }
@@ -35,11 +21,7 @@ namespace Paradigm.ORM.Tests.Fixtures
 
         public abstract string DeleteOneEntityQuerySingleKey { get; }
 
-        public abstract string DeleteTwoEntitiesQuerySingleKey { get; }
-
         public abstract string DeleteOneEntityQueryMultipleKey { get; }
-
-        public abstract string DeleteTwoEntitiesQueryMultipleKey { get; }
 
         public abstract string UpdateQuery { get; }
 
@@ -51,6 +33,20 @@ namespace Paradigm.ORM.Tests.Fixtures
 
         public abstract ITwoPrimaryKeyTable TwoPrimaryKeyEntity1 { get; }
 
-        public abstract ITwoPrimaryKeyTable TwoPrimaryKeyEntity2 { get; }
+        public abstract ITwoPrimaryKeyTable TwoPrimaryKeyEntity2 { get; }      
+
+        protected CommandBuilderFixtureBase()
+        {
+            this.Connector = this.CreateConnector();
+            this.Connector.Open();
+        }
+
+        protected abstract IDatabaseConnector CreateConnector();
+
+        public void Dispose()
+        {
+            this.Connector.Close();
+            this.Connector?.Dispose();
+        }
     }
 }

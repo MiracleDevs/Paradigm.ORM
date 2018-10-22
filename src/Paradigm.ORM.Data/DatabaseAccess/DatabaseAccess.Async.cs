@@ -250,15 +250,27 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             if (!entityList.Any())
                 return;
 
+            // 1. Delete the children entities.
             foreach (var x in this.NavigationDatabaseAccesses)
                 await x.DeleteBeforeAsync(entityList);
 
-            var valueProvider = new ClassValueProvider(this.Connector, entityList);
-            using (var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider))
+            // 2. Use a batch manager to save the main entities
+            using (var batchManager = this.CreateBatchManager())
             {
-                await this.Connector.ExecuteNonQueryAsync(command);
+                var valueProvider = new ClassValueProvider(this.Connector, entityList);
+
+                while (valueProvider.MoveNext())
+                {
+                    using (var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider))
+                    {
+                        batchManager.Add(new CommandBatchStep(command));
+                    }
+                }
+
+                await batchManager.ExecuteAsync();
             }
 
+            // 3. Delete any parent entity if any.
             foreach (var x in this.NavigationDatabaseAccesses)
                 await x.DeleteAfterAsync(entityList);
         }

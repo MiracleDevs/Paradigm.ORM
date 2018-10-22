@@ -222,8 +222,12 @@ namespace Paradigm.ORM.Tests.Tests
                 fixture.SetEntityId(first, second);
                 var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
 
-                deleteCommandBuilder.Should().NotBeNull();
+                valueProvider.MoveNext();
                 var deleteCommand = deleteCommandBuilder.GetCommand(valueProvider);
+                deleteCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
+
+                valueProvider.MoveNext();
+                deleteCommand = deleteCommandBuilder.GetCommand(valueProvider);
                 deleteCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
             }
 
@@ -420,10 +424,14 @@ namespace Paradigm.ORM.Tests.Tests
             fixture.CreateTables();
 
             var first = fixture.CreateNewTwoKeysEntity();
-  
+            var second = fixture.CreateNewTwoKeysEntity();
+
             var insertCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateInsertCommandBuilder(fixture.GetMultipleKeyDescriptor());
             {
-                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
+
+                valueProvider.MoveNext();
+                insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
 
                 valueProvider.MoveNext();
                 insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
@@ -431,8 +439,14 @@ namespace Paradigm.ORM.Tests.Tests
 
             var deleteCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateDeleteCommandBuilder(fixture.GetMultipleKeyDescriptor());
             {
-                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first });
+                var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { first, second });
+
+                valueProvider.MoveNext();
                 var deleteCommand = deleteCommandBuilder.GetCommand(valueProvider);
+                deleteCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
+
+                valueProvider.MoveNext();
+                deleteCommand = deleteCommandBuilder.GetCommand(valueProvider);
                 deleteCommand.Invoking(c => c.ExecuteNonQuery()).Should().NotThrow();
             }
 

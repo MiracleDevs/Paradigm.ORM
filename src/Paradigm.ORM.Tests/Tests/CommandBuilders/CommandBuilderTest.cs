@@ -178,22 +178,6 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
             deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQuerySingleKey);
         }
 
-        [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]
-        [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.SimpleTable))]
-        [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.SimpleTable))]
-        [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.SimpleTable))]
-        public void ShouldCreateADeleteCommandForTwoEntitiesWidthASingleKey(Type fixtureType, Type tableDescriptorType)
-        {
-            var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
-            var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
-            var entitiesToDelete = new[] { fixture.Entity1, fixture.Entity2 };
-            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
-
-            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
-            deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQuerySingleKey);
-        }
-
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
         [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
         [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
@@ -208,28 +192,6 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
 
             var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
             deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteOneEntityQueryMultipleKey);
-        }
-
-        [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.TwoPrimaryKeyTable))]
-        [TestCase(typeof(SqlCommandBuilderFixture), typeof(Mocks.Sql.TwoPrimaryKeyTable))]
-        [TestCase(typeof(PostgreSqlCommandBuilderFixture), typeof(Mocks.PostgreSql.TwoPrimaryKeyTable))]
-        [TestCase(typeof(CqlCommandBuilderFixture), typeof(Mocks.Cql.TwoPrimaryKeyTable))]
-        public void ShouldCreateADeleteCommandForTwoEntitiesWithMultipleKeys(Type fixtureType, Type tableDescriptorType)
-        {
-            var fixture = Activator.CreateInstance(fixtureType) as CommandBuilderFixtureBase;
-            var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableDescription = DescriptorCache.Instance.GetTableTypeDescriptor(tableDescriptorType);
-            var entitiesToDelete = new[] { fixture.TwoPrimaryKeyEntity1, fixture.TwoPrimaryKeyEntity2 };
-            var valueProvider = new ClassValueProvider(fixture.Connector, entitiesToDelete.Cast<object>().ToList());
-
-            var deleteCommand = commandBuilderFactory.CreateDeleteCommandBuilder(tableDescription);
-
-            if (fixtureType == typeof(CqlCommandBuilderFixture))
-            {
-                deleteCommand.Invoking(d => d.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQueryMultipleKey)).Should().Throw<NotSupportedException>();
-            }
-            else
-                deleteCommand.GetCommand(valueProvider).CommandText.Should().Be(fixture.DeleteTwoEntitiesQueryMultipleKey);
         }
 
         [TestCase(typeof(MySqlCommandBuilderFixture), typeof(Mocks.MySql.SimpleTable))]

@@ -25,14 +25,6 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// </value>
         protected string CommandText { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the where clause.
-        /// </summary>
-        /// <value>
-        /// The where clause.
-        /// </value>
-        protected string WhereClause { get; private set; }
-
         #endregion
 
         #region Constructor
@@ -60,88 +52,49 @@ namespace Paradigm.ORM.Data.CommandBuilders
         /// </returns>
         public IDatabaseCommand GetCommand(IValueProvider valueProvider)
         {
-            return this.Connector.CreateCommand(this.Descriptor.PrimaryKeyColumns.Count == 1 ? GetSingleKeyCommand(valueProvider) : GetMultipleKeyCommand(valueProvider));
+            var typeConverter = this.Connector.GetDbStringTypeConverter();
+            var command = this.Connector.CreateCommand(this.CommandText);
+
+            foreach (var column in this.Descriptor.PrimaryKeyColumns)
+            {
+                command.AddParameter(
+                    this.FormatProvider.GetParameterName(column.ColumnName),
+                    typeConverter.GetType(column.DataType),
+                    column.MaxSize,
+                    column.Precision,
+                    column.Scale,
+                    valueProvider.GetValue(column));
+            }
+
+            return command;
         }
 
         #endregion
 
-        #region Protected Methods
-
-        /// <summary>
-        /// Gets the delete command for single key tables.
-        /// </summary>
-        /// <param name="valueProvider">The value provider.</param>
-        protected string GetSingleKeyCommand(IValueProvider valueProvider)
-        {
-            var builder = new StringBuilder();
-
-            builder.Append(this.CommandText);
-            builder.Append(" WHERE ");
-
-            var primaryKey = this.Descriptor.PrimaryKeyColumns[0];
-
-            builder.Append(this.FormatProvider.GetEscapedName(primaryKey.ColumnName));
-            builder.Append(" IN (");
-
-            while (valueProvider.MoveNext())
-            {
-                builder.Append(this.FormatProvider.GetColumnValue(valueProvider.GetValue(primaryKey), primaryKey.DataType));
-                builder.Append(",");
-            }
-
-            builder.Remove(builder.Length - 1, 1);
-            builder.Append(")");
-
-            return builder.ToString();
-        }
-
-
-        /// <summary>
-        /// Gets the delete command for multiple key tables.
-        /// </summary>
-        /// <param name="valueProvider">The value provider.</param>
-        protected virtual string GetMultipleKeyCommand(IValueProvider valueProvider)
-        {
-            var builder = new StringBuilder();
-
-            builder.Append(this.CommandText);
-            builder.Append(" WHERE ");
-
-            while (valueProvider.MoveNext())
-            {
-                builder.Append("(");
-                builder.AppendFormat(this.WhereClause, this.Descriptor.PrimaryKeyColumns.Select(x => this.FormatProvider.GetColumnValue(valueProvider.GetValue(x), x.DataType)).Cast<object>().ToArray());
-                builder.Append(") OR ");
-            }
-
-            builder.Remove(builder.Length - 4, 4);
-
-            return builder.ToString();
-        }
-
-        #endregion
-
-        #region Private Methods
+        #region Private Method
 
         /// <summary>
         /// Initializes the command builder.
         /// </summary>
         private void Initialize()
         {
-            this.CommandText = $"DELETE FROM {this.FormatProvider.GetTableName(this.Descriptor)}";
-
             if (!this.Descriptor.PrimaryKeyColumns.Any())
                 throw new OrmNoPrimaryKeysException(this.Descriptor.TableName);
 
             var builder = new StringBuilder();
 
-            for (var i = 0; i < this.Descriptor.PrimaryKeyColumns.Count; i++)
+            builder.AppendFormat("DELETE FROM {0} WHERE ", this.FormatProvider.GetTableName(this.Descriptor));
+
+            foreach (var primaryKey in this.Descriptor.PrimaryKeyColumns)
             {
-                var primaryKey = this.Descriptor.PrimaryKeyColumns[i];
-                builder.AppendFormat("{0}={{{1}}} AND ", this.FormatProvider.GetEscapedName(primaryKey.ColumnName), i);
+                var columnName = primaryKey.ColumnName;
+
+                builder.AppendFormat("{0}={1} AND ", 
+                    this.FormatProvider.GetEscapedName(columnName), 
+                    this.FormatProvider.GetParameterName(columnName));
             }
 
-            this.WhereClause = builder.Remove(builder.Length - 5, 5).ToString();
+            this.CommandText = builder.Remove(builder.Length - 5, 5).ToString();
         }
 
         #endregion
