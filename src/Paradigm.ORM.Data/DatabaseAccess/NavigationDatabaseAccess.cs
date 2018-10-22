@@ -88,7 +88,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             if (!entityList.Any())
                 return;
 
-            // 1. construct a where clase to look up for related entities.
+            // 1. construct a where class to look up for related entities.
             var whereClause = this.NavigationHelper.GetWhereClause(entityList);
 
             // 2. if no where clause was provided, ignore selection and return.
@@ -114,7 +114,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public void SaveBefore(IEnumerable<object> entities)
         {
-            // only child entities can be saved.
+            // only parent entities can be saved.
             if (this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
@@ -140,17 +140,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public void SaveAfter(IEnumerable<object> entities)
         {
-            // only child entities can be saved.
+            // only children entities can be saved.
             if (!this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
-            var childs = this.GetChildsToSave(entities);
+            var children = this.GetChildrenToSave(entities);
 
-            if (childs.Item1.Any())
-                this.DatabaseAccess.Insert(childs.Item1);
+            if (children.Item1.Any())
+                this.DatabaseAccess.Insert(children.Item1);
 
-            if (childs.Item2.Any())
-                this.DatabaseAccess.Update(childs.Item2);
+            if (children.Item2.Any())
+                this.DatabaseAccess.Update(children.Item2);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public void DeleteBefore(IEnumerable<object> entities)
         {
-            // only child entities can be deleted here.
+            // only children entities can be deleted here.
             if (!this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
@@ -168,12 +168,12 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             if (!entityList.Any())
                 return;
 
-            var childsToDelete = this.GetChildsToDelete(entityList);
+            var childrenToDelete = this.GetChildrenToDelete(entityList);
 
-            if (!childsToDelete.Any())
+            if (!childrenToDelete.Any())
                 return;
 
-            this.DatabaseAccess.Delete(childsToDelete);
+            this.DatabaseAccess.Delete(childrenToDelete);
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public void DeleteAfter(IEnumerable<object> entities)
         {
-            // only related entities can be deleted here.
+            // only parent entities can be deleted here.
             if (this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
@@ -225,14 +225,14 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         }
 
         /// <summary>
-        /// Gets the childs to save.
+        /// Gets the children to save.
         /// </summary>
         /// <param name="entities">The parent entities.</param>
-        /// <returns>List of childs to save.</returns>
-        private Tuple<List<object>, List<object>> GetChildsToSave(IEnumerable entities)
+        /// <returns>List of children to save.</returns>
+        private Tuple<List<object>, List<object>> GetChildrenToSave(IEnumerable entities)
         {
-            var childsToInsert = new List<object>();
-            var childsToUpdate = new List<object>();
+            var childrenToInsert = new List<object>();
+            var childrenToUpdate = new List<object>();
 
             var entityKeyPropertyInfo = this.NavigationPropertyDescriptor.FromDescriptor.IdentityProperty?.PropertyInfo;
 
@@ -245,24 +245,24 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
             foreach (var entity in entities)
             {
-                var allChilds = this.GetListInstance(entity);
+                var allChildren = this.GetListInstance(entity);
                 var entityId = needsToSetId ? entityKeyPropertyInfo.GetValue(entity) : null;
 
-                foreach (var child in allChilds)
+                foreach (var child in allChildren)
                 {
                     if (this.NavigationPropertyDescriptor.ToDescriptor.IsNew(child))
                     {
                         childForeignKeyPropertyInfo?.SetValue(child, entityId);
-                        childsToInsert.Add(child);
+                        childrenToInsert.Add(child);
                     }
                     else
                     {
-                        childsToUpdate.Add(child);
+                        childrenToUpdate.Add(child);
                     }
                 }
             }
 
-            return new Tuple<List<object>, List<object>>(childsToInsert, childsToUpdate);
+            return new Tuple<List<object>, List<object>>(childrenToInsert, childrenToUpdate);
         }
 
         /// <summary>
@@ -312,21 +312,21 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         }
 
         /// <summary>
-        /// Gets the childs to delete.
+        /// Gets the children to delete.
         /// </summary>
         /// <param name="entities">The parent entities.</param>
-        /// <returns>List of childs to delete.</returns>
-        private List<object> GetChildsToDelete(IEnumerable entities)
+        /// <returns>List of children to delete.</returns>
+        private List<object> GetChildrenToDelete(IEnumerable entities)
         {
-            var childsToDelete = new List<object>();
+            var childrenToDelete = new List<object>();
 
             foreach (var entity in entities)
             {
-                var childs = this.GetListInstance(entity);
-                childsToDelete.AddRange(childs.Cast<object>().Where(child => child != null));
+                var children = this.GetListInstance(entity);
+                childrenToDelete.AddRange(children.Cast<object>().Where(child => child != null));
             }
 
-            return childsToDelete;
+            return childrenToDelete;
         }
 
         /// <summary>

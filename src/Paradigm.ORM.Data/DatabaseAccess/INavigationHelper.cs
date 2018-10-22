@@ -25,7 +25,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         void PopulateReferenced(object mainEntity, IList referencedEntities, PropertyInfo referencerProperty);
 
         /// <summary>
-        /// Populates the navigation property with all the childs passed.
+        /// Populates the navigation property with all the children passed.
         /// </summary>
         /// <param name="mainEntity">The main entity.</param>
         /// <param name="childEntities">The child entities.</param>

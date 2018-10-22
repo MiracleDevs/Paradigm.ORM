@@ -16,7 +16,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         {
             var entityList = entities as IList<object> ?? entities.ToList();
 
-            // 1. construct a where clase to look up for related entities.
+            // 1. construct a where class to look up for related entities.
             var whereClause = this.NavigationHelper.GetWhereClause(entityList);
 
             // 2. if no where clause was provided, ignore selection and return.
@@ -42,7 +42,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public async Task SaveBeforeAsync(IEnumerable<object> entities)
         {
-            // only child entities can be saved.
+            // only parent entities can be saved.
             if (this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
@@ -68,17 +68,17 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public async Task SaveAfterAsync(IEnumerable<object> entities)
         {
-            // only child entities can be saved.
+            // only children entities can be saved.
             if (!this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
-            var childs = this.GetChildsToSave(entities);
+            var children = this.GetChildrenToSave(entities);
 
-            if (childs.Item1.Any())
-                await this.DatabaseAccess.InsertAsync(childs.Item1);
+            if (children.Item1.Any())
+                await this.DatabaseAccess.InsertAsync(children.Item1);
 
-            if (childs.Item2.Any())
-                await this.DatabaseAccess.UpdateAsync(childs.Item2);
+            if (children.Item2.Any())
+                await this.DatabaseAccess.UpdateAsync(children.Item2);
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public async Task DeleteBeforeAsync(IEnumerable<object> entities)
         {
-            // only child entities can be deleted here.
+            // only children entities can be deleted here.
             if (!this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 
@@ -96,12 +96,12 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             if (!entityList.Any())
                 return;
 
-            var childsToDelete = this.GetChildsToDelete(entityList);
+            var childrenToDelete = this.GetChildrenToDelete(entityList);
 
-            if (!childsToDelete.Any())
+            if (!childrenToDelete.Any())
                 return;
 
-            await this.DatabaseAccess.DeleteAsync(childsToDelete);
+            await this.DatabaseAccess.DeleteAsync(childrenToDelete);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of parent entities.</param>
         public async Task DeleteAfterAsync(IEnumerable<object> entities)
         {
-            // only related entities can be deleted here.
+            // only parent entities can be deleted here.
             if (this.NavigationPropertyDescriptor.IsAggregateRoot)
                 return;
 

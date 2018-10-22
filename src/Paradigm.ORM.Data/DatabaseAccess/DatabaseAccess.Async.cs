@@ -80,7 +80,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to insert, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Insert(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task InsertAsync(object entity)
         {
@@ -97,7 +97,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task InsertAsync(IEnumerable<object> entities)
         {
@@ -112,12 +112,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 1. Save 1-1 relationships first, as we'll need the ids of the related entities
             //    for the main entities to be stored later.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (!navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    await navigationDatabaseAccess.SaveBeforeAsync(entityList);
-                }
-            }
+                await navigationDatabaseAccess.SaveBeforeAsync(entityList);
 
             // 2. Use a batch manager to save the main entities
             using (var batchManager = this.CreateBatchManager())
@@ -151,12 +146,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    await navigationDatabaseAccess.SaveAfterAsync(entityList);
-                }
-            }
+                await navigationDatabaseAccess.SaveAfterAsync(entityList);
         }
 
         /// <summary>
@@ -167,7 +157,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to update, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Update(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task UpdateAsync(object entity)
         {
@@ -184,7 +174,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task UpdateAsync(IEnumerable<object> entities)
         {
@@ -199,12 +189,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 1. Save 1-1 relationships first, as we'll need the ids of the related entities
             //    for the main entities to be stored later.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (!navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    await navigationDatabaseAccess.SaveBeforeAsync(entityList);
-                }
-            }
+                await navigationDatabaseAccess.SaveBeforeAsync(entityList);
 
             // 2. Use a batch manager to save the main entities
             using (var batchManager = this.CreateBatchManager())
@@ -225,12 +210,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    await navigationDatabaseAccess.SaveAfterAsync(entityList);
-                }
-            }
+                await navigationDatabaseAccess.SaveAfterAsync(entityList);
         }
 
         /// <summary>
@@ -241,7 +221,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to delete, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Delete(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task DeleteAsync(object entity)
         {
@@ -258,7 +238,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <returns></returns>
         /// <exception cref="System.ArgumentException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual async Task DeleteAsync(IEnumerable<object> entities)
         {

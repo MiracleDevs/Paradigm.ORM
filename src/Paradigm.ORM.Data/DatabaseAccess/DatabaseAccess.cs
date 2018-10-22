@@ -169,7 +169,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to insert, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Insert(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual void Insert(object entity)
         {
@@ -185,7 +185,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of entities to insert.</param>
         /// <exception cref="ArgumentNullException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual void Insert(IEnumerable<object> entities)
         {
@@ -200,19 +200,14 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 1. Save 1-1 relationships first, as we'll need the ids of the related entities
             //    for the main entities to be stored later.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (!navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    navigationDatabaseAccess.SaveBefore(entityList);
-                }
-            }
+                navigationDatabaseAccess.SaveBefore(entityList);
 
             // 2. Use a batch manager to save the main entities
             using (var batchManager = this.CreateBatchManager())
             {
                 var valueProvider = new ClassValueProvider(this.Connector, entityList);
 
-                while(valueProvider.MoveNext())
+                while (valueProvider.MoveNext())
                 {
                     using (var command = this.CommandBuilderManager.InsertCommandBuilder.GetCommand(valueProvider))
                     {
@@ -234,15 +229,11 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 batchManager.Execute();
             }
+
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    navigationDatabaseAccess.SaveAfter(entityList);
-                }
-            }
+                navigationDatabaseAccess.SaveAfter(entityList);
         }
 
         /// <summary>
@@ -252,7 +243,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to update, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Update(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual void Update(object entity)
         {
@@ -268,7 +259,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of entities to update.</param>
         /// <exception cref="System.ArgumentNullException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual void Update(IEnumerable<object> entities)
         {
@@ -283,12 +274,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 1. Save 1-1 relationships first, as we'll need the ids of the related entities
             //    for the main entities to be stored later.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (!navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    navigationDatabaseAccess.SaveBefore(entityList);
-                }
-            }
+                navigationDatabaseAccess.SaveBefore(entityList);
 
             // 2. Use a batch manager to save the main entities
             using (var batchManager = this.CreateBatchManager())
@@ -309,12 +295,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
             // 3. Save the 1-Many relationship at last, as they'll need the
             //    main entity id before being stored.
             foreach (var navigationDatabaseAccess in this.NavigationDatabaseAccesses)
-            {
-                if (navigationDatabaseAccess.NavigationPropertyDescriptor.IsAggregateRoot)
-                {
-                    navigationDatabaseAccess.SaveAfter(entityList);
-                }
-            }
+                navigationDatabaseAccess.SaveAfter(entityList);
         }
 
         /// <summary>
@@ -324,7 +305,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <exception cref="System.ArgumentNullException">entity can not be null.</exception>
         /// <remarks>
         /// If there are more than one element to delete, please use the overloaded method <see cref="M:Paradigm.ORM.Data.DatabaseAccess.IDatabaseAccess.Delete(System.Collections.Generic.IEnumerable{System.Object})" />
-        /// because is prepared to batch the operation, and preventing unnecessary roundtrips to the database.
+        /// because is prepared to batch the operation, and preventing unnecessary round trips to the database.
         /// </remarks>
         public virtual void Delete(object entity)
         {
@@ -340,7 +321,7 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// <param name="entities">List of entities to delete.</param>
         /// <exception cref="System.ArgumentException">entities can not be null.</exception>
         /// <remarks>
-        /// This method utilizes batching to prevent unnecessary roundtrips to the database.
+        /// This method utilizes batching to prevent unnecessary round trips to the database.
         /// </remarks>
         public virtual void Delete(IEnumerable<object> entities)
         {
