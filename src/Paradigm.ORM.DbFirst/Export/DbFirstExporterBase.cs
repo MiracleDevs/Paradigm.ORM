@@ -1,10 +1,10 @@
-using System.IO;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.DbFirst.Configuration;
 using Paradigm.ORM.DbFirst.Schema;
 using Paradigm.ORM.DbFirst.Translation;
-using Newtonsoft.Json;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Paradigm.ORM.DbFirst.Export
 {
@@ -14,6 +14,8 @@ namespace Paradigm.ORM.DbFirst.Export
         {
             using (var connector = this.CreateConnector(configuration))
             {
+                await connector.OpenAsync();
+
                 var database = new Database(connector);
                 await database.ExtractSchemaAsync(configuration);
                 database.ProcessResults();

@@ -58,7 +58,7 @@ namespace Paradigm.ORM.Data.MySql.Schema
         /// </returns>
         public async Task<List<IColumn>> GetColumnsAsync(string database, string tableName)
         {
-            return (await this.ColumnQuery.ExecuteAsync($"`TABLE_SCHEMA`='{database}' AND `TABLE_NAME`='{tableName}'")).Cast<IColumn>().ToList();
+            return (await this.ColumnQuery.ExecuteAsync($"`TABLE_SCHEMA`='{database}' AND `TABLE_NAME`='{tableName}' ORDER BY `ORDINAL_POSITION`")).Cast<IColumn>().ToList();
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace Paradigm.ORM.Data.MySql.Schema
         /// </returns>
         public async Task<List<IParameter>> GetParametersAsync(string database, string routineName)
         {
-            return (await this.ParameterQuery.ExecuteAsync($"`SPECIFIC_SCHEMA`='{database}' AND `SPECIFIC_NAME`='{routineName}'")).Cast<IParameter>().ToList();
+            return (await this.ParameterQuery.ExecuteAsync($"`SPECIFIC_SCHEMA`='{database}' AND `SPECIFIC_NAME`='{routineName}' ORDER BY `ORDINAL_POSITION`")).Cast<IParameter>().ToList();
         }
 
         #endregion

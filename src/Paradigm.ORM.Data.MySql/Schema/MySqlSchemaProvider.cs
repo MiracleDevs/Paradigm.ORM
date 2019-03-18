@@ -194,7 +194,7 @@ namespace Paradigm.ORM.Data.MySql.Schema
         /// </returns>
         public List<IColumn> GetColumns(string database, string tableName)
         {
-            return this.ColumnQuery.Execute($"`table_schema`='{database}' AND `table_name`='{tableName}'").Cast<IColumn>().ToList();
+            return this.ColumnQuery.Execute($"`table_schema`='{database}' AND `table_name`='{tableName}' ORDER BY `ORDINAL_POSITION`").Cast<IColumn>().ToList();
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace Paradigm.ORM.Data.MySql.Schema
         /// </returns>
         public List<IParameter> GetParameters(string database, string routineName)
         {
-            return this.ParameterQuery.Execute($"`specific_schema`='{database}' AND `specific_name`='{routineName}'").Cast<IParameter>().ToList();
+            return this.ParameterQuery.Execute($"`specific_schema`='{database}' AND `specific_name`='{routineName}' ORDER BY `ORDINAL_POSITION`").Cast<IParameter>().ToList();
         }
 
         #endregion

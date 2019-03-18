@@ -137,7 +137,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <returns></returns>
         public bool RemoveTableDescriptor(ITable table)
         {
-            return this.TableDescriptors.TryRemove(table, out ITableDescriptor _);
+            return this.TableDescriptors.TryRemove(table, out var _);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <returns></returns>
         public bool RemoveTableTypeDescriptor(Type type)
         {
-            return this.TableTypeDescriptors.TryRemove(type, out ITableTypeDescriptor _);
+            return this.TableTypeDescriptors.TryRemove(type, out var _);
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <returns></returns>
         public bool RemoveCustomTypeDescriptor(Type type)
         {
-            return this.CustomTypeDescriptors.TryRemove(type, out ICustomTypeDescriptor _);
+            return this.CustomTypeDescriptors.TryRemove(type, out var _);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Paradigm.ORM.Data.Descriptors
         /// <returns></returns>
         public bool RemoveRoutineTypeDescriptor(Type type)
         {
-            return this.RoutineTypeDescriptors.TryRemove(type, out IRoutineTypeDescriptor _);
+            return this.RoutineTypeDescriptors.TryRemove(type, out var _);
         }
 
         /// <summary>
