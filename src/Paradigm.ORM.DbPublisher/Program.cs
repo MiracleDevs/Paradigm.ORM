@@ -76,11 +76,11 @@ namespace Paradigm.ORM.DbPublisher
             var scripts = GetConfigurationFiles(fileName, publishConfiguration, verbose).ToList();
 
             LoggingService.WriteLine($"{scripts.Count} script files discovered.");
+            LoggingService.Notice("Generating script");
+            builder.Build(scripts);
 
             if (publishConfiguration.GenerateScript)
             {
-                LoggingService.Notice("Generating script");
-                builder.Build(scripts);              
                 builder.SaveScript(Path.IsPathRooted(publishConfiguration.OutputFileName) ? publishConfiguration.OutputFileName : Path.GetFullPath($"{Path.GetDirectoryName(fileName)}/{publishConfiguration.OutputFileName}"));
                 LoggingService.Notice("Script generated to: ");
                 LoggingService.WriteLine(publishConfiguration.OutputFileName);
