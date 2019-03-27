@@ -35,7 +35,7 @@ namespace Paradigm.ORM.DbPublisher.Builders
             }
         }
 
-        public void SaveScript(string fileName)
+        public void SaveScript(string fileName, bool verbose)
         {
             var path = Path.GetDirectoryName(fileName);
 

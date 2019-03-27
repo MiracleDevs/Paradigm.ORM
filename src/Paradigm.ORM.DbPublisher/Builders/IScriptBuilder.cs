@@ -8,7 +8,7 @@ namespace Paradigm.ORM.DbPublisher.Builders
 
         void Build(IEnumerable<string> fileNames);
 
-        void SaveScript(string fileName);
+        void SaveScript(string fileName, bool verbose);
 
         string GetScript(string fileName);
     }

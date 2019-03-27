@@ -5,6 +5,6 @@ namespace Paradigm.ORM.DbPublisher.Runners
 {
     public interface IScriptRunner
     {
-        Task RunAsync(IScriptBuilder scriptBuilder);
+        Task RunAsync(IScriptBuilder scriptBuilder, bool verbose);
     }
 }

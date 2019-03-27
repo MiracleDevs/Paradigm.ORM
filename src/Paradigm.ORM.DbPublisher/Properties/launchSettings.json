@@ -2,7 +2,7 @@
   "profiles": {
     "Paradigm.ORM.DbPublisher": {
       "commandName": "Project",
-      "commandLineArgs": "-c c:\\temp\\dbpublisher\\dbpublisher.cassandra.json"
+      "commandLineArgs": "-c filename"
     }
   }
 }

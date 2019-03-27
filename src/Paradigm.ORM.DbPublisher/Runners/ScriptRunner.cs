@@ -18,7 +18,7 @@ namespace Paradigm.ORM.DbPublisher.Runners
             this.ServiceProvider = serviceProvider;
         }
 
-        public async Task RunAsync(IScriptBuilder scriptBuilder)
+        public async Task RunAsync(IScriptBuilder scriptBuilder, bool verbose)
         {
             var loggingService = this.ServiceProvider.GetService<ILoggingService>();
             var connector = this.ServiceProvider.GetService<IDatabaseConnector>();
@@ -29,7 +29,11 @@ namespace Paradigm.ORM.DbPublisher.Runners
             {
                 try
                 {
-                    loggingService.WriteLine($"Running script: {Path.GetFileName(script)}");
+                    if (verbose)
+                    {
+                        loggingService.WriteLine($"Running script: {Path.GetFileName(script)}");
+                    }
+
                     await connector.ExecuteNonQueryAsync(scriptBuilder.GetScript(script));
                 }
                 catch (Exception ex)

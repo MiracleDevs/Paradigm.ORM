@@ -2,7 +2,7 @@
   "profiles": {
     "Paradigm.ORM.DbFirst": {
       "commandName": "Project",
-      "commandLineArgs": "-f c:\\Repositories\\gitlab\\timetracker\\build\\configuration\\dbfirst\\timetracking.json"
+      "commandLineArgs": "-f filename"
     }
   }
 }

@@ -15,8 +15,11 @@ namespace Paradigm.ORM.DbFirst
     {
         private static ILoggingService LoggingService { get; set; }
 
+        private static object Locker { get; set; }
+
         private static void Main(string[] args)
         {
+            Locker = new object();
             Mappings.Initialize();
 
             LoggingService = new ConsoleLoggingService();
@@ -52,21 +55,81 @@ namespace Paradigm.ORM.DbFirst
                 var topDirectoryOnly = commandLineApplication.Option("-t | --topdirectory", "If directories were provided, indicates if the system should check only on the top directory.", CommandOptionType.NoValue);
                 var extension = commandLineApplication.Option("-e | --extension <extension>", "Indicates the extension of configuration files when searching inside directories. The default extension is 'json'.", CommandOptionType.SingleValue);
                 var verbose = commandLineApplication.Option("-v | --verbose", "Indicates the tool to log in detail what is doing.", CommandOptionType.NoValue);
+                var watch = commandLineApplication.Option("-w | --watch <path>", "Indicates the tool to watch for changes in the path and execute the tool automatically.", CommandOptionType.SingleValue);
 
                 commandLineApplication.HelpOption("-? | -h | --help");
-                commandLineApplication.OnExecute(() =>
-                {
-                    foreach (var configurationFileName in GetConfigurationFiles(fileNames.Values, directories.Values, topDirectoryOnly.HasValue(), extension.Value(), verbose.HasValue()).ToList())
-                        OpenConfigurationFile(configurationFileName);
-
-                    return 0;
-                });
+                commandLineApplication.OnExecute(() =>  Execute(fileNames.Values, directories.Values, topDirectoryOnly.HasValue(), extension.Value(), verbose.HasValue(), watch.Value()));
 
                 commandLineApplication.Execute(args);
             }
             catch (Exception ex)
             {
                 LoggingService.Error(ex.Message);
+            }
+        }
+
+        private static int Execute(List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose, string watch)
+        {
+            if (watch == null)
+            {
+                IterateOverFiles(fileNames, directories, topDirectoryOnly, extension, verbose);
+            }
+            else
+            {
+                LoggingService.WriteLine("Starting watch mode: ");
+
+
+                var watcher = new FileSystemWatcher();
+                watcher.BeginInit();
+                watcher.IncludeSubdirectories = true;
+                watcher.EnableRaisingEvents = true;
+
+                var attr = File.GetAttributes(watch);
+
+                if (attr.HasFlag(FileAttributes.Directory))
+                {
+                    watcher.Path = watch;
+                }
+                else
+                {
+                    watcher.Path = Path.GetDirectoryName(watch);
+                    watcher.Filter = Path.GetFileName(watch);
+                }
+
+                watcher.Changed += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
+                watcher.Renamed += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
+                watcher.Created += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
+                watcher.Deleted += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
+                watcher.Error += (s, e) => LoggingService.Error(e.GetException().Message);
+                watcher.EndInit();
+
+                while (true)
+                {
+                }
+            }
+
+            return 0;
+        }
+
+        private static void DetectChanges(WatcherChangeTypes changeType, string changePath, List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
+        {
+            lock (Locker)
+            {
+                Console.Clear();
+                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+                LoggingService.Notice($"Path Changed: {changePath}");
+                LoggingService.Notice($"Change Type: {changeType}");
+                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+
+                IterateOverFiles(fileNames, directories, topDirectoryOnly, extension, verbose);
+            }
+        }
+
+        private static void IterateOverFiles(List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
+        {
+            foreach (var configurationFileName in GetConfigurationFiles(fileNames, directories, topDirectoryOnly, extension, verbose).ToList())
+            {
+                OpenConfigurationFile(configurationFileName);
             }
         }
 
