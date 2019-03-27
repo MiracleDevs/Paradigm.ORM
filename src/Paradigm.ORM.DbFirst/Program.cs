@@ -76,15 +76,13 @@ namespace Paradigm.ORM.DbFirst
             }
             else
             {
-                LoggingService.WriteLine("Starting watch mode: ");
-
-
                 var watcher = new FileSystemWatcher();
                 watcher.BeginInit();
                 watcher.IncludeSubdirectories = true;
                 watcher.EnableRaisingEvents = true;
 
                 var attr = File.GetAttributes(watch);
+                watch = Path.IsPathRooted(watch) ? watch : Path.GetFullPath(watch);
 
                 if (attr.HasFlag(FileAttributes.Directory))
                 {
@@ -102,6 +100,8 @@ namespace Paradigm.ORM.DbFirst
                 watcher.Deleted += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
                 watcher.Error += (s, e) => LoggingService.Error(e.GetException().Message);
                 watcher.EndInit();
+
+                LoggingService.WriteLine($"Starting watch mode: [{watcher.Path}]: {watcher.Filter}");
 
                 while (true)
                 {
