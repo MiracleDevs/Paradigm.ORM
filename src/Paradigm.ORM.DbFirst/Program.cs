@@ -1,13 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.Extensions.CommandLineUtils;
+﻿using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
+using Newtonsoft.Json;
 using Paradigm.ORM.DbFirst.Configuration;
 using Paradigm.ORM.DbFirst.Export;
 using Paradigm.ORM.DbFirst.Logging;
 using Paradigm.ORM.DbFirst.Mapping;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace Paradigm.ORM.DbFirst
 {
@@ -15,11 +17,10 @@ namespace Paradigm.ORM.DbFirst
     {
         private static ILoggingService LoggingService { get; set; }
 
-        private static object Locker { get; set; }
+        private static PhysicalFileProvider FileProvider { get; set; }
 
         private static void Main(string[] args)
         {
-            Locker = new object();
             Mappings.Initialize();
 
             LoggingService = new ConsoleLoggingService();
@@ -58,7 +59,7 @@ namespace Paradigm.ORM.DbFirst
                 var watch = commandLineApplication.Option("-w | --watch <path>", "Indicates the tool to watch for changes in the path and execute the tool automatically.", CommandOptionType.SingleValue);
 
                 commandLineApplication.HelpOption("-? | -h | --help");
-                commandLineApplication.OnExecute(() =>  Execute(fileNames.Values, directories.Values, topDirectoryOnly.HasValue(), extension.Value(), verbose.HasValue(), watch.Value()));
+                commandLineApplication.OnExecute(() => Execute(fileNames.Values, directories.Values, topDirectoryOnly.HasValue(), extension.Value(), verbose.HasValue(), watch.Value()));
 
                 commandLineApplication.Execute(args);
             }
@@ -76,32 +77,19 @@ namespace Paradigm.ORM.DbFirst
             }
             else
             {
-                var watcher = new FileSystemWatcher();
-                watcher.BeginInit();
-                watcher.IncludeSubdirectories = true;
-                watcher.EnableRaisingEvents = true;
+                var directory = Path.IsPathRooted(watch) ? watch : Path.GetFullPath(watch);
+                var attr = File.GetAttributes(directory);
+                var filter = "*";
 
-                var attr = File.GetAttributes(watch);
-                watch = Path.IsPathRooted(watch) ? watch : Path.GetFullPath(watch);
-
-                if (attr.HasFlag(FileAttributes.Directory))
+                if (!attr.HasFlag(FileAttributes.Directory))
                 {
-                    watcher.Path = watch;
-                }
-                else
-                {
-                    watcher.Path = Path.GetDirectoryName(watch);
-                    watcher.Filter = Path.GetFileName(watch);
+                    directory = Path.GetDirectoryName(directory);
+                    filter = Path.GetFileName(watch);
                 }
 
-                watcher.Changed += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
-                watcher.Renamed += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
-                watcher.Created += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
-                watcher.Deleted += (s, e) => DetectChanges(e.ChangeType, e.FullPath, fileNames, directories, topDirectoryOnly, extension, verbose);
-                watcher.Error += (s, e) => LoggingService.Error(e.GetException().Message);
-                watcher.EndInit();
-
-                LoggingService.WriteLine($"Starting watch mode: [{watcher.Path}]: {watcher.Filter}");
+                LoggingService.WriteLine($"Starting watch mode: [{directory}:{filter}]");
+                FileProvider = new PhysicalFileProvider(directory, ExclusionFilters.DotPrefixed | ExclusionFilters.DotPrefixed | ExclusionFilters.System);
+                Watch(filter, fileNames, directories, topDirectoryOnly, extension, verbose);
 
                 while (true)
                 {
@@ -111,18 +99,21 @@ namespace Paradigm.ORM.DbFirst
             return 0;
         }
 
-        private static void DetectChanges(WatcherChangeTypes changeType, string changePath, List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
+        private static void Watch(string filter, List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
         {
-            lock (Locker)
-            {
-                Console.Clear();
-                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
-                LoggingService.Notice($"Path Changed: {changePath}");
-                LoggingService.Notice($"Change Type: {changeType}");
-                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+            var watcher = FileProvider.Watch(filter);
+            watcher.RegisterChangeCallback(_ => DetectChanges(filter, fileNames, directories, topDirectoryOnly, extension, verbose), null);
+        }
 
-                IterateOverFiles(fileNames, directories, topDirectoryOnly, extension, verbose);
-            }
+        private static void DetectChanges(string filter, List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
+        {
+            Console.Clear();
+            LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+            LoggingService.Notice("Path Changed: ");
+            LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+
+            IterateOverFiles(fileNames, directories, topDirectoryOnly, extension, verbose);
+            Watch(filter, fileNames, directories, topDirectoryOnly, extension, verbose);
         }
 
         private static void IterateOverFiles(List<string> fileNames, List<string> directories, bool topDirectoryOnly, string extension, bool verbose)
@@ -156,22 +147,32 @@ namespace Paradigm.ORM.DbFirst
                 var fullFileName = Path.IsPathRooted(fileName) ? fileName : Path.GetFullPath($"{path}/{fileName}");
 
                 if (File.Exists(fullFileName))
+                {
                     files.Add(fullFileName);
+                }
                 else
+                {
                     LoggingService.Error($"File not found [{fullFileName}]");
+                }
             }
 
             foreach (var directory in directories)
             {
-                var fullDirectoryPath = Path.IsPathRooted(directory)? directory : Path.GetFullPath($"{path}/{directory}");
+                var fullDirectoryPath = Path.IsPathRooted(directory) ? directory : Path.GetFullPath($"{path}/{directory}");
 
                 if (verbose)
+                {
                     LoggingService.WriteLine($"     Processing Directory [{fullDirectoryPath}]");
+                }
 
                 if (Directory.Exists(fullDirectoryPath))
+                {
                     files.AddRange(Directory.EnumerateFiles(fullDirectoryPath, $"*.{extension ?? "json"}", topDirectoryOnly ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories));
+                }
                 else
+                {
                     LoggingService.Error($"Directory not found [{fullDirectoryPath}]");
+                }
             }
 
             LoggingService.WriteLine(string.Empty);

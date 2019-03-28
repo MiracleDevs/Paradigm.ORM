@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.CommandLineUtils;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.FileProviders.Physical;
 using Newtonsoft.Json;
 using Paradigm.Core.DependencyInjection.Interfaces;
 using Paradigm.ORM.DbPublisher.Builders;
@@ -17,11 +19,10 @@ namespace Paradigm.ORM.DbPublisher
     {
         private static ILoggingService LoggingService { get; set; }
 
-        private static object Locker { get; set; }
+        private static PhysicalFileProvider FileProvider { get; set; }
 
         private static void Main(string[] args)
         {
-            Locker = new object();
             LoggingService = new ConsoleLoggingService();
             var started = DateTime.Now;
 
@@ -91,32 +92,19 @@ namespace Paradigm.ORM.DbPublisher
             }
             else
             {
-                var watcher = new FileSystemWatcher();
-                watcher.BeginInit();
-                watcher.IncludeSubdirectories = true;
-                watcher.EnableRaisingEvents = true;
+                var directory = Path.IsPathRooted(watch) ? watch : Path.GetFullPath(watch);
+                var attr = File.GetAttributes(directory);
+                var filter = "*";
 
-                var attr = File.GetAttributes(watch);
-                watch = Path.IsPathRooted(watch) ? watch : Path.GetFullPath(watch);
-
-                if (attr.HasFlag(FileAttributes.Directory))
+                if (!attr.HasFlag(FileAttributes.Directory))
                 {
-                    watcher.Path = watch;
-                }
-                else
-                {
-                    watcher.Path = Path.GetDirectoryName(watch);
-                    watcher.Filter = Path.GetFileName(watch);
+                    directory = Path.GetDirectoryName(directory);
+                    filter = Path.GetFileName(watch);
                 }
 
-                watcher.Changed += (s, e) => ExecuteConfigurationWatcher(e.ChangeType, e.FullPath, container, configurationFileName, outputFileName, verbose, publishConfiguration);
-                watcher.Renamed += (s, e) => ExecuteConfigurationWatcher(e.ChangeType, e.FullPath, container, configurationFileName, outputFileName, verbose, publishConfiguration);
-                watcher.Created += (s, e) => ExecuteConfigurationWatcher(e.ChangeType, e.FullPath, container, configurationFileName, outputFileName, verbose, publishConfiguration);
-                watcher.Deleted += (s, e) => ExecuteConfigurationWatcher(e.ChangeType, e.FullPath, container, configurationFileName, outputFileName, verbose, publishConfiguration);
-                watcher.Error += (s, e) => LoggingService.Error(e.GetException().Message);
-                watcher.EndInit();
-
-                LoggingService.WriteLine($"Starting watch mode: [{watcher.Path}]: {watcher.Filter}");
+                LoggingService.WriteLine($"Starting watch mode: [{directory}:{filter}]");
+                FileProvider = new PhysicalFileProvider(directory, ExclusionFilters.DotPrefixed | ExclusionFilters.DotPrefixed | ExclusionFilters.System);
+                Watch(container, filter, configurationFileName, outputFileName, verbose);
 
                 while (true)
                 {
@@ -126,29 +114,27 @@ namespace Paradigm.ORM.DbPublisher
             return 0;
         }
 
-        private static void ExecuteConfigurationWatcher(WatcherChangeTypes changeType, string changePath, IDependencyContainer container, string configurationFileName, string outputFileName, bool verbose, PublishConfiguration publishConfiguration)
+        private static void Watch(IDependencyContainer container, string filter, string configurationFileName, string outputFileName, bool verbose)
         {
-            lock (Locker)
+            var watcher = FileProvider.Watch(filter);
+            watcher.RegisterChangeCallback(_ => ExecuteConfigurationWatcher(container, filter, configurationFileName, outputFileName, verbose), null);
+        }
+
+        private static void ExecuteConfigurationWatcher(IDependencyContainer container, string filter, string configurationFileName, string outputFileName, bool verbose)
+        {
+            Console.Clear();
+            LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+            LoggingService.Notice($"[{DateTime.Now}] - Path Changed: ");
+            LoggingService.Notice("------------------------------------------------------------------------------------------------------");
+            var publishConfiguration = JsonConvert.DeserializeObject<PublishConfiguration>(File.ReadAllText(configurationFileName));
+
+            if (publishConfiguration == null)
             {
-                if (changePath == outputFileName)
-                {
-                    return;
-                }
-
-                Console.Clear();
-                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
-                LoggingService.Notice($"Path Changed: {changePath}");
-                LoggingService.Notice($"Change Type: {changeType}");
-                LoggingService.Notice("------------------------------------------------------------------------------------------------------");
-                publishConfiguration = JsonConvert.DeserializeObject<PublishConfiguration>(File.ReadAllText(configurationFileName));
-
-                if (publishConfiguration == null)
-                {
-                    throw new Exception("Configuration file couldn't be opened");
-                }
-
-                ExecuteConfiguration(container, configurationFileName, outputFileName, verbose, publishConfiguration);               
+                throw new Exception("Configuration file couldn't be opened");
             }
+
+            ExecuteConfiguration(container, configurationFileName, outputFileName, verbose, publishConfiguration);
+            Watch(container, filter, configurationFileName, outputFileName, verbose);
         }
 
         private static void ExecuteConfiguration(IDependencyContainer container, string configurationFileName, string outputFileName, bool verbose, PublishConfiguration publishConfiguration)

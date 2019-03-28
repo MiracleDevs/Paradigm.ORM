@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Paradigm.ORM.DbPublisher": {
-      "commandName": "Project",
-      "commandLineArgs": "-c filename"
-    }
-  }
-}
