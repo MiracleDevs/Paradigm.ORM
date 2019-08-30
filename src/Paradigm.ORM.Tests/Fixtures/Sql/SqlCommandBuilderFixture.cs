@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        private string ConnectionString => "Server=192.168.2.160;User=test;Password=test1234;Connection Timeout=3600";
+        private string ConnectionString => "Server=.;User=test;Password=test1234;Connection Timeout=3600";
 
         protected override IDatabaseConnector CreateConnector()
         {

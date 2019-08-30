@@ -3,6 +3,7 @@ using System.Data;
 using Paradigm.ORM.Data.CommandBuilders;
 using Paradigm.ORM.Data.Converters;
 using Paradigm.ORM.Data.Database.Schema;
+using Paradigm.ORM.Data.Logging;
 
 namespace Paradigm.ORM.Data.Database
 {
@@ -36,7 +37,7 @@ namespace Paradigm.ORM.Data.Database
         void Initialize(string connectionString = null);
 
         /// <summary>
-        /// Opens the conection to a database.
+        /// Opens the connection to a database.
         /// </summary>
         void Open();
 
@@ -87,7 +88,7 @@ namespace Paradigm.ORM.Data.Database
         /// The command formatter gives basic functionality to format
         /// sql queries for each database type.
         /// </remarks>
-        /// <returns>The command formatted realted to this database type.</returns>
+        /// <returns>The command formatted related to this database type.</returns>
         ICommandFormatProvider GetCommandFormatProvider();
 
         /// <summary>
@@ -130,5 +131,11 @@ namespace Paradigm.ORM.Data.Database
         /// </remarks>
         /// <returns></returns>
         IDbTypeValueRangeProvider GetDbTypeValueRangeProvider();
+
+        /// <summary>
+        /// Enables the logs.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        void EnableLogs(ILogProvider provider);
     }
 }

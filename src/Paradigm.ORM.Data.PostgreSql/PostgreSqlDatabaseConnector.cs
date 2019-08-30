@@ -11,6 +11,7 @@ using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Database.Schema;
 using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
+using Paradigm.ORM.Data.Logging;
 using Paradigm.ORM.Data.PostgreSql.Converters;
 
 namespace Paradigm.ORM.Data.PostgreSql
@@ -113,6 +114,14 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </value>
         private Stack<PostgreSqlDatabaseTransaction> Transactions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the log provider.
+        /// </summary>
+        /// <value>
+        /// The log provider.
+        /// </value>
+        internal ILogProvider LogProvider { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -193,7 +202,7 @@ namespace Paradigm.ORM.Data.PostgreSql
         }
 
         /// <summary>
-        /// Opens the conection to a database.
+        /// Opens the connection to a database.
         /// </summary>
         public void Open()
         {
@@ -295,7 +304,7 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// Get a command text format provider.
         /// </summary>
         /// <returns>
-        /// The command formatted realted to this database type.
+        /// The command formatted related to this database type.
         /// </returns>
         /// <remarks>
         /// The command formatter gives basic functionality to format
@@ -371,6 +380,17 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             this.ThrowIfNull();
             return this.ValueProvider.Value;
+        }
+
+        /// <summary>
+        /// Enables the logs.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public void EnableLogs(ILogProvider provider)
+        {
+            this.ThrowIfNull();
+            this.LogProvider = provider;
         }
 
         #endregion

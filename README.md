@@ -39,6 +39,10 @@ If you are planning to use the tools in several projects, we recommend to add th
 Change log
 ---
 
+Version `2.3.2`
+- Updated nuget dependencies.
+- Added logging provider and a default logger to log commands and command errors.
+
 Version `2.3.1`
 - Added more tests for composite partition keys for cassandra/scylla connector.
 - Disabled the batch delete for cassandra/scylla due to cql constrains.

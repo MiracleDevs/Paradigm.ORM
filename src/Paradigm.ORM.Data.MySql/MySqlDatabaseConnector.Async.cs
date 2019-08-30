@@ -9,7 +9,7 @@ namespace Paradigm.ORM.Data.MySql
         #region Public Methods
 
         /// <summary>
-        /// Opens the conection to a database.
+        /// Opens the connection to a database.
         /// </summary>
         /// <returns></returns>
         public async Task OpenAsync()

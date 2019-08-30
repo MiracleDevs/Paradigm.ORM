@@ -37,11 +37,11 @@ namespace Paradigm.ORM.Tests.Tests.Batches
             var fixture = Activator.CreateInstance(fixtureType) as CommandBatchFixtureBase;
             var commandBatch = new CommandBatch(fixture.Connector);
             var commandBuilderFactory = fixture.Connector.GetCommandBuilderFactory();
-            var tableTypeDescritor = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(BatchMock));
+            var tableTypeDescriptor = DescriptorCache.Instance.GetTableTypeDescriptor(typeof(BatchMock));
             var valueProvider = new ClassValueProvider(fixture.Connector, new List<object> { fixture.CreateMock(), fixture.CreateMock() });
 
-            commandBatch.Add(new CommandBatchStep(commandBuilderFactory.CreateInsertCommandBuilder(tableTypeDescritor).GetCommand(valueProvider)));
-            commandBatch.Add(new CommandBatchStep(commandBuilderFactory.CreateInsertCommandBuilder(tableTypeDescritor).GetCommand(valueProvider)));
+            commandBatch.Add(new CommandBatchStep(commandBuilderFactory.CreateInsertCommandBuilder(tableTypeDescriptor).GetCommand(valueProvider)));
+            commandBatch.Add(new CommandBatchStep(commandBuilderFactory.CreateInsertCommandBuilder(tableTypeDescriptor).GetCommand(valueProvider)));
 
             commandBatch.GetCommand().CommandText.Should().Be(fixture.CommandBatchText);
         }

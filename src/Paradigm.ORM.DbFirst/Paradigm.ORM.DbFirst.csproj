@@ -15,14 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="7.0.1" />
-    <PackageReference Include="Humanizer.Core" Version="2.5.1" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.6.2" />
     <PackageReference Include="Microsoft.Extensions.CommandLineUtils" Version="1.1.1" />
     <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="2.2.0" />
     <PackageReference Include="Paradigm.CodeGen.Input.Json.Models" Version="2.0.3" />
     <PackageReference Include="Paradigm.Core.Extensions" Version="2.0.5" />
     <PackageReference Include="Paradigm.Core.Mapping" Version="2.0.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
 

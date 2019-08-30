@@ -8,7 +8,6 @@ using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.MySql
 {
-
     /// <summary>
     /// Provides a way to execute commands on a MySql Server Database.
     /// </summary>
@@ -108,10 +107,12 @@ namespace Paradigm.ORM.Data.MySql
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Reader: {this.Command.CommandText}");
                 return new MySqlDatabaseReader(this.Command.ExecuteReader());
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }
@@ -128,10 +129,12 @@ namespace Paradigm.ORM.Data.MySql
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Non Query: {this.Command.CommandText}");
                 return this.Command.ExecuteNonQuery();
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }
@@ -149,10 +152,12 @@ namespace Paradigm.ORM.Data.MySql
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Scalar: {this.Command.CommandText}");
                 return this.Command.ExecuteScalar();
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }

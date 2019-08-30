@@ -5,7 +5,7 @@ namespace Paradigm.ORM.Data.Database
     public partial interface IDatabaseConnector
     {
         /// <summary>
-        /// Opens the conection to a database.
+        /// Opens the connection to a database.
         /// </summary>
         Task OpenAsync();
 

@@ -18,7 +18,7 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
         public void OneTimeSetup()
         {
             // We first connect to create the database with a connection string that does not contain the database parameter
-            // to create the database, and the we use the the conection with the database specified.
+            // to create the database, and the we use the the connection with the database specified.
             // We do this due to a bug in MySql. If we do not specify the database in the connection string we can not execute
             // the stored procedures.
             // TODO Remove this lines when the bug is fixed.

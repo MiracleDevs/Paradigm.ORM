@@ -21,10 +21,12 @@ namespace Paradigm.ORM.Data.SqlServer
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Reader: {this.Command.CommandText}");
                 return new SqlDatabaseReader(await this.Command.ExecuteReaderAsync());
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }
@@ -41,10 +43,12 @@ namespace Paradigm.ORM.Data.SqlServer
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Non Query: {this.Command.CommandText}");
                 return await this.Command.ExecuteNonQueryAsync();
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }
@@ -62,10 +66,12 @@ namespace Paradigm.ORM.Data.SqlServer
             try
             {
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
+                this.Connector.LogProvider?.Info($"Execute Scalar: {this.Command.CommandText}");
                 return await this.Command.ExecuteScalarAsync();
             }
             catch (Exception e)
             {
+                this.Connector.LogProvider?.Error(e.Message);
                 throw new DatabaseCommandException(this, e);
             }
         }
