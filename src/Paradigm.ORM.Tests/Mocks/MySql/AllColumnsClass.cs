@@ -3,7 +3,7 @@ using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.MySql
 {
-    [Table("allcolumns", Catalog = "test")]
+    [Table("all_columns", Catalog = "test")]
     public class AllColumnsClass
     {
         [Column(Type = "int")]

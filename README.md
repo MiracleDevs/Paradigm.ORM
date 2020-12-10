@@ -36,6 +36,36 @@ If you are planning to use the tools in several projects, we recommend to add th
 | DataExport | Linux x64   | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.linux-x64.zip) |
 | DataExport | OSX x64     | [Download](https://github.com/MiracleDevs/Paradigm.ORM/releases/download/v2.3.1/dataexport.osx-x64.zip) |
 
+
+
+
+Running the tests
+---
+We are working to automate the test suite, but currently, if you want to run the tests, you can create the test databases by
+going to the directory `./build/docker/` and run docker compose:
+
+```sh
+$ cd ./build/docker
+$ docker-compose up -d
+```
+
+You'll create 4 databases, one for each connection, that will be available in your localhost on the default ports:
+- mysql `3306`
+- mssql `1433`
+- pgsql `5432`
+- scylla (cassandra) `9042`
+
+Once the docker compose provisioned the containers, you'll need to wait a couple of minutes depending on your machine, while each
+container starts the database and run the initial scripts. If you run the tests just after the docker-compose up, you'll get a lot of
+timeouts or errors.
+
+After running the tests, you can shutdown the containers by:
+```sh
+$ docker-compose down
+```
+
+
+
 Change log
 ---
 

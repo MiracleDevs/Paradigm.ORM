@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlReaderMapperFixture: ReaderMapperFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
         public override string SelectStatement => @"SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate`,`TinyIntProperty`, `BoolProperty`,
                                                            `SmallintProperty`,`MediumIntProp`,`IntProp`,`BigIntProperty`,`FloatProperty`,
@@ -18,7 +18,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                                                            `TimestampProperty`,`CharProperty`,`VarcharProperty`,`TinytextProperty`,
                                                            `TextProperty`,`MediumtextProperty`,`LongtextProperty`,`BlobProperty`,`TinyBlobProperty`,
                                                            `MediumBlobProperty`,`LongBlobProperty`,`BinaryProperty`,`VarBinaryProperty`
-                                                    FROM   `test`.`allcolumns`";
+                                                    FROM   `test`.`all_columns`";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -32,13 +32,13 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `allcolumns`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `all_columns`;");
         }
 
         public override void CreateTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`allcolumns`
+                CREATE TABLE IF NOT EXISTS `test`.`all_columns`
                 (
                     `Id`                    INT             NOT NULL AUTO_INCREMENT,
                     `Name`                  NVARCHAR(200)   NOT NULL,

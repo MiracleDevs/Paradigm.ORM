@@ -3,7 +3,7 @@ using Paradigm.ORM.Data.Attributes;
 
 namespace Paradigm.ORM.Tests.Mocks.MySql
 {
-    [Table("singlekeychildtable", Catalog ="test")]
+    [Table("single_key_child_table", Catalog ="test")]
     public class SingleKeyChildTable
     {
         [Column(Type = "int")]

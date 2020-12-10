@@ -2,7 +2,7 @@
 
 namespace Paradigm.ORM.Tests.Mocks.MySql
 {
-    [Table("twoprimarykeytable", Catalog = "test")]
+    [Table("two_primary_key_table", Catalog = "test")]
     public class TwoPrimaryKeyTable : ITwoPrimaryKeyTable
     {
         [Column(Type = "int")]

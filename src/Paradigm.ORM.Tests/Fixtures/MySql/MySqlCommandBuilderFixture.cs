@@ -8,30 +8,30 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
         protected override IDatabaseConnector CreateConnector()
         {
             return new MySqlDatabaseConnector(this.ConnectionString);
         }
 
-        public override string SelectQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simpletable`";
+        public override string SelectQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simple_table`";
 
         public override string SelectWhereClause => "`Name` = \"John Doe\"";
 
-        public override string SelectOneQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simpletable` WHERE `Id`=@Id";
+        public override string SelectOneQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simple_table` WHERE `Id`=@Id";
 
-        public override string SelectWithWhereQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simpletable` WHERE " + SelectWhereClause;
+        public override string SelectWithWhereQuery => "SELECT `Id`,`Name`,`IsActive`,`Amount`,`CreatedDate` FROM `test`.`simple_table` WHERE " + SelectWhereClause;
 
-        public override string SelectWithTwoPrimaryKeysQuery => "SELECT `Id1`,`Id2`,`Name` FROM `test`.`twoprimarykeytable` WHERE `Id1`=@Id1 AND `Id2`=@Id2";
+        public override string SelectWithTwoPrimaryKeysQuery => "SELECT `Id1`,`Id2`,`Name` FROM `test`.`two_primary_key_table` WHERE `Id1`=@Id1 AND `Id2`=@Id2";
 
-        public override string InsertQuery => "INSERT INTO `test`.`simpletable` (`Name`,`IsActive`,`Amount`,`CreatedDate`) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
+        public override string InsertQuery => "INSERT INTO `test`.`simple_table` (`Name`,`IsActive`,`Amount`,`CreatedDate`) VALUES (@Name,@IsActive,@Amount,@CreatedDate)";
 
-        public override string DeleteOneEntityQuerySingleKey => "DELETE FROM `test`.`simpletable` WHERE `Id`=@Id";
+        public override string DeleteOneEntityQuerySingleKey => "DELETE FROM `test`.`simple_table` WHERE `Id`=@Id";
 
-        public override string DeleteOneEntityQueryMultipleKey => "DELETE FROM `test`.`twoprimarykeytable` WHERE `Id1`=@Id1 AND `Id2`=@Id2";
+        public override string DeleteOneEntityQueryMultipleKey => "DELETE FROM `test`.`two_primary_key_table` WHERE `Id1`=@Id1 AND `Id2`=@Id2";
 
-        public override string UpdateQuery => "UPDATE `test`.`simpletable` SET `Id`=@Id,`Name`=@Name,`IsActive`=@IsActive,`Amount`=@Amount,`CreatedDate`=@CreatedDate WHERE `Id`=@Id";
+        public override string UpdateQuery => "UPDATE `test`.`simple_table` SET `Id`=@Id,`Name`=@Name,`IsActive`=@IsActive,`Amount`=@Amount,`CreatedDate`=@CreatedDate WHERE `Id`=@Id";
 
         public override string LastInsertIdQuery => "SELECT LAST_INSERT_ID()";
 

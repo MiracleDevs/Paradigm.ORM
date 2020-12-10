@@ -2,7 +2,7 @@
 
 namespace Paradigm.ORM.Tests.Mocks.MySql.Routines
 {
-    [Routine("UpdateRoutine")]
+    [Routine("update_routine")]
     public class UpdateRoutineParameters
     {
         [Parameter("Id", "int", true)]

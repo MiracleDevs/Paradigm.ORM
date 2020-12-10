@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlStoredProcedureFixture : StoredProcedureFixtureBase
     {
-        private string ConnectionString => "Server=192.168.2.90;User Id=test;Password=test1234;Timeout=3;Database=test";
+        private string ConnectionString => "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
 
         protected override IDatabaseConnector CreateConnector()
         {

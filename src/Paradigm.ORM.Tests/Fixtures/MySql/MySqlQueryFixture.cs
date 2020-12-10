@@ -10,9 +10,9 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlQueryFixture: QueryFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
-        public override string SelectClause => "SELECT * FROM `test`.`singlekeyparenttable`";
+        public override string SelectClause => "SELECT * FROM `test`.`single_key_parent_table`";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -29,14 +29,14 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeychildtable`;");
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeyparenttable`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `single_key_child_table`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `single_key_parent_table`;");
         }
 
         public override void CreateParentTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`singlekeyparenttable`
+                CREATE TABLE IF NOT EXISTS `test`.`single_key_parent_table`
                 (
                     `Id`            INT             NOT NULL AUTO_INCREMENT,
                     `Name`          NVARCHAR(200)   NOT NULL,
@@ -54,7 +54,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
         public override void CreateChildTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`singlekeychildtable`
+                CREATE TABLE IF NOT EXISTS `test`.`single_key_child_table`
                 (
                     `Id`            INT             NOT NULL AUTO_INCREMENT,
                     `ParentId`      INT             NOT NULL,
@@ -65,7 +65,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
                     CONSTRAINT `PK_SingleKeyChildTable` PRIMARY KEY (`Id` ASC),
 	                CONSTRAINT `UX_SingleKeyChildTable_Name` UNIQUE (`Name`),
-                    CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `singlekeyparenttable` (`Id`)
+                    CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `single_key_parent_table` (`Id`)
 
                 )ENGINE=INNODB;
             ");

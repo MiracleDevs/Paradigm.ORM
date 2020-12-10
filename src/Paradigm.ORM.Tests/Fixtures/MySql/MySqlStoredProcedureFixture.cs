@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlStoredProcedureFixture : StoredProcedureFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=test;Password=test1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 
         protected override IDatabaseConnector CreateConnector()
         {
@@ -24,14 +24,14 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
         public override void DropDatabase()
         {
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeychildtable`;");
-            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `singlekeyparenttable`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `single_key_child_table`;");
+            this.Connector.ExecuteNonQuery("DROP TABLE IF EXISTS `single_key_parent_table`;");
         }
 
         public override void CreateParentTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`singlekeyparenttable`
+                CREATE TABLE IF NOT EXISTS `test`.`single_key_parent_table`
                 (
                     `Id`            INT             NOT NULL AUTO_INCREMENT,
                     `Name`          NVARCHAR(200)   NOT NULL,
@@ -49,7 +49,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
         public override void CreateChildTable()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE TABLE IF NOT EXISTS `test`.`singlekeychildtable`
+                CREATE TABLE IF NOT EXISTS `test`.`single_key_child_table`
                 (
                     `Id`            INT             NOT NULL AUTO_INCREMENT,
                     `ParentId`      INT             NOT NULL,
@@ -60,7 +60,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 
                     CONSTRAINT `PK_SingleKeyChildTable` PRIMARY KEY (`Id` ASC),
 	                CONSTRAINT `UX_SingleKeyChildTable_Name` UNIQUE (`Name`),
-                    CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `singlekeyparenttable` (`Id`)
+                    CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `single_key_parent_table` (`Id`)
 
                 )ENGINE=INNODB;
             ");
@@ -129,62 +129,62 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
         public override void CreateStoredProcedures()
         {
             this.Connector.ExecuteNonQuery(@"
-                CREATE PROCEDURE `SearchParentTable`
+                CREATE PROCEDURE `search_parent_table`
                 (
                     `ParentName`        NVARCHAR(200),
                     `Active`            TINYINT
                 )
                 BEGIN
                     SELECT *
-                    FROM `test`.`singlekeyparenttable` t
+                    FROM `test`.`single_key_parent_table` t
                     WHERE t.`Name` like concat('%', `ParentName`, '%')
                           AND t.`IsActive` = `Active`;
                 END;");
 
             this.Connector.ExecuteNonQuery(@"
-                CREATE PROCEDURE `UpdateRoutine`
+                CREATE PROCEDURE `update_routine`
                 (
 	                `Id`        INT
                 )
                 BEGIN
-	                UPDATE `SingleKeyParentTable` AS skpt
+	                UPDATE `single_key_parent_table` AS skpt
 	                SET skpt.Name = 'Test Parent ChangedNameTest'
 	                WHERE skpt.Id = Id;
                 END");
 
             this.Connector.ExecuteNonQuery(@"
-                CREATE PROCEDURE `SearchParentsAndChilds`
+                CREATE PROCEDURE `search_parents_and_childs`
                 (
 	                `ParentName`        NVARCHAR(200),
 	                `Active`            TINYINT
                 )
                 BEGIN
-                SELECT * FROM `SingleKeyParentTable` AS skpt
+                SELECT * FROM `single_key_parent_table` AS skpt
                 WHERE skpt.Name like concat('%', ParentName, '%') 
 	                  AND skpt.IsActive = Active;
-                SELECT * FROM `SingleKeyChildTable` AS skct
+                SELECT * FROM `single_key_child_table` AS skct
                 WHERE skct.Name like concat('%', ParentName, '%') 
                       AND skct.IsActive = Active;
                 END");
 
             this.Connector.ExecuteNonQuery(@"
-               CREATE PROCEDURE `GetTotalAmount`
+               CREATE PROCEDURE `get_total_amount`
                (
 	               `Active`	TINYINT
                )
                BEGIN
 	               SELECT SUM(skpt.Amount)
-	               FROM `SingleKeyParentTable` as skpt
+	               FROM `single_key_parent_table` as skpt
                    WHERE skpt.IsActive = Active;
                END");
         }
 
         public override void DeleteStoredProcedures()
         {
-            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `SearchParentTable`;");
-            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `UpdateRoutine`;");
-            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `SearchParentsAndChilds`;");
-            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `GetTotalAmount`;");
+            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `search_parent_table`;");
+            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `update_routine`;");
+            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `search_parents_and_childs`;");
+            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `get_total_amount`;");
         }
     }
 }

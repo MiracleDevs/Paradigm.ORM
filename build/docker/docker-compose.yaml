@@ -1,0 +1,54 @@
+version: "3.8"
+services:
+  paradigm-mysql:
+    image: paradigm-mysql
+    container_name: paradigm-mysql
+    build:
+      context: ./
+      dockerfile: ./mysql.dockerfile
+    restart: "no"
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Paradigm_Test_1234
+      - MYSQL_DATABASE=test
+
+  paradigm-mssql:
+    image: paradigm-mssql
+    container_name: paradigm-mssql
+    build:
+      context: ./
+      dockerfile: ./mssql.dockerfile
+    restart: "no"
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Paradigm_Test_1234
+      - MSSQL_PID=Developer
+
+  paradigm-pgsql:
+    image: paradigm-pgsql
+    container_name: paradigm-pgsql
+    build:
+      context: ./
+      dockerfile: ./pgsql.dockerfile
+    restart: "no"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=Paradigm_Test_1234
+      - POSTGRES_DB=test
+      - TZ=GMT+3
+      - PGTZ=GMT+3
+  paradigm-scylla:
+    image: paradigm-scylla
+    container_name: paradigm-scylla
+    build:
+      context: ./
+      dockerfile: ./scylla.dockerfile
+    restart: "no"
+    environment:
+      - CASSANDRA_KEYSPACE=test
+    ports:
+      - "9042:9042"

@@ -2,7 +2,7 @@
 
 namespace Paradigm.ORM.Tests.Mocks.MySql.Routines
 {
-    [Routine("SearchParentTable")]
+    [Routine("search_parent_table")]
     public class SearchParentTableParameters
     {
         [Parameter("ParentName", "varchar", true), Size(200)]
