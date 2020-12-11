@@ -1,6 +1,6 @@
 ﻿using System;
 using Paradigm.ORM.Data.Database;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace Paradigm.ORM.Data.MySql
 {

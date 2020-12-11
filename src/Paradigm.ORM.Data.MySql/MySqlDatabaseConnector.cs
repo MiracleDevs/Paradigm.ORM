@@ -11,7 +11,7 @@ using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.MySql.CommandBuilders;
 using Paradigm.ORM.Data.MySql.Converters;
 using Paradigm.ORM.Data.MySql.Schema;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Paradigm.ORM.Data.Logging;
 
 namespace Paradigm.ORM.Data.MySql

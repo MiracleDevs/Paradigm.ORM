@@ -6,7 +6,7 @@
         <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
         <Copyright>Miracle Devs</Copyright>
         <Description>Paradigm ORM MySql Connector library.</Description>
-        <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
         <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MySqlConnector" Version="0.56.0" />
+        <PackageReference Include="MySqlConnector" Version="1.2.0" />
     </ItemGroup>
 
     <ItemGroup>

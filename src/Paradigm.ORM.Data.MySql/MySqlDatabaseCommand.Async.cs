@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Paradigm.ORM.Data.Database;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 using Paradigm.ORM.Data.Exceptions;
 
 namespace Paradigm.ORM.Data.MySql
