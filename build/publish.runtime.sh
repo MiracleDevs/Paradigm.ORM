@@ -27,7 +27,7 @@ block "$index - PUBLISH AND ZIP $tool FOR $C_CYAN $runtime $C_TRANSPARENT"
 
 execute "rm -rf $deployDir/$runtime/"
 
-execute "dotnet publish $toolProject -c Release -f net5.0 -r $runtime -o ../$deployDir/$runtime/ -v q"
+execute "dotnet publish $toolProject -c Release -f net5.0 -r $runtime -o $deployDir/$runtime/ -v q"
 
 execute "rm -rf $distDir/$zipFile"
 
