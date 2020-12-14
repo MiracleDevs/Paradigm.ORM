@@ -3,11 +3,11 @@
 
 | Library    | Nuget | Install
 |-|-|-|
-| Data       | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data/)            | `Install-Package Paradigm.ORM.Data` |
-| MySql      | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.MySql/)      | `Install-Package Paradigm.ORM.Data.MySql` |
-| PostgreSQL | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.PostgreSql/) | `Install-Package Paradigm.ORM.Data.PostgreSql` |
-| SQL Server | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.SqlServer/)  | `Install-Package Paradigm.ORM.Data.SqlServer` |
-| Cassandra | [![NuGet](https://img.shields.io/nuget/v/Nuget.Core.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.Cassandra/)  | `Install-Package Paradigm.ORM.Data.Cassandra` |
+| Data       | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data/)            | `Install-Package Paradigm.ORM.Data` |
+| MySql      | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.MySql.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.MySql/)      | `Install-Package Paradigm.ORM.Data.MySql` |
+| PostgreSQL | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.PostgreSql.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.PostgreSql/) | `Install-Package Paradigm.ORM.Data.PostgreSql` |
+| SQL Server | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.SqlServer.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.SqlServer/)  | `Install-Package Paradigm.ORM.Data.SqlServer` |
+| Cassandra | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.Cassandra.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.Cassandra/)  | `Install-Package Paradigm.ORM.Data.Cassandra` |
 
 # Paradigm.ORM
 .NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources.
@@ -68,6 +68,14 @@ $ docker-compose down
 
 Change log
 ---
+
+Version `2.4.0`
+- Updated nuget dependencies.
+- Updated project version to use .NET Standard 2.1.
+- Updated console projects to use .NET 5.0.
+- Fixed tests to use the latest fluent assertion extensions.
+- Added docker files to create test databases.
+- Merged pull request from @bgrainger to update [MySql connector](https://github.com/mysql-net/MySqlConnector) to the last version.
 
 Version `2.3.2`
 - Updated nuget dependencies.
