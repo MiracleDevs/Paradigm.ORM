@@ -1,7 +1,0 @@
-language: csharp
-dist: trusty
-dotnet: 2.1.300
-install:
-- dotnet restore ./src/Paradigm.ORM.sln
-script:
-- dotnet build ./src/Paradigm.ORM.sln

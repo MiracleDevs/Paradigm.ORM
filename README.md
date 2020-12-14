@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MiracleDevs/Paradigm.ORM.svg?branch=master)](https://travis-ci.org/MiracleDevs/Paradigm.ORM)
+[![Build Status](https://github.com/MiracleDevs/Paradigm.ORM/workflows/Paradigm%20ORM/badge.svg)](https://github.com/MiracleDevs/Paradigm.ORM/actions)
 
 
 | Library    | Nuget | Install
