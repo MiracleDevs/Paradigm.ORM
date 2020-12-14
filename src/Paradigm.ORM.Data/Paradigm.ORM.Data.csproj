@@ -8,8 +8,8 @@
         <Description>Paradigm ORM data library.</Description>
         <PostBuildEvent></PostBuildEvent>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-        <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
-        <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <Authors>Miracle Devs</Authors>
@@ -22,4 +22,9 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
         <PackageReference Include="System.Data.Common" Version="4.3.0" />
     </ItemGroup>
+
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="" />
+    </ItemGroup>
+
 </Project>

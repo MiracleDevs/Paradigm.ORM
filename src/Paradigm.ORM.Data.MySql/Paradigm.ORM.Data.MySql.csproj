@@ -7,7 +7,7 @@
         <Copyright>Miracle Devs</Copyright>
         <Description>Paradigm ORM MySql Connector library.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <Authors>Miracle Devs</Authors>
@@ -22,6 +22,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

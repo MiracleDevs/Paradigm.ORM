@@ -8,9 +8,9 @@
         <Product>Paradigm.ORM</Product>
         <Description>Paradigm ORM Cassandra Connector library.</Description>
         <Copyright>Miracle Devs</Copyright>
-        <PackageLicenseUrl>https://github.com/MiracleDevs/Paradigm.ORM/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
-        <PackageIconUrl>https://avatars2.githubusercontent.com/u/8192926</PackageIconUrl>
+        <PackageIcon>icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
@@ -24,6 +24,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Paradigm.ORM.Data\Paradigm.ORM.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>
