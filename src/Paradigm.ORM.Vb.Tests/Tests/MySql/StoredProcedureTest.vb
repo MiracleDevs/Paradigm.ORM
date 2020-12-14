@@ -14,7 +14,7 @@ Namespace Tests.MySql
         <TestInitialize()>
         Public Sub Initialize()
 
-            Connector = New MySqlDatabaseConnector("Server=localhost;Database=Test;User=test;Password=Paradigm_Test_1234;Connection Timeout=3600")
+            Connector = New MySqlDatabaseConnector("Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600")
             Connector.Open()
 
             Connector.ExecuteNonQuery("
