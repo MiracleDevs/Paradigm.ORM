@@ -73,8 +73,8 @@ Namespace Tests.MySql
 
             zoneDatabaseAccess.Insert(newZone)
 
-            Dim parameters = New SearchZonesParameters With{ .Keyword = "z" }
-            Dim procedure = new SearchZonesStoredProcedure(Connector)
+            Dim parameters = New SearchZonesParameters With {.Keyword = "z"}
+            Dim procedure = New SearchZonesStoredProcedure(Connector)
 
             Dim zones = procedure.Execute(parameters)
 
@@ -82,4 +82,4 @@ Namespace Tests.MySql
         End Sub
 
     End Class
-End NameSpace
+End Namespace
