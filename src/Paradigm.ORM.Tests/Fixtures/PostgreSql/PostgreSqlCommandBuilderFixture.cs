@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlCommandBuilderFixture : CommandBuilderFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
+        private string ConnectionString => ConnectionStrings.PSql;
 
         protected override IDatabaseConnector CreateConnector()
         {

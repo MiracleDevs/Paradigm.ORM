@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlCrudCommandFixture: CrudCommandFixtureBase
     {
-        private string ConnectionString => "Contact Points=localhost;Port=9042;Default Keyspace=test;Username=root";
+        private string ConnectionString => ConnectionStrings.Cql;
 
         public int Ids { get; set; }
 

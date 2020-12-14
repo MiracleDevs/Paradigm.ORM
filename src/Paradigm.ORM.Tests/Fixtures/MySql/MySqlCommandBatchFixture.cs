@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlCommandBatchFixture: CommandBatchFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => ConnectionStrings.MySql;
 
         public override string CommandBatchText => "INSERT INTO `batch` (`id`,`name`,`mobile`,`mobile_brand`,`mobile_number`) VALUES (@p0,@p1,@p2,@p3,@p4);INSERT INTO `batch` (`id`,`name`,`mobile`,`mobile_brand`,`mobile_number`) VALUES (@p5,@p6,@p7,@p8,@p9);";
 

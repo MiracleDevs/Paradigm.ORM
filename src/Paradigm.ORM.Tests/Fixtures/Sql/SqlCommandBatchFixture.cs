@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlCommandBatchFixture: CommandBatchFixtureBase
     {
-        private static string ConnectionString => "Server=localhost;User=sa;Password=Paradigm_Test_1234;Connection Timeout=3600";
+        private static string ConnectionString => ConnectionStrings.MsSql;
 
         public override string CommandBatchText => "INSERT INTO [batch] ([id],[name],[mobile],[mobile_brand],[mobile_number]) VALUES (@p0,@p1,@p2,@p3,@p4);INSERT INTO [batch] ([id],[name],[mobile],[mobile_brand],[mobile_number]) VALUES (@p5,@p6,@p7,@p8,@p9);";
 

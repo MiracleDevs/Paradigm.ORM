@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Paradigm.ORM.Data.Database;
 using Paradigm.ORM.Data.Exceptions;
@@ -7,41 +8,34 @@ using Paradigm.ORM.Data.SqlServer;
 using NUnit.Framework;
 using Paradigm.ORM.Data.MySql;
 using Paradigm.ORM.Data.Cassandra;
+using Paradigm.ORM.Tests.Fixtures;
 
 namespace Paradigm.ORM.Tests.Tests
 {
     [TestFixture]
     public class DatabaseConnectorTest
     {
-        private const string MySqlConnectionString = "Server=localhost;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600";
-
-        private const string PostgreSqlConnectionString = "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3";
-
-        private const string SqlConnectionString = "Server=localhost;User=sa;Password=Paradigm_Test_1234;Connection Timeout=3600";
-
-        private const string CqlConnectionString = "Contact Points=localhost;Port=9042;Default Keyspace=test;Username=root";
-
         [Order(1)]
-        [TestCase(typeof(MySqlDatabaseConnector))]
-        [TestCase(typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(typeof(SqlDatabaseConnector))]
-        [TestCase(typeof(CqlDatabaseConnector))]
-        public void ShouldCreateWithConnectionString(Type connectorType)
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
+        public void ShouldCreateWithConnectionString(string connectionString, Type connectorType)
         {
-            using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
+            using (var connector = Activator.CreateInstance(connectorType, connectionString) as IDatabaseConnector)
             {
                 connector.Should().NotBeNull();
             }
         }
 
         [Order(2)]
-        [TestCase(typeof(MySqlDatabaseConnector))]
-        [TestCase(typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(typeof(SqlDatabaseConnector))]
-        [TestCase(typeof(CqlDatabaseConnector))]
-        public void ShouldCreateWithConnectionStringAndBeInitialized(Type connectorType)
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
+        public void ShouldCreateWithConnectionStringAndBeInitialized(string connectionString, Type connectorType)
         {
-            using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
+            using (var connector = Activator.CreateInstance(connectorType, connectionString) as IDatabaseConnector)
             {
                 connector.Should().NotBeNull();
 
@@ -79,17 +73,17 @@ namespace Paradigm.ORM.Tests.Tests
         }
 
         [Order(4)]
-        [TestCase(typeof(MySqlDatabaseConnector))]
-        [TestCase(typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(typeof(SqlDatabaseConnector))]
-        [TestCase(typeof(CqlDatabaseConnector))]
-        public void ShouldInitialize(Type connectorType)
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
+        public void ShouldInitialize(string connectionString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType) as IDatabaseConnector)
             {
                 connector.Should().NotBeNull();
 
-                connector.Invoking(x => x.Initialize("")).Should().NotThrow();
+                connector.Invoking(x => x.Initialize(connectionString)).Should().NotThrow();
                 connector.IsOpen().Should().BeFalse();
 
                 connector.GetCommandBuilderFactory().Should().NotBeNull();
@@ -102,26 +96,26 @@ namespace Paradigm.ORM.Tests.Tests
         }
 
         [Order(5)]
-        [TestCase(typeof(MySqlDatabaseConnector))]
-        [TestCase(typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(typeof(SqlDatabaseConnector))]
-        [TestCase(typeof(CqlDatabaseConnector))]
-        public void ShouldThrowIfConnectionIsntPossible(Type connectorType)
+        [TestCase("Server=1.1.1.1", typeof(MySqlDatabaseConnector))]
+        [TestCase("Server=1.1.1.1", typeof(PostgreSqlDatabaseConnector))]
+        [TestCase("Server=1.1.1.1", typeof(SqlDatabaseConnector))]
+        [TestCase("Contact Points=1.1.1.1", typeof(CqlDatabaseConnector))]
+        public void ShouldThrowIfConnectionIsntPossible(string connectionString, Type connectorType)
         {
-            using (var connector = Activator.CreateInstance(connectorType, "") as IDatabaseConnector)
+            using (var connector = Activator.CreateInstance(connectorType, connectionString) as IDatabaseConnector)
             {
                 connector.Should().NotBeNull();
 
                 connector.Invoking(x => x.Open()).Should().Throw<OrmCanNotOpenConnectionException>();
-                connector.Awaiting(async x => await x.OpenAsync()).Should().Throw<OrmCanNotOpenConnectionException>();
+                connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.OpenAsync())).Should().Throw<OrmCanNotOpenConnectionException>();
             }
         }
 
         [Order(6)]
-        [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
-        [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
-        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
         public void ShouldConnectAndClose(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)
@@ -131,16 +125,16 @@ namespace Paradigm.ORM.Tests.Tests
                 connector.Invoking(x => x.Open()).Should().NotThrow<OrmCanNotOpenConnectionException>();
                 connector.Invoking(x => x.Close()).Should().NotThrow<OrmCanNotCloseConnectionException>();
 
-                connector.Awaiting(async x => await x.OpenAsync()).Should().NotThrow<OrmCanNotOpenConnectionException>();
-                connector.Awaiting(async x => await x.CloseAsync()).Should().NotThrow<OrmCanNotCloseConnectionException>();
+                connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.OpenAsync())).Should().NotThrow<OrmCanNotOpenConnectionException>();
+                connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.CloseAsync())).Should().NotThrow<OrmCanNotCloseConnectionException>();
             }
         }
 
         [Order(7)]
-        [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
-        [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
-        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
         public void ShouldCreateACommand(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)
@@ -159,10 +153,10 @@ namespace Paradigm.ORM.Tests.Tests
         }
 
         [Order(8)]
-        [TestCase(MySqlConnectionString, typeof(MySqlDatabaseConnector))]
-        [TestCase(PostgreSqlConnectionString, typeof(PostgreSqlDatabaseConnector))]
-        [TestCase(SqlConnectionString, typeof(SqlDatabaseConnector))]
-        [TestCase(CqlConnectionString, typeof(CqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MySql, typeof(MySqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
+        [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
         public void ShouldCreateATransaction(string connectorString, Type connectorType)
         {
             using (var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector)

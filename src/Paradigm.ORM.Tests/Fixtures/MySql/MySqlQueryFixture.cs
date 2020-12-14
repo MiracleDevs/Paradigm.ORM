@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 {
     public class MySqlQueryFixture: QueryFixtureBase
     {
-        private string ConnectionString => "Server=localhost;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
+        private string ConnectionString => ConnectionStrings.MySql;
 
         public override string SelectClause => "SELECT * FROM `test`.`single_key_parent_table`";
 

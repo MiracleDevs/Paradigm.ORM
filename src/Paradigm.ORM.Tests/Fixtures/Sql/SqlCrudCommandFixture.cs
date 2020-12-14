@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
 {
     public class SqlCrudCommandFixture: CrudCommandFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User=sa;Password=Paradigm_Test_1234;Connection Timeout=3600";
+        private string ConnectionString => ConnectionStrings.MsSql;
 
         public int Ids { get; set; }
 

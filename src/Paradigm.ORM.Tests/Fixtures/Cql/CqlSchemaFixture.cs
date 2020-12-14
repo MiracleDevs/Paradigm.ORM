@@ -8,7 +8,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlSchemaFixture: IDisposable
     {
-        protected string ConnectionString => "Contact Points=localhost;Port=9042;Default Keyspace=test;Username=root";
+        protected string ConnectionString => ConnectionStrings.Cql;
 
         public CqlDatabaseConnector Connector { get; }
 

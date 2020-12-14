@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <Version>2.3.2</Version>
         <Authors>Miracle Devs</Authors>
         <Company>Miracle Devs</Company>
@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CassandraCSharpDriver" Version="3.11.0" />
+        <PackageReference Include="CassandraCSharpDriver" Version="3.16.1" />
         <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
         <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
     </ItemGroup>

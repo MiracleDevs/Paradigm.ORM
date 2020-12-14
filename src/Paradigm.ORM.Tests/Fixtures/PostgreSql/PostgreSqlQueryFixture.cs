@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlQueryFixture: QueryFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
+        private string ConnectionString => ConnectionStrings.PSql;
 
         public override string SelectClause => "SELECT * FROM \"SingleKeyParentTable\"";
 

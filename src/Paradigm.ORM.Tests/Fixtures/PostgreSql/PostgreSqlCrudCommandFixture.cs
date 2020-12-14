@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlCrudCommandFixture: CrudCommandFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
+        private string ConnectionString => ConnectionStrings.PSql;
 
         public int Ids { get; set; }
 

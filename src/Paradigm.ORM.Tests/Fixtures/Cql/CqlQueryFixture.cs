@@ -10,7 +10,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlQueryFixture : QueryFixtureBase
     {
-        private string ConnectionString => "Contact Points=localhost;Port=9042;Default Keyspace=test;Username=root";
+        private string ConnectionString => ConnectionStrings.Cql;
 
         public override string SelectClause => @"SELECT * FROM ""test"".""singlekeyparenttable""";
 

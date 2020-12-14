@@ -13,7 +13,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 {
     public class CqlReaderMapperFixture : ReaderMapperFixtureBase
     {
-        private string ConnectionString => "Contact Points=localhost;Port=9042;Default Keyspace=test;Username=root";
+        private string ConnectionString => ConnectionStrings.Cql;
 
         public override string SelectStatement => @"SELECT * FROM ""test"".""allcolumns""";
 

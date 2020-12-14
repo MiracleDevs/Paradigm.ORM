@@ -6,7 +6,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
 {
     public class PostgreSqlCommandBatchFixture: CommandBatchFixtureBase
     {
-        private string ConnectionString => "Server=localhost;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
+        private string ConnectionString => ConnectionStrings.PSql;
 
         public override string CommandBatchText => @"INSERT INTO ""batch"" (""id"",""name"",""mobile"",""mobile_brand"",""mobile_number"") VALUES (@p0,@p1,@p2,@p3,@p4);INSERT INTO ""batch"" (""id"",""name"",""mobile"",""mobile_brand"",""mobile_number"") VALUES (@p5,@p6,@p7,@p8,@p9);";
 
