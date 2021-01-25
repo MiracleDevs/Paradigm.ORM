@@ -15,7 +15,7 @@ namespace Paradigm.ORM.Data.Querying
     /// A query object encapsulates all the steps in a data reader operation.
     /// Basically contains a table type descriptor, a command and a database reader mapper.
     /// The basic idea behind a query is to facilitate the creation of queries, and the ability
-    /// to reuse them if neccessary.
+    /// to reuse them if necessary.
     /// The difference between a query and a custom query, is that a custom query does not uses
     /// the default select command, but allows the user to provide a custom select to the database.
     /// But even with a custom query string, the custom query requires the table type descriptor to
@@ -89,27 +89,25 @@ namespace Paradigm.ORM.Data.Querying
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
 
-            using (var command = this.Connector.CreateCommand())
+            using var command = this.Connector.CreateCommand();
+            if (parameters != null)
             {
-                if (parameters != null)
+                for (var index = 0; index < parameters.Length; index++)
                 {
-                    for (var index = 0; index < parameters.Length; index++)
-                    {
-                        var oldName = $"@{index + 1}";
-                        var newName = formatProvider.GetParameterName($"p{(index + 1)}");
+                    var oldName = $"@{index + 1}";
+                    var newName = formatProvider.GetParameterName($"p{(index + 1)}");
 
-                        builder.Replace(oldName, newName);
+                    builder.Replace(oldName, newName);
 
-                        var parameter = parameters[index];
-                        var type = parameter == null ? typeof(object) : parameter.GetType();
-                        var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
-                        commandParameter.Value = parameter;
-                    }
+                    var parameter = parameters[index];
+                    var type = parameter == null ? typeof(object) : parameter.GetType();
+                    var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
+                    commandParameter.Value = parameter;
                 }
-
-                command.CommandText = builder.ToString();
-                return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
             }
+
+            command.CommandText = builder.ToString();
+            return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
         }
 
         #endregion

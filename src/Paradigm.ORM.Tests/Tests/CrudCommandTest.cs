@@ -235,12 +235,10 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 var selectCommand = selectCommandBuilder.GetCommand();
 
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
-                    var results = mapper.Map(reader);
-                    results.Should().NotBeNull().And.HaveCount(0);
-                }
+                using var reader = selectCommand.ExecuteReader();
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetParentDescriptor());
+                var results = mapper.Map(reader);
+                results.Should().NotBeNull().And.HaveCount(0);
             }
 
             fixture.DropDatabase();
@@ -456,12 +454,10 @@ namespace Paradigm.ORM.Tests.Tests
             {
                 var selectCommand = selectCommandBuilder.GetCommand();
 
-                using (var reader = selectCommand.ExecuteReader())
-                {
-                    var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetMultipleKeyDescriptor());
-                    var results = mapper.Map(reader);
-                    results.Should().NotBeNull().And.HaveCount(0);
-                }
+                using var reader = selectCommand.ExecuteReader();
+                var mapper = new DatabaseReaderMapper(fixture.Connector, fixture.GetMultipleKeyDescriptor());
+                var results = mapper.Map(reader);
+                results.Should().NotBeNull().And.HaveCount(0);
             }
 
             fixture.DropDatabase();

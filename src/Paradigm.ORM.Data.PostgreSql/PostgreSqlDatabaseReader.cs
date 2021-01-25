@@ -332,25 +332,21 @@ namespace Paradigm.ORM.Data.PostgreSql
             var buffer = new byte[bufferSize];
             long readPointer = 0;
 
-            using (var memoryStream = new MemoryStream())
+            using var memoryStream = new MemoryStream();
+            using var binaryWriter = new BinaryWriter(memoryStream);
+            long readAmount;
+
+            do
             {
-                using (var binaryWriter = new BinaryWriter(memoryStream))
-                {
-                    long readAmount;
+                readAmount = this.Reader.GetBytes(index, readPointer, buffer, 0, bufferSize);
+                readPointer += readAmount;
 
-                    do
-                    {
-                        readAmount = this.Reader.GetBytes(index, readPointer, buffer, 0, bufferSize);
-                        readPointer += readAmount;
+                binaryWriter.Write(buffer);
+                binaryWriter.Flush();
 
-                        binaryWriter.Write(buffer);
-                        binaryWriter.Flush();
+            } while (readAmount == bufferSize);
 
-                    } while (readAmount == bufferSize);
-
-                    return memoryStream.ToArray();
-                }
-            }
+            return memoryStream.ToArray();
         }
 
         /// <summary>

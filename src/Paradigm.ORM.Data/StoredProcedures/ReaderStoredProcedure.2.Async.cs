@@ -20,21 +20,17 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public async Task<Tuple<List<TResult1>, List<TResult2>>> ExecuteAsync(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
 
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    var result1 = await this.Mapper1.MapAsync(reader);
-                    await reader.NextResultAsync();
-                    var result2 = await this.Mapper2.MapAsync(reader);
+            using var reader = await command.ExecuteReaderAsync();
+            var result1 = await this.Mapper1.MapAsync(reader);
+            await reader.NextResultAsync();
+            var result2 = await this.Mapper2.MapAsync(reader);
 
-                    return new Tuple<List<TResult1>, List<TResult2>>(result1, result2);
-                }
-            }
+            return new Tuple<List<TResult1>, List<TResult2>>(result1, result2);
         }
 
         #endregion

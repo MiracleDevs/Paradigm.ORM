@@ -47,27 +47,24 @@ namespace Paradigm.ORM.DataExport.Export
                 if (this.Verbose)
                     this.LoggingService.Notice($"\nTable {tableName}");
 
-                using (var tableData = new TableData(this.Configuration.SourceDatabase.DatabaseName, tableName, this.SourceDatabase))
+                using var tableData = new TableData(this.Configuration.SourceDatabase.DatabaseName, tableName, this.SourceDatabase);
+                if (this.Verbose)
                 {
-                    if (this.Verbose)
-                    {
-                        this.LoggingService.WriteLine("Table schema extracted.");
-                        this.LoggingService.WriteLine($"Columns: [{tableData.TableDescriptor.AllColumns.Count}]");
-                        this.LoggingService.WriteLine($"Primary Keys: [{string.Join(",", tableData.TableDescriptor.PrimaryKeyColumns.Select(x => x.ColumnName))}]");
-                        this.LoggingService.WriteLine("Reading data...");
-                    }
-
-                    var valueProvider = tableData.Read();
-
-                    if (this.Verbose)
-                        this.LoggingService.WriteLine("Data reading successfull.");
-
-                    this.ProcessData(tableData, valueProvider);
-
-                    if (this.Verbose)
-                        this.LoggingService.WriteLine("Data export successfull.");
-
+                    this.LoggingService.WriteLine("Table schema extracted.");
+                    this.LoggingService.WriteLine($"Columns: [{tableData.TableDescriptor.AllColumns.Count}]");
+                    this.LoggingService.WriteLine($"Primary Keys: [{string.Join(",", tableData.TableDescriptor.PrimaryKeyColumns.Select(x => x.ColumnName))}]");
+                    this.LoggingService.WriteLine("Reading data...");
                 }
+
+                var valueProvider = tableData.Read();
+
+                if (this.Verbose)
+                    this.LoggingService.WriteLine("Data reading successfull.");
+
+                this.ProcessData(tableData, valueProvider);
+
+                if (this.Verbose)
+                    this.LoggingService.WriteLine("Data export successfull.");
             }
 
             this.FinishExport();

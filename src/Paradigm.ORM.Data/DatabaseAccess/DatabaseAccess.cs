@@ -111,18 +111,15 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual object SelectOne(params object[] ids)
         {
-            using (var command = this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids))
-            {
-                // 1. get current entity.
-                var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
+            using var command = this.CommandBuilderManager.SelectOneCommandBuilder.GetCommand(ids);
+            // 1. get current entity.
+            var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
 
-                // 2. get related entities.
-                foreach (var x in this.NavigationDatabaseAccesses)
-                    x.Select(entities);
+            // 2. get related entities.
+            foreach (var x in this.NavigationDatabaseAccesses)
+                x.Select(entities);
 
-                return entities.FirstOrDefault();
-            }
-
+            return entities.FirstOrDefault();
         }
 
         /// <summary>
@@ -149,17 +146,15 @@ namespace Paradigm.ORM.Data.DatabaseAccess
         /// </returns>
         public virtual List<object> Select(string whereClause, params object[] parameters)
         {
-            using (var command = this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters))
-            {
-                // 1. get the current entities.
-                var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
+            using var command = this.CommandBuilderManager.SelectCommandBuilder.GetCommand(whereClause, parameters);
+            // 1. get the current entities.
+            var entities = this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
 
-                // 2. get related entities.
-                foreach (var x in this.NavigationDatabaseAccesses)
-                    x.Select(entities);
+            // 2. get related entities.
+            foreach (var x in this.NavigationDatabaseAccesses)
+                x.Select(entities);
 
-                return entities;
-            }
+            return entities;
         }
 
         /// <summary>
@@ -220,10 +215,8 @@ namespace Paradigm.ORM.Data.DatabaseAccess
                     {
                         var entity = valueProvider.CurrentEntity;
 
-                        using (var command = this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand())
-                        {
-                            batchManager.Add(new CommandBatchStep(command, reader => this.SetEntityId(entity, reader)));
-                        }
+                        using var command = this.CommandBuilderManager.LastInsertIdCommandBuilder.GetCommand();
+                        batchManager.Add(new CommandBatchStep(command, reader => this.SetEntityId(entity, reader)));
                     }
                 }
 
@@ -283,10 +276,8 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 while (valueProvider.MoveNext())
                 {
-                    using (var command = this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider))
-                    {
-                        batchManager.Add(new CommandBatchStep(command));
-                    }
+                    using var command = this.CommandBuilderManager.UpdateCommandBuilder.GetCommand(valueProvider);
+                    batchManager.Add(new CommandBatchStep(command));
                 }
 
                 batchManager.Execute();
@@ -344,10 +335,8 @@ namespace Paradigm.ORM.Data.DatabaseAccess
 
                 while (valueProvider.MoveNext())
                 {
-                    using (var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider))
-                    {
-                        batchManager.Add(new CommandBatchStep(command));
-                    }
+                    using var command = this.CommandBuilderManager.DeleteCommandBuilder.GetCommand(valueProvider);
+                    batchManager.Add(new CommandBatchStep(command));
                 }
 
                 batchManager.Execute();

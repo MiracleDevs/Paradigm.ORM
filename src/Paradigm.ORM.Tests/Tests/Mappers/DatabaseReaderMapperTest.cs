@@ -83,7 +83,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             fixture.CreateTable();
 
             var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
-            databaseAccess.Insert(new object[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
+            databaseAccess.Insert(new[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
 
             fixture.Connector.ExecuteReader(fixture.SelectStatement, reader =>
             {

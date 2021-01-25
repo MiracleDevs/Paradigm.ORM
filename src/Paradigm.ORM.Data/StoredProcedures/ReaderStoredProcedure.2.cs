@@ -32,7 +32,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         private IDatabaseReaderMapper<TResult1> Mapper1 { get; set; }
 
         /// <summary>
-        /// Gets or sets the secund result mapper.
+        /// Gets or sets the second result mapper.
         /// </summary>
         private IDatabaseReaderMapper<TResult2> Mapper2 { get; set; }
 
@@ -114,21 +114,17 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public Tuple<List<TResult1>, List<TResult2>> Execute(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
 
-                using (var reader = command.ExecuteReader())
-                {
-                    var result1 = this.Mapper1.Map(reader);
-                    reader.NextResult();
-                    var result2 = this.Mapper2.Map(reader);
+            using var reader = command.ExecuteReader();
+            var result1 = this.Mapper1.Map(reader);
+            reader.NextResult();
+            var result2 = this.Mapper2.Map(reader);
 
-                    return new Tuple<List<TResult1>, List<TResult2>>(result1, result2);
-                }
-            }
+            return new Tuple<List<TResult1>, List<TResult2>>(result1, result2);
         }
 
         #endregion
@@ -140,8 +136,8 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector));
-            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector));
+            this.Mapper1 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector));
+            this.Mapper2 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector));
 
             if (this.Mapper1 == null)
                 throw new OrmException("The first mapper can not be null.");

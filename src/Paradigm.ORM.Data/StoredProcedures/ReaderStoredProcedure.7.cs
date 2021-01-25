@@ -37,7 +37,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         private IDatabaseReaderMapper<TResult1> Mapper1 { get; set; }
 
         /// <summary>
-        /// Gets or sets the secund result mapper.
+        /// Gets or sets the second result mapper.
         /// </summary>
         private IDatabaseReaderMapper<TResult2> Mapper2 { get; set; }
 
@@ -174,31 +174,27 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>, List<TResult6>, List<TResult7>> Execute(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
 
-                using (var reader = command.ExecuteReader())
-                {
-                    var result1 = this.Mapper1.Map(reader);
-                    reader.NextResult();
-                    var result2 = this.Mapper2.Map(reader);
-                    reader.NextResult();
-                    var result3 = this.Mapper3.Map(reader);
-                    reader.NextResult();
-                    var result4 = this.Mapper4.Map(reader);
-                    reader.NextResult();
-                    var result5 = this.Mapper5.Map(reader);
-                    reader.NextResult();
-                    var result6 = this.Mapper6.Map(reader);
-                    reader.NextResult();
-                    var result7 = this.Mapper7.Map(reader);
+            using var reader = command.ExecuteReader();
+            var result1 = this.Mapper1.Map(reader);
+            reader.NextResult();
+            var result2 = this.Mapper2.Map(reader);
+            reader.NextResult();
+            var result3 = this.Mapper3.Map(reader);
+            reader.NextResult();
+            var result4 = this.Mapper4.Map(reader);
+            reader.NextResult();
+            var result5 = this.Mapper5.Map(reader);
+            reader.NextResult();
+            var result6 = this.Mapper6.Map(reader);
+            reader.NextResult();
+            var result7 = this.Mapper7.Map(reader);
 
-                    return new Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>, List<TResult6>, List<TResult7>>(result1, result2, result3, result4, result5, result6, result7);
-                }
-            }
+            return new Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>, List<TResult6>, List<TResult7>>(result1, result2, result3, result4, result5, result6, result7);
         }
 
         #endregion
@@ -210,13 +206,13 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            this.Mapper1 = this.Mapper1 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector));
-            this.Mapper2 = this.Mapper2 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector));
-            this.Mapper3 = this.Mapper3 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(this.Connector));
-            this.Mapper4 = this.Mapper4 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(this.Connector));
-            this.Mapper5 = this.Mapper5 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(this.Connector));
-            this.Mapper6 = this.Mapper6 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult6>>(() => new DatabaseReaderMapper<TResult6>(this.Connector));
-            this.Mapper7 = this.Mapper7 ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult7>>(() => new DatabaseReaderMapper<TResult7>(this.Connector));
+            this.Mapper1 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult1>>(() => new DatabaseReaderMapper<TResult1>(this.Connector));
+            this.Mapper2 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult2>>(() => new DatabaseReaderMapper<TResult2>(this.Connector));
+            this.Mapper3 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult3>>(() => new DatabaseReaderMapper<TResult3>(this.Connector));
+            this.Mapper4 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult4>>(() => new DatabaseReaderMapper<TResult4>(this.Connector));
+            this.Mapper5 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult5>>(() => new DatabaseReaderMapper<TResult5>(this.Connector));
+            this.Mapper6 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult6>>(() => new DatabaseReaderMapper<TResult6>(this.Connector));
+            this.Mapper7 ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult7>>(() => new DatabaseReaderMapper<TResult7>(this.Connector));
 
             if (this.Mapper1 == null)
                 throw new OrmException("The first mapper can not be null.");

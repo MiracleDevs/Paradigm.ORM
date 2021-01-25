@@ -48,11 +48,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteReaderAsync(this IDatabaseConnector connector, IDatabaseCommand command, Func<IDatabaseReader, Task> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-            {
-                await action(reader);
-            }
+            using var reader = await command.ExecuteReaderAsync();
+            await action(reader);
         }
 
         /// <summary>
@@ -64,11 +61,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteReaderAsync(this IDatabaseConnector connector, IDatabaseCommand command, Action<IDatabaseReader> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-            {
-                action(reader);
-            }
+            using var reader = await command.ExecuteReaderAsync();
+            action(reader);
         }
 
         /// <summary>
@@ -80,11 +74,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteReaderAsync<T>(this IDatabaseConnector connector, IDatabaseCommand command, Func<IDatabaseReader, T> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-            {
-                return action(reader);
-            }
+            using var reader = await command.ExecuteReaderAsync();
+            return action(reader);
         }
 
         /// <summary>
@@ -96,14 +87,9 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteReaderAsync(this IDatabaseConnector connector, string commandText, Func<IDatabaseReader, Task> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    await action(reader);
-                }
-            }
+            using var command = connector.CreateCommand(commandText);
+            using var reader = await command.ExecuteReaderAsync();
+            await action(reader);
         }
 
         /// <summary>
@@ -115,14 +101,9 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteReaderAsync(this IDatabaseConnector connector, string commandText, Action<IDatabaseReader> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    action(reader);
-                }
-            }
+            using var command = connector.CreateCommand(commandText);
+            using var reader = await command.ExecuteReaderAsync();
+            action(reader);
         }
 
         /// <summary>
@@ -134,11 +115,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteReaderAsync<T>(this IDatabaseConnector connector, IDatabaseCommand command, Func<IDatabaseReader, Task<T>> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var reader = await command.ExecuteReaderAsync())
-            {
-                return await action(reader);
-            }
+            using var reader = await command.ExecuteReaderAsync();
+            return await action(reader);
         }
 
         /// <summary>
@@ -150,14 +128,9 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteReaderAsync<T>(this IDatabaseConnector connector, string commandText, Func<IDatabaseReader, Task<T>> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    return await action(reader);
-                }
-            }
+            using var command = connector.CreateCommand(commandText);
+            using var reader = await command.ExecuteReaderAsync();
+            return await action(reader);
         }
 
         /// <summary>
@@ -169,14 +142,9 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteReaderAsync<T>(this IDatabaseConnector connector, string commandText, Func<IDatabaseReader, T> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    return action(reader);
-                }
-            }
+            using var command = connector.CreateCommand(commandText);
+            using var reader = await command.ExecuteReaderAsync();
+            return action(reader);
         }
 
         /// <summary>
@@ -222,11 +190,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteNonQueryAsync(this IDatabaseConnector connector, string commandText)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                await command.ExecuteNonQueryAsync();
-            }
+            using var command = connector.CreateCommand(commandText);
+            await command.ExecuteNonQueryAsync();
         }
 
         /// <summary>
@@ -238,11 +203,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteNonQueryAsync(this IDatabaseConnector connector, string commandText, Func<int, Task> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                await action(await command.ExecuteNonQueryAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            await action(await command.ExecuteNonQueryAsync());
         }
 
         /// <summary>
@@ -254,11 +216,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteNonQueryAsync(this IDatabaseConnector connector, string commandText, Action<int> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                action(await command.ExecuteNonQueryAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            action(await command.ExecuteNonQueryAsync());
         }
 
         /// <summary>
@@ -294,11 +253,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteNonQueryAsync<T>(this IDatabaseConnector connector, string commandText, Func<int, Task<T>> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                return await action(await command.ExecuteNonQueryAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            return await action(await command.ExecuteNonQueryAsync());
         }
 
         /// <summary>
@@ -310,11 +266,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteNonQueryAsync<T>(this IDatabaseConnector connector, string commandText, Func<int, T> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                return action(await command.ExecuteNonQueryAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            return action(await command.ExecuteNonQueryAsync());
         }
 
         /// <summary>
@@ -350,11 +303,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteScalarAsync(this IDatabaseConnector connector, string commandText, Func<object, Task> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                await action(await command.ExecuteScalarAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            await action(await command.ExecuteScalarAsync());
         }
 
         /// <summary>
@@ -366,11 +316,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task ExecuteScalarAsync(this IDatabaseConnector connector, string commandText, Action<object> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                action(await command.ExecuteScalarAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            action(await command.ExecuteScalarAsync());
         }
 
         /// <summary>
@@ -394,11 +341,8 @@ namespace Paradigm.ORM.Data.Extensions
         public static async Task<T> ExecuteScalarAsync<T>(this IDatabaseConnector connector, string commandText, Func<object, Task<T>> action)
         {
             await connector.OpenMySqlConnectionWhenCloseAsync();
-
-            using (var command = connector.CreateCommand(commandText))
-            {
-                return await action(await command.ExecuteScalarAsync());
-            }
+            using var command = connector.CreateCommand(commandText);
+            return await action(await command.ExecuteScalarAsync());
         }
 
         #endregion

@@ -177,6 +177,45 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
 	               FROM `single_key_parent_table` as skpt
                    WHERE skpt.IsActive = Active;
                END");
+
+            this.Connector.ExecuteNonQuery(@"
+               CREATE PROCEDURE `get_8_results`
+               (
+	               `Active`	TINYINT
+               )
+               BEGIN             
+	               SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+
+                   SELECT *
+	               FROM `single_key_parent_table` as skpt
+                   WHERE skpt.IsActive = Active;
+               END");
         }
 
         public override void DeleteStoredProcedures()
@@ -185,6 +224,7 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
             this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `update_routine`;");
             this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `search_parents_and_childs`;");
             this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `get_total_amount`;");
+            this.Connector.ExecuteNonQuery("DROP PROCEDURE IF EXISTS `get_8_results`;");
         }
     }
 }

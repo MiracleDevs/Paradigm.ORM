@@ -14,7 +14,7 @@ namespace Paradigm.ORM.Data.Querying
     /// A query object encapsulates all the steps in a data reader operation.
     /// Basically contains a table type descriptor, a select command and a database reader mapper.
     /// The basic idea behind a query is to facilitate the creation of queries, and the ability
-    /// to reuse them if neccessary.
+    /// to reuse them if necessary.
     /// </remarks>
     /// <remarks>
     /// The <see cref="IDatabaseConnector"/> contains extensions to create
@@ -77,10 +77,8 @@ namespace Paradigm.ORM.Data.Querying
         /// </returns>
         public List<TResultType> Execute(string whereClause = null, params object[] parameters)
         {
-            using (var command = this.SelectCommandBuilder.GetCommand(whereClause, parameters))
-            {
-                return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
-            }
+            using var command = this.SelectCommandBuilder.GetCommand(whereClause, parameters);
+            return this.Connector.ExecuteReader(command, reader => this.Mapper.Map(reader));
         }
 
         #endregion

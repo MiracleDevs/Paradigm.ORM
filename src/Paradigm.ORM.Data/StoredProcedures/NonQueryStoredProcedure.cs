@@ -58,13 +58,11 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public int ExecuteNonQuery(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
-                return command.ExecuteNonQuery();
-            }
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
+            return command.ExecuteNonQuery();
         }
 
         #endregion

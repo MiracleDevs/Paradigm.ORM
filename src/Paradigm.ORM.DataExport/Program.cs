@@ -58,10 +58,8 @@ namespace Paradigm.ORM.DataExport
 
         private static int Process(string fileName, bool verbose)
         {
-            using (var exporter = ExporterFactory.Create(LoggingService, GetConfiguration(fileName, verbose), verbose))
-            {
-                exporter.Export();
-            }
+            using var exporter = ExporterFactory.Create(LoggingService, GetConfiguration(fileName, verbose), verbose);
+            exporter.Export();
 
             return 0;
         }
@@ -83,7 +81,7 @@ namespace Paradigm.ORM.DataExport
 
             if (verbose)
             {
-                LoggingService.Notice("Soruce");
+                LoggingService.Notice("Source");
                 LoggingService.WriteLine($"Source Type:      [{configuration.SourceDatabase.DatabaseType}]");
                 LoggingService.WriteLine($"Database Name:    [{configuration.SourceDatabase.DatabaseName}]");
                 LoggingService.WriteLine($"Tables:           [{string.Join(", ", configuration.TableNames)}]\n");

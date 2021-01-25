@@ -11,6 +11,6 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns>List of tuples.</returns>
-        Task<Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>, List<TResult6>, List<TResult7>, List<TResult8>>> ExecuteAsync(TParameters parameters);
+        Task<Tuple<List<TResult1>, List<TResult2>, List<TResult3>, List<TResult4>, List<TResult5>, List<TResult6>, List<TResult7>, Tuple<List<TResult8>>>> ExecuteAsync(TParameters parameters);
     }
 }

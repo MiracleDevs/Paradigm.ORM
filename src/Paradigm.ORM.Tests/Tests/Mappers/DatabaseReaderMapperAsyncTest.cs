@@ -34,7 +34,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             var entity = fixture.CreateNewEntity();
 
             var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
-            databaseAccess.Insert(entity);
+            await databaseAccess.InsertAsync(entity);
 
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {
@@ -81,7 +81,7 @@ namespace Paradigm.ORM.Tests.Tests.Mappers
             fixture.CreateTable();
 
             var databaseAccess = new DatabaseAccess(fixture.Connector, mappedType);
-            databaseAccess.Insert(new object[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
+            await databaseAccess.InsertAsync(new[] { fixture.CreateNewEntity(), fixture.CreateNewEntity() });
 
             await fixture.Connector.ExecuteReaderAsync(fixture.SelectStatement, reader =>
              {

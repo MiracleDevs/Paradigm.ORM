@@ -26,27 +26,25 @@ namespace Paradigm.ORM.Data.Querying
             if (!string.IsNullOrWhiteSpace(whereClause))
                 builder.AppendFormat(" WHERE {0}", whereClause);
 
-            using (var command = this.Connector.CreateCommand())
+            using var command = this.Connector.CreateCommand();
+            if (parameters != null)
             {
-                if (parameters != null)
+                for (var index = 0; index < parameters.Length; index++)
                 {
-                    for (var index = 0; index < parameters.Length; index++)
-                    {
-                        var oldName = $"@{index + 1}";
-                        var newName = formatProvider.GetParameterName($"p{(index + 1)}");
+                    var oldName = $"@{index + 1}";
+                    var newName = formatProvider.GetParameterName($"p{(index + 1)}");
 
-                        builder.Replace(oldName, newName);
+                    builder.Replace(oldName, newName);
 
-                        var parameter = parameters[index];
-                        var type = parameter == null ? typeof(object) : parameter.GetType();
-                        var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
-                        commandParameter.Value = parameter;
-                    }
+                    var parameter = parameters[index];
+                    var type = parameter == null ? typeof(object) : parameter.GetType();
+                    var commandParameter = command.AddParameter(newName, DbTypeConverter.FromType(type));
+                    commandParameter.Value = parameter;
                 }
-
-                command.CommandText = builder.ToString();
-                return await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
             }
+
+            command.CommandText = builder.ToString();
+            return await this.Connector.ExecuteReaderAsync(command, async reader => await this.Mapper.MapAsync(reader));
         }
 
         #endregion

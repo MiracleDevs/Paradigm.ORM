@@ -20,17 +20,13 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public async Task<List<TResult>> ExecuteAsync(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
 
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    return await this.Mapper.MapAsync(reader);
-                }
-            }
+            using var reader = await command.ExecuteReaderAsync();
+            return await this.Mapper.MapAsync(reader);
         }
 
         #endregion

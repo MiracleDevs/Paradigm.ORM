@@ -72,10 +72,8 @@ namespace Paradigm.ORM.DataExport.Export
 
             while (valueProvider.MoveNext())
             {
-                using (var command = commandBuilder.GetCommand(valueProvider))
-                {
-                    command.ExecuteNonQuery();
-                }
+                using var command = commandBuilder.GetCommand(valueProvider);
+                command.ExecuteNonQuery();
             }
 
             if (this.Verbose)

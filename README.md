@@ -69,6 +69,11 @@ $ docker-compose down
 Change log
 ---
 
+Version `2.5.0`
+- Due to a constraint with Tuples, now the reader stored procedure must return a Tuple<List<TResult8>> for the last parameter.
+- Updated code to use declarative using.
+- Updated code to use async when possible in some cases that was calling the sync version.
+
 Version `2.4.0`
 - Updated nuget dependencies.
 - Updated project version to use .NET Standard 2.1.

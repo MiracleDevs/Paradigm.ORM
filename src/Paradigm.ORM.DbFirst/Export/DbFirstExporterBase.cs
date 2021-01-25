@@ -12,26 +12,24 @@ namespace Paradigm.ORM.DbFirst.Export
     {
         public async Task ExportAsync(string configurationFileName, DbFirstConfiguration configuration)
         {
-            using (var connector = this.CreateConnector(configuration))
+            using var connector = this.CreateConnector(configuration);
+            await connector.OpenAsync();
+
+            var database = new Database(connector);
+            await database.ExtractSchemaAsync(configuration);
+            database.ProcessResults();
+
+            var objects = new DatabaseToObjectContainerTranslator(connector, configuration).Translate(database);
+            var json = JsonConvert.SerializeObject(objects, Formatting.Indented);
+            var outputPath = Path.IsPathRooted(configuration.OutputFileName) ? configuration.OutputFileName : Path.GetFullPath($"{Path.GetDirectoryName(configurationFileName)}/{configuration.OutputFileName}");
+            var outputParentPath = Directory.GetParent(outputPath);
+
+            if (outputParentPath != null && !outputParentPath.Exists)
             {
-                await connector.OpenAsync();
-
-                var database = new Database(connector);
-                await database.ExtractSchemaAsync(configuration);
-                database.ProcessResults();
-
-                var objects = new DatabaseToObjectContainerTranslator(connector, configuration).Translate(database);
-                var json = JsonConvert.SerializeObject(objects, Formatting.Indented);
-                var outputPath = Path.IsPathRooted(configuration.OutputFileName) ? configuration.OutputFileName : Path.GetFullPath($"{Path.GetDirectoryName(configurationFileName)}/{configuration.OutputFileName}");
-                var outputParentPath = Directory.GetParent(outputPath);
-
-                if (!outputParentPath.Exists)
-                {
-                    outputParentPath.Create();
-                }
-
-                File.WriteAllText(outputPath, json);
+                outputParentPath.Create();
             }
+
+            await File.WriteAllTextAsync(outputPath, json);
         }
 
         protected abstract IDatabaseConnector CreateConnector(DbFirstConfiguration configuration);

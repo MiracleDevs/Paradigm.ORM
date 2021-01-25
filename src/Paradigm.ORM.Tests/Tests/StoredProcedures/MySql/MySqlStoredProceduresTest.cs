@@ -189,6 +189,36 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
             results.Should().Throw<ArgumentNullException>();
         }
 
+        [Test]
+        public void ShouldRetrieve8Results()
+        {
+            var args = new GetEightResultsParameters()
+            {
+                Active = false
+            };
+
+            var results = new ReaderStoredProcedure<
+                GetEightResultsParameters,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable,
+                SingleKeyParentTable>(Fixture.Connector).Execute(args);
+
+            results.Should().NotBeNull();
+            results.Item1.Should().NotBeNull();
+            results.Item2.Should().NotBeNull();
+            results.Item3.Should().NotBeNull();
+            results.Item4.Should().NotBeNull();
+            results.Item5.Should().NotBeNull();
+            results.Item6.Should().NotBeNull();
+            results.Item7.Should().NotBeNull();
+            results.Rest.Item1.Should().NotBeNull();
+        }
+
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
@@ -197,55 +227,4 @@ namespace Paradigm.ORM.Tests.Tests.StoredProcedures.MySql
             Fixture.Dispose();
         }
     }
-
-    /*
-CREATE DATABASE IF NOT EXISTS `test`;
-USE `test`;
-
-CREATE TABLE IF NOT EXISTS `test`.`singlekeyparenttable`
-(
-	`Id`            INT             NOT NULL AUTO_INCREMENT,
-	`Name`          NVARCHAR(200)   NOT NULL,
-	`IsActive`      BOOL            NOT NULL,
-	`Amount`        DECIMAL(20,9)   NOT NULL,
-	`CreatedDate`   DATETIME        NOT NULL,
-
-	CONSTRAINT `PK_SingleKeyParentTable` PRIMARY KEY (`Id` ASC),
-	CONSTRAINT `UX_SingleKeyParentTable_Name` UNIQUE (`Name`)
-
-)ENGINE=INNODB;
-
-CREATE TABLE IF NOT EXISTS `test`.`singlekeychildtable`
-(
-	`Id`            INT             NOT NULL AUTO_INCREMENT,
-	`ParentId`      INT             NOT NULL,
-	`Name`          NVARCHAR(200)   NOT NULL,
-	`IsActive`      BOOL            NOT NULL,
-	`Amount`        DECIMAL(20,9)   NOT NULL,
-	`CreatedDate`   DATETIME        NOT NULL,
-
-	CONSTRAINT `PK_SingleKeyChildTable` PRIMARY KEY (`Id` ASC),
-	CONSTRAINT `UX_SingleKeyChildTable_Name` UNIQUE (`Name`),
-	CONSTRAINT `FK_SingleKeyChildTable_Parent` FOREIGN KEY (`ParentId`) REFERENCES `singlekeyparenttable` (`Id`)
-
-)ENGINE=INNODB;
-
-
-DROP PROCEDURE IF EXISTS `SearchParentTable`;
-DELIMITER $$
-CREATE PROCEDURE `SearchParentTable`
-(
-    `ParentName`        VARCHAR(200),
-    `Active`            TINYINT
-)
-BEGIN
-
-  SELECT *
-    FROM `test`.`singlekeyparenttable` t
-   WHERE t.`Name` like concat('%', `ParentName`, '%')
-     AND t.`IsActive` = `Active`;
-
-END$$
-DELIMITER ;
-*/
 }

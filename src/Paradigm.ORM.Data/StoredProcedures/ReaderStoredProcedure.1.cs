@@ -100,17 +100,13 @@ namespace Paradigm.ORM.Data.StoredProcedures
         public List<TResult> Execute(TParameters parameters)
         {
             if (parameters == null)
-                throw new ArgumentNullException("Must give parameters to execute the stored procedure.");
+                throw new ArgumentNullException(nameof(parameters), "Must give parameters to execute the stored procedure.");
 
-            using (var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure))
-            {
-                this.PopulateParameters(command, parameters);
+            using var command = this.Connector.CreateCommand(this.GetRoutineName(), CommandType.StoredProcedure);
+            this.PopulateParameters(command, parameters);
 
-                using (var reader = command.ExecuteReader())
-                {
-                    return this.Mapper.Map(reader);
-                }
-            }
+            using var reader = command.ExecuteReader();
+            return this.Mapper.Map(reader);
         }
 
         #endregion
@@ -122,7 +118,7 @@ namespace Paradigm.ORM.Data.StoredProcedures
         /// </summary>
         protected void Initialize()
         {
-            this.Mapper = this.Mapper ?? this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector));
+            this.Mapper ??= this.ServiceProvider.GetServiceIfAvailable<IDatabaseReaderMapper<TResult>>(() => new DatabaseReaderMapper<TResult>(this.Connector));
 
             if (this.Mapper == null)
                 throw new OrmException("The mapper can not be null.");
