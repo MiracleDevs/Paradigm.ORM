@@ -21,6 +21,9 @@ namespace Paradigm.ORM.Data.MySql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Reader: {this.Command.CommandText}");
                 return new MySqlDatabaseReader(await this.Command.ExecuteReaderAsync() as MySqlDataReader);
@@ -43,6 +46,9 @@ namespace Paradigm.ORM.Data.MySql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Non Query: {this.Command.CommandText}");
                 return await this.Command.ExecuteNonQueryAsync();
@@ -66,6 +72,9 @@ namespace Paradigm.ORM.Data.MySql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Scalar: {this.Command.CommandText}");
                 return await this.Command.ExecuteScalarAsync();

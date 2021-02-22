@@ -50,7 +50,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the database reader.</param>
         public static void ExecuteReader(this IDatabaseConnector connector, IDatabaseCommand command, Action<IDatabaseReader> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var reader = command.ExecuteReader();
             action(reader);
         }
@@ -63,7 +62,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the database reader.</param>
         public static void ExecuteReader(this IDatabaseConnector connector, string commandText, Action<IDatabaseReader> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             using var reader = command.ExecuteReader();
             action(reader);
@@ -77,7 +75,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the database reader.</param>
         public static T ExecuteReader<T>(this IDatabaseConnector connector, IDatabaseCommand command, Func<IDatabaseReader, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var reader = command.ExecuteReader();
             return action(reader);
         }
@@ -90,7 +87,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the database reader.</param>
         public static T ExecuteReader<T>(this IDatabaseConnector connector, string commandText, Func<IDatabaseReader, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             using var reader = command.ExecuteReader();
             return action(reader);
@@ -103,7 +99,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="command">The database command.</param>
         public static void ExecuteNonQuery(this IDatabaseConnector connector, IDatabaseCommand command)
         {
-            connector.OpenMySqlConnectionWhenClose();
             command.ExecuteNonQuery();
         }
 
@@ -114,7 +109,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="commandText">The command text.</param>
         public static void ExecuteNonQuery(this IDatabaseConnector connector, string commandText)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             command.ExecuteNonQuery();
         }
@@ -127,7 +121,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the affected rows quantity.</param>
         public static void ExecuteNonQuery(this IDatabaseConnector connector, IDatabaseCommand command, Action<int> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             action(command.ExecuteNonQuery());
         }
 
@@ -139,7 +132,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the affected rows quantity.</param>
         public static void ExecuteNonQuery(this IDatabaseConnector connector, string commandText, Action<int> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             action(command.ExecuteNonQuery());
         }
@@ -152,7 +144,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the affected rows quantity.</param>
         public static T ExecuteNonQuery<T>(this IDatabaseConnector connector, IDatabaseCommand command, Func<int, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             return action(command.ExecuteNonQuery());
         }
 
@@ -164,7 +155,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the affected rows quantity.</param>
         public static T ExecuteNonQuery<T>(this IDatabaseConnector connector, string commandText, Func<int, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             return action(command.ExecuteNonQuery());
         }
@@ -177,7 +167,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the scalar value.</param>
         public static void ExecuteScalar(this IDatabaseConnector connector, IDatabaseCommand command, Action<object> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             action(command.ExecuteScalar());
         }
 
@@ -189,7 +178,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the scalar value.</param>
         public static void ExecuteScalar(this IDatabaseConnector connector, string commandText, Action<object> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             action(command.ExecuteScalar());
         }
@@ -202,7 +190,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the scalar value.</param>
         public static T ExecuteScalar<T>(this IDatabaseConnector connector, IDatabaseCommand command, Func<object, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             return action(command.ExecuteScalar());
         }
 
@@ -214,7 +201,6 @@ namespace Paradigm.ORM.Data.Extensions
         /// <param name="action">A callback action to process the scalar value.</param>
         public static T ExecuteScalar<T>(this IDatabaseConnector connector, string commandText, Func<object, T> action)
         {
-            connector.OpenMySqlConnectionWhenClose();
             using var command = connector.CreateCommand(commandText);
             return action(command.ExecuteScalar());
         }
@@ -245,22 +231,6 @@ namespace Paradigm.ORM.Data.Extensions
             command.CommandText = commandText;
             command.CommandType = commandType;
             return command;
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Opens my SQL connection when its closed.
-        /// </summary>
-        /// <param name="connector">The database connector.</param>
-        private static void OpenMySqlConnectionWhenClose(this IDatabaseConnector connector)
-        {
-            if (!connector.IsOpen())
-            {
-                connector.Open();
-            }
         }
 
         #endregion

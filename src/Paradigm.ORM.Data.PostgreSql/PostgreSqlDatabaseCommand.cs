@@ -105,6 +105,9 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    this.Connector.Open();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Reader: {this.Command.CommandText}");
                 return new PostgreSqlDatabaseReader(this.Command.ExecuteReader());
@@ -127,6 +130,9 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    this.Connector.Open();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Non Query: {this.Command.CommandText}");
                 return this.Command.ExecuteNonQuery();
@@ -150,6 +156,9 @@ namespace Paradigm.ORM.Data.PostgreSql
         {
             try
             {
+                if (!this.Connector.IsOpen())
+                    this.Connector.Open();
+
                 this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Scalar: {this.Command.CommandText}");
                 return this.Command.ExecuteScalar();

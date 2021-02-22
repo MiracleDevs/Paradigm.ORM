@@ -69,6 +69,11 @@ $ docker-compose down
 Change log
 ---
 
+Version `2.6.0`
+- Updated connector specific commands to check if the connection has been opened before executing.
+- Removed open check from extensions.
+- Updated nuget dependencies.
+
 Version `2.5.0`
 - Due to a constraint with Tuples, now the reader stored procedure must return a Tuple<List<TResult8>> for the last parameter.
 - Updated code to use declarative using.

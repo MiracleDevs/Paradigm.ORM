@@ -21,9 +21,10 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             try
             {
-                if (this.Connector.ActiveTransaction != null)
-                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
 
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Reader: {this.Command.CommandText}");
                 return new CqlDatabaseReader(await this.Command.ExecuteReaderAsync() as CqlReader);
             }
@@ -45,9 +46,10 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             try
             {
-                if (this.Connector.ActiveTransaction != null)
-                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
 
+                this.Command.Transaction = this.Connector.ActiveTransaction?.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Non Query: {this.Command.CommandText}");
                 return await this.Command.ExecuteNonQueryAsync();
 
@@ -71,9 +73,10 @@ namespace Paradigm.ORM.Data.Cassandra
         {
             try
             {
-                if (this.Connector.ActiveTransaction != null)
-                    this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
+                if (!this.Connector.IsOpen())
+                    await this.Connector.OpenAsync();
 
+                this.Command.Transaction = this.Connector.ActiveTransaction.Transaction;
                 this.Connector.LogProvider?.Info($"Execute Scalar: {this.Command.CommandText}");
                 return await this.Command.ExecuteScalarAsync();
             }
