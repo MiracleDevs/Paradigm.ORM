@@ -239,6 +239,9 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
+            if (!this.IsOpen())
+                this.Open();
+
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 

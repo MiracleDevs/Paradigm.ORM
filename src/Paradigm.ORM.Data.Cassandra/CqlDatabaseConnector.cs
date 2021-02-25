@@ -239,6 +239,9 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
+            if (!this.IsOpen())
+                this.Open();
+
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 

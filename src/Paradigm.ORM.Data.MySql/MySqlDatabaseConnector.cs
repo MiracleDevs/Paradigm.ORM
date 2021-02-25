@@ -239,6 +239,9 @@ namespace Paradigm.ORM.Data.MySql
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
+            if (!this.IsOpen())
+                this.Open();
+
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 

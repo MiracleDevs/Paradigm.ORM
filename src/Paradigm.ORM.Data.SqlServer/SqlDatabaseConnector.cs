@@ -239,6 +239,9 @@ namespace Paradigm.ORM.Data.SqlServer
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
+            if (!this.IsOpen())
+                this.Open();
+
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 
