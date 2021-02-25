@@ -69,6 +69,10 @@ $ docker-compose down
 Change log
 ---
 
+Version `2.6.1`
+- Updated connector to open connection before creating a transaction, if the connection was closed.
+- Added tests for transactions.
+
 Version `2.6.0`
 - Updated connector specific commands to check if the connection has been opened before executing.
 - Removed open check from extensions.
