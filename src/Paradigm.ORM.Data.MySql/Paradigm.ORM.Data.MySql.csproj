@@ -12,7 +12,7 @@
         <RepositoryType>git</RepositoryType>
         <Authors>Miracle Devs</Authors>
         <Company>Miracle Devs</Company>
-        <Version>2.6.1</Version>
+        <Version>2.6.2</Version>
         <Product>Paradigm.ORM</Product>
     </PropertyGroup>
 

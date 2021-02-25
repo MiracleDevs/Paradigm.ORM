@@ -239,9 +239,6 @@ namespace Paradigm.ORM.Data.MySql
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
-            if (!this.IsOpen())
-                this.Open();
-
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 
@@ -255,6 +252,9 @@ namespace Paradigm.ORM.Data.MySql
         public IDatabaseTransaction CreateTransaction(IsolationLevel isolationLevel)
         {
             this.ThrowIfNull();
+
+            if (!this.IsOpen())
+                this.Open();
 
             return this.ThrowIfFails<OrmConnectorException, IDatabaseTransaction>(() =>
             {

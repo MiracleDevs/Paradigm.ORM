@@ -239,9 +239,6 @@ namespace Paradigm.ORM.Data.PostgreSql
         /// </returns>
         public IDatabaseTransaction CreateTransaction()
         {
-            if (!this.IsOpen())
-                this.Open();
-
             return this.CreateTransaction(IsolationLevel.Serializable);
         }
 
@@ -255,6 +252,9 @@ namespace Paradigm.ORM.Data.PostgreSql
         public IDatabaseTransaction CreateTransaction(IsolationLevel isolationLevel)
         {
             this.ThrowIfNull();
+
+            if (!this.IsOpen())
+                this.Open();
 
             return this.ThrowIfFails<OrmConnectorException, IDatabaseTransaction>(() =>
             {             
