@@ -152,8 +152,9 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </summary>
         public void Dispose()
         {
-            this.Connection?.Dispose();
-
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // connections are not disposed, are handled by the CqlConnectionManager and the Datastax driver internals.
+            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (this.Transactions != null)
             {
                 foreach (var transaction in this.Transactions.ToList())
@@ -198,7 +199,7 @@ namespace Paradigm.ORM.Data.Cassandra
             this.ValueProvider = new Lazy<CqlDbTypeValueRangeProvider>(() => new CqlDbTypeValueRangeProvider(), true);
             this.Transactions = new Stack<CqlDatabaseTransaction>();
 
-            this.Connection = connectionString == null ? new CqlConnection() : new CqlConnection(connectionString);
+            this.Connection = CqlConnectionManager.Instance.GetConnection(connectionString ?? string.Empty);
         }
 
         /// <summary>
