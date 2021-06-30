@@ -69,6 +69,13 @@ $ docker-compose down
 Change log
 ---
 
+Version `2.6.3`
+- Updated cassandra connector to cache active connections by connection string instead of disposing them. When working with multiple threads, the ORM used to create multiple connections, and dispose them after finalization.
+  Disposing the active connection also disposed the internal cluster and session, producing unintended side effects inside the datastax driver: A lot of leaked references being captured and not collected by GC.
+  With this new change, we expect to provide a better performance and memory footprint overall.
+  If you need to clean all the static connections, you can still call to `CqlConnectionManager.ClearConnections()` but note that clearing the connections won't free everything, due to how the datastax driver caches internal pool objects.
+- Updated nuget dependencies.
+
 Version `2.6.2`
 - Moved the open check to a more generic method.
 
