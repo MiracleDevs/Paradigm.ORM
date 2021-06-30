@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CassandraCSharpDriver" Version="3.16.2" />
+        <PackageReference Include="CassandraCSharpDriver" Version="3.16.3" />
         <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
         <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
         <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
