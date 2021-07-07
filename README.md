@@ -1,6 +1,11 @@
 [![Build Status](https://github.com/MiracleDevs/Paradigm.ORM/workflows/Paradigm%20ORM/badge.svg)](https://github.com/MiracleDevs/Paradigm.ORM/actions)
 
+# Paradigm.ORM
+.NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources. You can find more information [here](https://www.paradigm.net.co/articles/1.introduction/index.html).
 
+
+
+## Nuget Packages
 | Library    | Nuget | Install
 |-|-|-|
 | Data       | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data/)            | `Install-Package Paradigm.ORM.Data` |
@@ -9,13 +14,9 @@
 | SQL Server | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.SqlServer.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.SqlServer/)  | `Install-Package Paradigm.ORM.Data.SqlServer` |
 | Cassandra | [![NuGet](https://img.shields.io/nuget/v/Paradigm.ORM.Data.Cassandra.svg)](https://www.nuget.org/packages/Paradigm.ORM.Data.Cassandra/)  | `Install-Package Paradigm.ORM.Data.Cassandra` |
 
-# Paradigm.ORM
-.NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources.
 
 
-Self Contained Deploy (SCD)
----
-
+## Self Contained Deploy (SCD)
 Bellow you can find portable versions for all major OSs.
 If you are planning to use the tools in several projects, we recommend to add the SCD folder to your PATH.
 
@@ -39,8 +40,7 @@ If you are planning to use the tools in several projects, we recommend to add th
 
 
 
-Running the tests
----
+## Running the tests
 We are working to automate the test suite, but currently, if you want to run the tests, you can create the test databases by
 going to the directory `./build/docker/` and run docker compose:
 
@@ -66,8 +66,13 @@ $ docker-compose down
 
 
 
-Change log
----
+## Change log
+
+Version `2.6.4`
+- Added a new feature to the `dbpublisher` tool to ignore script errors on execution. This only works while executing scripts, but the parameter will be dropt and ignored for file generation.
+  To ignore the errors produced by a script, add the line `#ignore-errors` to your script file, and the `ScriptBuilder` will configure the script to ignore errors,
+  and will remove that line from the content. This can come in handy for cassandra and scylla, because there's no way of checking before altering a table, and subsequent executions
+  will produce errors if you are using `dbpublisher` for incremental builds.
 
 Version `2.6.3`
 - Updated cassandra connector to cache active connections by connection string instead of disposing them. When working with multiple threads, the ORM used to create multiple connections, and dispose them after finalization.

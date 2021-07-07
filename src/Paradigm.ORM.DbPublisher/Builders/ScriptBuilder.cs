@@ -9,21 +9,35 @@ namespace Paradigm.ORM.DbPublisher.Builders
     {
         #region Properties
 
-        public Dictionary<string, string> Scripts { get; }
+        /// <summary>
+        /// Gets the scripts.
+        /// </summary>
+        /// <value>
+        /// The scripts.
+        /// </value>
+        public Dictionary<string, Script> Scripts { get; }
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScriptBuilder"/> class.
+        /// </summary>
         public ScriptBuilder()
         {
-            this.Scripts = new Dictionary<string, string>();
+            this.Scripts = new Dictionary<string, Script>();
         }
 
         #endregion
 
         #region Public Methods
 
+        /// <summary>
+        /// Builds the specified file names.
+        /// </summary>
+        /// <param name="fileNames">The file names.</param>
+        /// <exception cref="System.Exception">File not found.</exception>
         public void Build(IEnumerable<string> fileNames)
         {
             foreach (var fileName in fileNames)
@@ -31,41 +45,87 @@ namespace Paradigm.ORM.DbPublisher.Builders
                 if (!File.Exists(fileName))
                     throw new Exception("File not found.");
 
-                this.Scripts.Add(fileName, File.ReadAllText(fileName));
+                this.Scripts.Add(fileName, this.OpenScript(fileName));
             }
         }
 
+        /// <summary>
+        /// Saves the script.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="verbose">if set to <c>true</c> [verbose].</param>
         public void SaveScript(string fileName, bool verbose)
         {
             var path = Path.GetDirectoryName(fileName);
 
+            if (path == null)
+                throw new Exception("Unable to get the path to save the script.");
+
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
 
-            File.WriteAllText(fileName, string.Join(Environment.NewLine, this.Scripts.Keys.Select(x => ProcessScript(x, true))));
+            File.WriteAllText(fileName, string.Join(Environment.NewLine, this.Scripts.Values.Select(x => ProcessScript(x, true))));
         }
 
-        public string GetScript(string fileName)
+        /// <summary>
+        /// Gets the script.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">Script with path '{fileName}' was not loaded.</exception>
+        public Script GetScript(string fileName)
         {
-            return ProcessScript(fileName, false);
+            if (!this.Scripts.ContainsKey(fileName))
+                throw new Exception($"Script with path '{fileName}' was not loaded.");
+
+            var script = this.Scripts[fileName];
+            return new Script(script.Name, ProcessScript(script, false), script.IgnoreErrors);
         }
 
         #endregion
 
         #region Private Methods
 
-        private string ProcessScript(string fileName, bool isForCommandLine)
+        /// <summary>
+        /// Opens the script.
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns></returns>
+        private Script OpenScript(string fileName)
         {
-            if (!this.Scripts.ContainsKey(fileName))
-                return string.Empty;
+            const string ignoreString = "#ignore-errors";
+            var content = File.ReadAllText(fileName);
+            var ignoreErrors = false;
+            int startIndex;
 
+            while ((startIndex = content.IndexOf(ignoreString, StringComparison.Ordinal)) >= 0)
+            {
+                ignoreErrors = true;
+                content = content.Remove(startIndex, ignoreString.Length);
+            }
+
+            return new Script(fileName, content, ignoreErrors);
+        }
+
+        /// <summary>
+        /// Processes the script.
+        /// </summary>
+        /// <param name="script">The script.</param>
+        /// <param name="isForCommandLine">if set to <c>true</c> [is for command line].</param>
+        /// <returns></returns>
+        /// <exception cref="System.Exception">
+        /// Can not continue because a {endif} is missing at line {lineNumber} in file {name}.
+        /// or
+        /// Can not continue because a {endif} is missing at line {lineNumber} in file {name}.
+        /// </exception>
+        private string ProcessScript(Script script, bool isForCommandLine)
+        {
             const string ifcmd = "#ifcmd";
             const string ifexe = "#ifexe";
             const string endif = "#endif";
-            var file = Path.GetFileName(fileName);
             int startIndex;
-
-            var content = this.Scripts[fileName];
+            var content = script.Content;
+            var name = script.Name;
 
             if (content == null)
                 return null;
@@ -77,7 +137,7 @@ namespace Paradigm.ORM.DbPublisher.Builders
                 if (endIndex < 0)
                 {
                     var lineNumber = content.Take(startIndex).Count(c => c == '\n') + 1;
-                    throw new Exception($"Can not continue because a {endif} is missing at line {lineNumber} in file {file}.");
+                    throw new Exception($"Can not continue because a {endif} is missing at line {lineNumber} in file {name}.");
                 }
 
                 if (isForCommandLine)
@@ -102,7 +162,7 @@ namespace Paradigm.ORM.DbPublisher.Builders
                 if (endIndex < 0)
                 {
                     var lineNumber = content.Take(startIndex).Count(c => c == '\n') + 1;
-                    throw new Exception($"Can not continue because a {endif} is missing at line {lineNumber} in file {file}.");
+                    throw new Exception($"Can not continue because a {endif} is missing at line {lineNumber} in file {name}.");
                 }
 
                 if (!isForCommandLine)
