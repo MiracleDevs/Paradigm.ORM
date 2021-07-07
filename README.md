@@ -69,7 +69,7 @@ $ docker-compose down
 ## Change log
 
 Version `2.6.4`
-- Added a new feature to the `dbpublisher` tool to ignore script errors on execution. This only works while executing scripts, but the parameter will be dropt and ignored for file generation.
+- Added a new feature to the `dbpublisher` tool to ignore script errors on execution. This only works while executing scripts, but the parameter will be dropped and ignored for file generation.
   To ignore the errors produced by a script, add the line `#ignore-errors` to your script file, and the `ScriptBuilder` will configure the script to ignore errors,
   and will remove that line from the content. This can come in handy for cassandra and scylla, because there's no way of checking before altering a table, and subsequent executions
   will produce errors if you are using `dbpublisher` for incremental builds.
