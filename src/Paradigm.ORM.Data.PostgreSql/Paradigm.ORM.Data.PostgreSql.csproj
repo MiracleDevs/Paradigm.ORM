@@ -11,12 +11,12 @@
         <Company>Miracle Devs</Company>
         <Copyright>Miracle Devs</Copyright>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>2.6.4</Version>
+        <Version>2.7.0</Version>
         <Product>Paradigm.ORM</Product>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="npgsql" Version="5.0.7" />
+        <PackageReference Include="npgsql" Version="6.0.3" />
     </ItemGroup>
 
     <ItemGroup>

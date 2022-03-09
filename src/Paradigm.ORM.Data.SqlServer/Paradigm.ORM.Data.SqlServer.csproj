@@ -12,12 +12,12 @@
         <PackageIcon>icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/MiracleDevs/Paradigm.ORM.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Version>2.6.4</Version>
+        <Version>2.7.0</Version>
         <Product>Paradigm.ORM</Product>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
     </ItemGroup>
 
     <ItemGroup>

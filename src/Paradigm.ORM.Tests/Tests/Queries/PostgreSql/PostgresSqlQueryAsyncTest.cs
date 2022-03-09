@@ -58,10 +58,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.PostgreSql
 
         [Test]
         [Order(2)]
-        public void ShouldThrowPostgreSqlException()
+        public async Task ShouldThrowPostgreSqlException()
         {
             Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
-            result.Should().Throw<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
+            (await result.Should().ThrowAsync<DatabaseCommandException>()).WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]

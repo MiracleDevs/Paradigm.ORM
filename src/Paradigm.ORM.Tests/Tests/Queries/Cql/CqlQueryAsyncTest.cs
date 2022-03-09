@@ -58,10 +58,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.Cql
 
         [Test]
         [Order(2)]
-        public void ShouldThrowCqlException()
+        public async Task ShouldThrowCqlException()
         {
             Func<Task> result = async () => await this.Fixture.Connector.QueryAsync<AllColumnsClass>();
-            result.Should().Throw<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
+            (await result.Should().ThrowAsync<DatabaseCommandException>()).WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]

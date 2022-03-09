@@ -199,6 +199,11 @@ namespace Paradigm.ORM.Data.PostgreSql
             this.Transactions = new Stack<PostgreSqlDatabaseTransaction>();
 
             this.Connection = connectionString == null ? new NpgsqlConnection() : new NpgsqlConnection(connectionString);
+
+            /* TODO: Search for a better solution */
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            // https://www.npgsql.org/doc/types/datetime.html
+            // https://www.npgsql.org/doc/release-notes/6.0.html#timestamp-rationalization-and-improvements
         }
 
         /// <summary>

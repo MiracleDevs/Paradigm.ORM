@@ -41,6 +41,7 @@ services:
       - POSTGRES_DB=test
       - TZ=GMT+3
       - PGTZ=GMT+3
+
   paradigm-scylla:
     image: paradigm-scylla
     container_name: paradigm-scylla
@@ -48,6 +49,9 @@ services:
       context: ./
       dockerfile: ./scylla.dockerfile
     restart: "no"
+    command:
+      - --smp=4
+      - --memory=4G
     environment:
       - CASSANDRA_KEYSPACE=test
     ports:

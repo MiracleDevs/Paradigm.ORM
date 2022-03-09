@@ -33,12 +33,13 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
         }
 
         [Test]
-        public void ShouldRetrieveAllTables()
+        public async Task ShouldRetrieveAllTables()
         {
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<ITable> tables = null;
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => tables = await x.GetTablesAsync(this.Fixture.GetDatabaseName()))).Should().NotThrow();
+            var getDatabaseNameFunction = async () => tables = await schemaProvider.GetTablesAsync(this.Fixture.GetDatabaseName());
+            await getDatabaseNameFunction.Should().NotThrowAsync();
             tables.Should().NotBeNull();
             tables.Count.Should().Be(3);
 
@@ -57,12 +58,13 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
         }
 
         [Test]
-        public void ShouldRetrieveColumns()
+        public async Task ShouldRetrieveColumns()
         {
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IColumn> columns = null;
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => columns = await x.GetColumnsAsync(this.Fixture.GetDatabaseName(), "table1"))).Should().NotThrow();
+            var getColumnsFunction = async () => columns = await schemaProvider.GetColumnsAsync(this.Fixture.GetDatabaseName(), "table1");
+            await getColumnsFunction.Should().NotThrowAsync();
 
             columns.Should().NotBeNull();
             columns.Count.Should().Be(19);
@@ -133,7 +135,8 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             columns[18].Name.Should().Be("column19");
             columns[18].DataType.Should().Be("varint");
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => columns = await x.GetColumnsAsync(this.Fixture.GetDatabaseName(), "table3"))).Should().NotThrow();
+            getColumnsFunction = async () => columns = await schemaProvider.GetColumnsAsync(this.Fixture.GetDatabaseName(), "table3");
+            await getColumnsFunction.Should().NotThrowAsync();
 
             columns.Should().NotBeNull();
             columns.Count.Should().Be(19);
@@ -207,12 +210,13 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
         }
 
         [Test]
-        public void ShouldRetrieveConstraints()
+        public async Task ShouldRetrieveConstraints()
         {
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IConstraint> constraints = null;
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => constraints = await x.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table1"))).Should().NotThrow();
+            var getConstraintsFunction = async () => constraints = await schemaProvider.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table1");
+            await getConstraintsFunction.Should().NotThrowAsync();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(1);
@@ -225,7 +229,8 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             constraints[0].ToColumnName.Should().Be(null);
             constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => constraints = await x.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table2"))).Should().NotThrow();
+            getConstraintsFunction = async () => constraints = await schemaProvider.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table2");
+            await getConstraintsFunction.Should().NotThrowAsync();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(3);
@@ -238,7 +243,8 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
             constraints[0].ToColumnName.Should().Be(null);
             constraints[0].Type.Should().Be(ConstraintType.PrimaryKey);
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => constraints = await x.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table3"))).Should().NotThrow();
+            getConstraintsFunction = async () => constraints = await schemaProvider.GetConstraintsAsync(this.Fixture.GetDatabaseName(), "table3");
+            await getConstraintsFunction.Should().NotThrowAsync();
 
             constraints.Should().NotBeNull();
             constraints.Count.Should().Be(4);
@@ -263,24 +269,26 @@ namespace Paradigm.ORM.Tests.Tests.Schemas.Cql
         }
 
         [Test]
-        public void ShouldntRetrieveStoredProcedures()
+        public async Task ShouldntRetrieveStoredProcedures()
         {
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IStoredProcedure> storedProcedures = null;
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => storedProcedures = await x.GetStoredProceduresAsync(this.Fixture.GetDatabaseName()))).Should().NotThrow();
+            var getStoredProceduresFunction = async () => storedProcedures = await schemaProvider.GetStoredProceduresAsync(this.Fixture.GetDatabaseName());
+            await getStoredProceduresFunction.Should().NotThrowAsync();
 
             storedProcedures.Should().NotBeNull();
             storedProcedures.Count.Should().Be(0);
         }
 
         [Test]
-        public void ShouldntRetrieveParameters()
+        public async Task ShouldntRetrieveParameters()
         {
             var schemaProvider = this.Fixture.Connector.GetSchemaProvider();
             List<IParameter> parameters = null;
 
-            schemaProvider.Awaiting((Func<ISchemaProvider, Task>)(async x => parameters = await x.GetParametersAsync(this.Fixture.GetDatabaseName(), "StoredProcedure"))).Should().NotThrow();
+            var getParametersFunction = async () => parameters = await schemaProvider.GetParametersAsync(this.Fixture.GetDatabaseName(), "StoredProcedure");
+            await getParametersFunction.Should().NotThrowAsync();
 
             parameters.Should().NotBeNull();
             parameters.Count.Should().Be(0);

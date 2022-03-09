@@ -92,13 +92,14 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase("Server=1.1.1.1", typeof(PostgreSqlDatabaseConnector))]
         [TestCase("Server=1.1.1.1", typeof(SqlDatabaseConnector))]
         [TestCase("Contact Points=1.1.1.1", typeof(CqlDatabaseConnector))]
-        public void ShouldThrowIfConnectionIsntPossible(string connectionString, Type connectorType)
+        public async Task ShouldThrowIfConnectionIsntPossible(string connectionString, Type connectorType)
         {
             using var connector = Activator.CreateInstance(connectorType, connectionString) as IDatabaseConnector;
             connector.Should().NotBeNull();
 
             connector.Invoking(x => x.Open()).Should().Throw<OrmCanNotOpenConnectionException>();
-            connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.OpenAsync())).Should().Throw<OrmCanNotOpenConnectionException>();
+            var open = async () => await connector.OpenAsync();
+            await open.Should().ThrowAsync<OrmCanNotOpenConnectionException>();
         }
 
         [Order(6)]
@@ -106,7 +107,7 @@ namespace Paradigm.ORM.Tests.Tests
         [TestCase(ConnectionStrings.PSql, typeof(PostgreSqlDatabaseConnector))]
         [TestCase(ConnectionStrings.MsSql, typeof(SqlDatabaseConnector))]
         [TestCase(ConnectionStrings.Cql, typeof(CqlDatabaseConnector))]
-        public void ShouldConnectAndClose(string connectorString, Type connectorType)
+        public async Task ShouldConnectAndClose(string connectorString, Type connectorType)
         {
             using var connector = Activator.CreateInstance(connectorType, connectorString) as IDatabaseConnector;
             connector.Should().NotBeNull();
@@ -114,8 +115,12 @@ namespace Paradigm.ORM.Tests.Tests
             connector.Invoking(x => x.Open()).Should().NotThrow<OrmCanNotOpenConnectionException>();
             connector.Invoking(x => x.Close()).Should().NotThrow<OrmCanNotCloseConnectionException>();
 
-            connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.OpenAsync())).Should().NotThrow<OrmCanNotOpenConnectionException>();
-            connector.Awaiting((Func<IDatabaseConnector, Task>)(async x => await x.CloseAsync())).Should().NotThrow<OrmCanNotCloseConnectionException>();
+            var openFunction = async () => await connector.OpenAsync();
+            var closeFunction = async () => await connector.CloseAsync();
+
+            await openFunction.Should().NotThrowAsync<OrmCanNotOpenConnectionException>();
+            await closeFunction.Should().NotThrowAsync<OrmCanNotCloseConnectionException>();
+
         }
 
         [Order(7)]

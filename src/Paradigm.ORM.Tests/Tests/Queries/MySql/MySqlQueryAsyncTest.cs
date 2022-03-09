@@ -58,10 +58,10 @@ namespace Paradigm.ORM.Tests.Tests.Queries.MySql
 
         [Test]
         [Order(2)]
-        public void ShouldThrowMySqlException()
+        public async Task ShouldThrowMySqlException()
         {
             Func<Task> result = async () => await Fixture.Connector.QueryAsync<AllColumnsClass>();
-            result.Should().Throw<DatabaseCommandException>().WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
+            (await result.Should().ThrowAsync<DatabaseCommandException>()).WithMessage(DatabaseCommandException.DefaultMessage).And.Command.Should().NotBeNull();
         }
 
         [Test]
