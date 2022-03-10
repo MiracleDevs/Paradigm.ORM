@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/MiracleDevs/Paradigm.ORM/workflows/Paradigm%20ORM/badge.svg)](https://github.com/MiracleDevs/Paradigm.ORM/actions)
+[![Paradigm ORM](https://github.com/MiracleDevs/Paradigm.ORM/actions/workflows/dotnet-core.yml/badge.svg)](https://github.com/MiracleDevs/Paradigm.ORM/actions/workflows/dotnet-core.yml)
 
 # Paradigm.ORM
 .NET Core ORM with dbfirst support, and code scaffolding features. This ORM supports different database sources. You can find more information [here](https://www.paradigm.net.co/articles/1.introduction/index.html).
