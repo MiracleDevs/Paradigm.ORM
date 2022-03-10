@@ -66,7 +66,7 @@ namespace Paradigm.ORM.Data.Extensions
             var typeInfo = type?.GetTypeInfo();
             var types = new HashSet<Type>();
 
-            if ((type == null) || (typeInfo.BaseType == null))
+            if (type == null || typeInfo.BaseType == null)
             {
                 return types;
             }

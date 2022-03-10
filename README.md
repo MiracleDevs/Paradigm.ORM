@@ -71,8 +71,8 @@ $ docker-compose down
 
 ## Change log
 
-Version `2.7.0`:
-- Updated projects to .net 6.0.
+Version `3.0.0`:
+- Updated projects to .net6.0.
 - Updated dependencies to latest versions.
 - Updated tests to utilize new features.
 - Due to breaking changes on PostgreSQL, a temporal fix has been added to the connection to support old date formats, see more [here](https://www.npgsql.org/doc/types/datetime.html) and [here](https://www.npgsql.org/doc/release-notes/6.0.html#timestamp-rationalization-and-improvements).

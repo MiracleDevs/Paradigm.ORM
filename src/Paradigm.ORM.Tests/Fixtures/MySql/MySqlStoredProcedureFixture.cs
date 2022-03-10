@@ -103,14 +103,14 @@ namespace Paradigm.ORM.Tests.Fixtures.MySql
                 CreatedDate = new DateTime(2017, 6, 21),
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Name = $"Test Child 1 {Guid.NewGuid()}",
                         IsActive = false,
                         Amount = 100.25m,
                         CreatedDate = new DateTime(2017, 6, 22),
                     },
-                    new SingleKeyChildTable
+                    new()
                     {
                         Name = $"Test Child 2 {Guid.NewGuid()}",
                         IsActive = false,

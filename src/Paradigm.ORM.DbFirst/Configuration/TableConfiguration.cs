@@ -58,11 +58,6 @@ namespace Paradigm.ORM.DbFirst.Configuration
             return this.ColumnsToRename.FirstOrDefault(x => x.Name == column.Name);
         }
 
-        public RenameConfiguration GetConstraintRenameConfiguration(Constraint constraint)
-        {
-            return this.ConstraintsToRename.FirstOrDefault(x => x.Name == constraint.Name);
-        }
-
         #endregion
     }
 }

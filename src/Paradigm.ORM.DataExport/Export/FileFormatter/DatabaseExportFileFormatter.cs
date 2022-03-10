@@ -59,23 +59,15 @@ namespace Paradigm.ORM.DataExport.Export.FileFormatter
 
         private DatabaseType GetDatabaseType()
         {
-            switch (this.Configuration.DestinationFile.FileType)
+            return this.Configuration.DestinationFile.FileType switch
             {
-                case ExportFileType.SqlServer:
-                    return DatabaseType.SqlServer;
-
-                case ExportFileType.MySql:
-                    return DatabaseType.MySql;
-
-                case ExportFileType.PostgreSql:
-                    return DatabaseType.PostgreSql;
-
-                case ExportFileType.Cassandra:
-                    return DatabaseType.Cassandra;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(this.Configuration.DestinationFile.FileType), this.Configuration.DestinationFile.FileType, null);
-            }
+                ExportFileType.SqlServer => DatabaseType.SqlServer,
+                ExportFileType.MySql => DatabaseType.MySql,
+                ExportFileType.PostgreSql => DatabaseType.PostgreSql,
+                ExportFileType.Cassandra => DatabaseType.Cassandra,
+                _ => throw new ArgumentOutOfRangeException(nameof(this.Configuration.DestinationFile.FileType),
+                    this.Configuration.DestinationFile.FileType, null)
+            };
         }
 
         #endregion

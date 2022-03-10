@@ -100,7 +100,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Sql
                 CreatedDate = DateTime.Today,
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Name = "Test Child " + Guid.NewGuid(),
                         IsActive = true,

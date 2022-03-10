@@ -27,9 +27,9 @@ namespace Paradigm.ORM.DbFirst.Translation
             var output = new ObjectContainer();
 
             // enum is not possible in this scenario.
-            var objectBase = typeInfo.IsClass ? (output.Class = new Class()) : (output.Struct = new Struct());
+            var objectBase = typeInfo.IsClass ? output.Class = new Class() : output.Struct = new Struct();
 
-            if (input.GenericTypeArguments != null && input.GenericTypeArguments.Length > 0)
+            if (input.GenericTypeArguments.Length > 0)
                 objectBase.InnerObjectName = input.GenericTypeArguments[0].GetReadableFullName();
 
             objectBase.Name = input.GetReadableName();
@@ -39,7 +39,7 @@ namespace Paradigm.ORM.DbFirst.Translation
             if (typeInfo.IsArray && input != typeof(string))
             {
                 objectBase.IsArray = true;
-                objectBase.InnerObjectName = input.GetElementType().FullName;
+                objectBase.InnerObjectName = input.GetElementType()?.FullName;
             }
             else if (typeof(IEnumerable).GetTypeInfo().IsAssignableFrom(typeInfo) && input != typeof(string))
             {

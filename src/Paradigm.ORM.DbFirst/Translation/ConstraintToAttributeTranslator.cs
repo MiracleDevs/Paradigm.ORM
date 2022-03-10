@@ -23,56 +23,49 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         public override Attribute Translate(Constraint input)
         {
-            switch (input.Type)
+            return input.Type switch
             {
-                case ConstraintType.PrimaryKey:
-                    return GetPrimaryKeyAtribute();
-
-                case ConstraintType.ForeignKey:
-                    return GetForeignKeyAttribute(input);
-
-                case ConstraintType.UniqueKey:
-                    return GetUniqueKeyAttribute(input);
-
-                default:
-                    return null;
-            }
+                ConstraintType.PrimaryKey => GetPrimaryKeyAttribute(),
+                ConstraintType.ForeignKey => GetForeignKeyAttribute(input),
+                ConstraintType.UniqueKey => GetUniqueKeyAttribute(input),
+                _ => null
+            };
         }
 
         #endregion
 
         #region Private Methods
 
-        private static Attribute GetPrimaryKeyAtribute()
+        private static Attribute GetPrimaryKeyAttribute()
         {
             return new Attribute { Name = nameof(PrimaryKeyAttribute) };
         }
 
-        private static Attribute GetForeignKeyAttribute(Constraint input)
+        private static Attribute GetForeignKeyAttribute(IConstraint input)
         {
             return new Attribute
             {
                 Name = nameof(ForeignKeyAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter { Name = nameof(ForeignKeyAttribute.Name), Value = input.Name},
-                    new AttributeParameter { Name = nameof(ForeignKeyAttribute.FromTable), Value = input.FromTableName },
-                    new AttributeParameter { Name = nameof(ForeignKeyAttribute.FromColumn), Value = input.FromColumnName },
-                    new AttributeParameter { Name = nameof(ForeignKeyAttribute.ToTable), Value = input.ToTableName },
-                    new AttributeParameter { Name = nameof(ForeignKeyAttribute.ToColumn), Value = input.ToColumnName }
+                    new() { Name = nameof(ForeignKeyAttribute.Name), Value = input.Name},
+                    new() { Name = nameof(ForeignKeyAttribute.FromTable), Value = input.FromTableName },
+                    new() { Name = nameof(ForeignKeyAttribute.FromColumn), Value = input.FromColumnName },
+                    new() { Name = nameof(ForeignKeyAttribute.ToTable), Value = input.ToTableName },
+                    new() { Name = nameof(ForeignKeyAttribute.ToColumn), Value = input.ToColumnName }
                 }
             };
         }
 
-        private static Attribute GetUniqueKeyAttribute(Constraint input)
+        private static Attribute GetUniqueKeyAttribute(IConstraint input)
         {
             return new Attribute
             {
                 Name = nameof(UniqueKeyAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter { Name = nameof(UniqueKeyAttribute.Name), Value = input.Name },
-                    new AttributeParameter { Name = nameof(UniqueKeyAttribute.Column), Value = input.FromColumnName }
+                    new() { Name = nameof(UniqueKeyAttribute.Name), Value = input.Name },
+                    new() { Name = nameof(UniqueKeyAttribute.Column), Value = input.FromColumnName }
                 }
             };
         }

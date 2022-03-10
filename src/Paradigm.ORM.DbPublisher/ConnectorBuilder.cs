@@ -11,23 +11,14 @@ namespace Paradigm.ORM.DbPublisher
     {
         public static IDatabaseConnector Build(PublishConfiguration configuration)
         {
-            switch (configuration.DatabaseType)
+            return configuration.DatabaseType switch
             {
-                case DatabaseType.SqlServer:
-                    return new SqlDatabaseConnector(configuration.ConnectionString);
-
-                case DatabaseType.MySql:
-                    return new MySqlDatabaseConnector(configuration.ConnectionString);
-
-                case DatabaseType.PostgreSql:
-                    return new PostgreSqlDatabaseConnector(configuration.ConnectionString);
-
-                case DatabaseType.Cassandra:
-                    return new CqlDatabaseConnector(configuration.ConnectionString);
-
-                default:
-                    return null;
-            }
+                DatabaseType.SqlServer => new SqlDatabaseConnector(configuration.ConnectionString),
+                DatabaseType.MySql => new MySqlDatabaseConnector(configuration.ConnectionString),
+                DatabaseType.PostgreSql => new PostgreSqlDatabaseConnector(configuration.ConnectionString),
+                DatabaseType.Cassandra => new CqlDatabaseConnector(configuration.ConnectionString),
+                _ => null
+            };
         }
     }
 }

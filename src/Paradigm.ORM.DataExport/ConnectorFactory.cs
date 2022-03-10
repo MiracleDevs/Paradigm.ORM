@@ -12,23 +12,14 @@ namespace Paradigm.ORM.DataExport
     {
         public static IDatabaseConnector Create(DatabaseType database)
         {
-            switch (database)
+            return database switch
             {
-                case DatabaseType.MySql:
-                    return new MySqlDatabaseConnector();
-
-                case DatabaseType.PostgreSql:
-                    return new PostgreSqlDatabaseConnector();
-
-                case DatabaseType.SqlServer:
-                    return new SqlDatabaseConnector();
-
-                case DatabaseType.Cassandra:
-                    return new CqlDatabaseConnector();
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(database), database, null);
-            }
+                DatabaseType.MySql => new MySqlDatabaseConnector(),
+                DatabaseType.PostgreSql => new PostgreSqlDatabaseConnector(),
+                DatabaseType.SqlServer => new SqlDatabaseConnector(),
+                DatabaseType.Cassandra => new CqlDatabaseConnector(),
+                _ => throw new ArgumentOutOfRangeException(nameof(database), database, null)
+            };
         }
     }
 }

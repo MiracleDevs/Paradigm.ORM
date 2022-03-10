@@ -64,7 +64,7 @@ namespace Paradigm.ORM.DbFirst.Translation
                 Name = nameof(RoutineAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(RoutineAttribute.Name),
                         Value = input.Name
@@ -80,7 +80,7 @@ namespace Paradigm.ORM.DbFirst.Translation
                 Name = nameof(StoredProcedureTypeAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(StoredProcedureTypeAttribute.ProcedureType),
                         Value = input.Type.ToString()
@@ -96,7 +96,7 @@ namespace Paradigm.ORM.DbFirst.Translation
                 Name = nameof(RoutineResultAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(RoutineResultAttribute.ResultType),
                         Value = resultType

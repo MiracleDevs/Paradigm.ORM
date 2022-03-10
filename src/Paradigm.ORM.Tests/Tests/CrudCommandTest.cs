@@ -397,7 +397,7 @@ namespace Paradigm.ORM.Tests.Tests
             insertCommandBuilder.GetCommand(valueProvider).ExecuteNonQuery();
 
             var selectOneCommandBuilder = fixture.Connector.GetCommandBuilderFactory().CreateSelectOneCommandBuilder(fixture.GetMultipleKeyDescriptor());
-            var selectCommand = (fixtureType == typeof(CqlCrudCommandFixture))
+            var selectCommand = fixtureType == typeof(CqlCrudCommandFixture)
                 ? selectOneCommandBuilder.GetCommand(1, 2, ((Mocks.Cql.TwoPrimaryKeyTable)first).Date)
                 : selectOneCommandBuilder.GetCommand(1, 2);
 

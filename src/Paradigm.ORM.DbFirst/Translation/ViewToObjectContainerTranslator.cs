@@ -40,22 +40,22 @@ namespace Paradigm.ORM.DbFirst.Translation
 
                     Attributes = new List<Attribute>
                     {
-                        new Attribute
+                        new()
                         {
                             Name = nameof(TableAttribute),
                             Parameters = new List<AttributeParameter>
                             {
-                                new AttributeParameter
+                                new()
                                 {
                                     Name = nameof(TableAttribute.Catalog),
                                     Value = input.CatalogName
                                 },
-                                new AttributeParameter
+                                new()
                                 {
                                     Name = nameof(TableAttribute.Schema),
                                     Value =input.SchemaName
                                 },
-                                new AttributeParameter
+                                new()
                                 {
                                     Name = nameof(TableAttribute.Name),
                                     Value = input.Name

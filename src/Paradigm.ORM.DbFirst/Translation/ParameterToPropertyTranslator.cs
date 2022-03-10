@@ -33,22 +33,22 @@ namespace Paradigm.ORM.DbFirst.Translation
                 TypeName = type.GetReadableFullName(),
                 Attributes = new List<Attribute>
                 {
-                    new Attribute
+                    new()
                     {
                         Name = nameof(ParameterAttribute),
                         Parameters = new List<AttributeParameter>
                         {
-                            new AttributeParameter
+                            new()
                             {
                                 Name = nameof(ParameterAttribute.Name),
                                 Value = input.Name
                             },
-                            new AttributeParameter
+                            new()
                             {
                                 Name = nameof(ParameterAttribute.Type),
                                 Value = input.DataType
                             },
-                            new AttributeParameter
+                            new()
                             {
                                 Name = nameof(ParameterAttribute.IsInput),
                                 Value = input.IsInput.ToString().ToLower(),

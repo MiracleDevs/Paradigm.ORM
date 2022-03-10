@@ -67,7 +67,7 @@ namespace Paradigm.ORM.Data.CommandBuilders
                 for (var index = 0; index < parameters.Length; index++)
                 {
                     var oldName = $"@{index + 1}";
-                    var newName = this.FormatProvider.GetParameterName($"p{(index + 1)}");
+                    var newName = this.FormatProvider.GetParameterName($"p{index + 1}");
 
                     builder.Replace(oldName, newName);
 

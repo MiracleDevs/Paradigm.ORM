@@ -66,15 +66,12 @@ namespace Paradigm.ORM.Data.Cassandra.Converters
                     return Convert.ToDecimal(value);
 
                 case TypeCode.DateTime:
-                    switch (value)
+                    return value switch
                     {
-                        case LocalDate localDate:
-                            return new DateTime(localDate.Year, localDate.Month, localDate.Day);
-
-                        case DateTimeOffset offset:
-                            return offset.DateTime;
-                    }
-                    throw new NotSupportedException();
+                        LocalDate localDate => new DateTime(localDate.Year, localDate.Month, localDate.Day),
+                        DateTimeOffset offset => offset.DateTime,
+                        _ => throw new NotSupportedException()
+                    };
 
                 case TypeCode.Boolean:
                     return Convert.ToBoolean(value);

@@ -34,8 +34,7 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         protected IEnumerable<Property> CreateReferredConstraintProperties(View view)
         {
-            var table = view as Table;
-            var viewConfiguration = table != null
+            var viewConfiguration = view is Table table
                 ? this.Configuration.GetTableConfiguration(table)
                 : this.Configuration.GetTableConfiguration(view);
 
@@ -72,8 +71,7 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         protected IEnumerable<Property> CreateOwnConstraintNavigationProperties(View view)
         {
-            var table = view as Table;
-            var viewConfiguration = table != null
+            var viewConfiguration = view is Table table
                 ? this.Configuration.GetTableConfiguration(table)
                 : this.Configuration.GetTableConfiguration(view);
 
@@ -109,17 +107,17 @@ namespace Paradigm.ORM.DbFirst.Translation
                 Name = nameof(NavigationAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(NavigationAttribute.ReferencedType),
                         Value = this.GetTableName(invert ? x.FromTableView : x.ToTableView)
                     },
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(NavigationAttribute.SourceProperty),
                         Value = this.GetColumnName(invert ? x.ToColumn : x.FromColumn)
                     },
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(NavigationAttribute.ReferencedProperty),
                         Value = this.GetColumnName(invert ? x.FromColumn : x.ToColumn)
@@ -131,8 +129,7 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         protected string GetTableName(View view)
         {
-            var table = view as Table;
-            var viewConfiguration = table != null
+            var viewConfiguration = view is Table table
                 ? this.Configuration.GetTableConfiguration(table)
                 : this.Configuration.GetTableConfiguration(view);
 
@@ -141,8 +138,7 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         protected string GetColumnName(Column column)
         {
-            var table = column.TableView as Table;
-            var viewConfiguration = table != null
+            var viewConfiguration = column.TableView is Table table
                 ? this.Configuration.GetTableConfiguration(table)
                 : this.Configuration.GetTableConfiguration(column.TableView);
 

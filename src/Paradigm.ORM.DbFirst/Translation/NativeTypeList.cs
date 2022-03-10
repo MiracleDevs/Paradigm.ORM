@@ -8,7 +8,7 @@ namespace Paradigm.ORM.DbFirst.Translation
     {
         #region Properties
 
-        private static readonly Lazy<NativeTypeList> InternalInstance = new Lazy<NativeTypeList>(() => new NativeTypeList(), true);
+        private static readonly Lazy<NativeTypeList> InternalInstance = new(() => new NativeTypeList(), true);
 
         public static NativeTypeList Instance => InternalInstance.Value;
 
@@ -34,20 +34,12 @@ namespace Paradigm.ORM.DbFirst.Translation
             if (this.InnerList.Any(x => x == type))
                 return;
 
-            if (type.GenericTypeArguments != null)
+            foreach (var argument in type.GenericTypeArguments)
             {
-                foreach (var argument in type.GenericTypeArguments)
-                {
-                    this.RegisterType(argument);
-                }
+                this.RegisterType(argument);
             }
 
             this.InnerList.Add(type);
-        }
-
-        public Type Find(string name)
-        {
-            return this.InnerList.FirstOrDefault(x => x.Name == name);
         }
 
         public void Clear()

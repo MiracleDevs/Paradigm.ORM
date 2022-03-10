@@ -8,17 +8,13 @@ namespace Paradigm.ORM.DataExport.Export
     {
         public static Exporter Create(ILoggingService loggingService, Configuration.Configuration configuration, bool verbose)
         {
-            switch (configuration.ExportType)
+            return configuration.ExportType switch
             {
-                case ExportType.File:
-                    return new FileExporter(loggingService, configuration, verbose);
-
-                case ExportType.Database:
-                    return new DatabaseExporter(loggingService, configuration, verbose);
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(configuration.ExportType), configuration.ExportType, null);
-            }
+                ExportType.File => new FileExporter(loggingService, configuration, verbose),
+                ExportType.Database => new DatabaseExporter(loggingService, configuration, verbose),
+                _ => throw new ArgumentOutOfRangeException(nameof(configuration.ExportType), configuration.ExportType,
+                    null)
+            };
         }
     }
 }

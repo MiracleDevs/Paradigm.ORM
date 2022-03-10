@@ -79,7 +79,7 @@ namespace Paradigm.ORM.Tests.Fixtures.PostgreSql
                 CreatedDate = DateTime.Today,
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Name = "Test Child " + Guid.NewGuid(),
                         IsActive = true,

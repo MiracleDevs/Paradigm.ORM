@@ -5,6 +5,7 @@ using Paradigm.CodeGen.Input.Json.Models;
 using Paradigm.Core.Extensions;
 using Paradigm.ORM.Data.Attributes;
 using Paradigm.ORM.Data.Database;
+using Paradigm.ORM.Data.Database.Schema.Structure;
 using Paradigm.ORM.DbFirst.Configuration;
 using Paradigm.ORM.DbFirst.Schema;
 using Attribute = Paradigm.CodeGen.Input.Json.Models.Attribute;
@@ -70,31 +71,28 @@ namespace Paradigm.ORM.DbFirst.Translation
 
         private string FormatValue(object value)
         {
-            if (value is DateTime dateTime)
-                return dateTime.ToString("O");
-
-            if (value is DateTimeOffset dateTimeOffset)
-                return dateTimeOffset.ToString("O");
-
-            if (value is TimeSpan timeSpan)
-                return timeSpan.ToString("G");
-
-            return value?.ToString();
+            return value switch
+            {
+                DateTime dateTime => dateTime.ToString("O"),
+                DateTimeOffset dateTimeOffset => dateTimeOffset.ToString("O"),
+                TimeSpan timeSpan => timeSpan.ToString("G"),
+                _ => value?.ToString()
+            };
         }
 
-        private static Attribute GetColumnAttribute(Column input)
+        private static Attribute GetColumnAttribute(IColumn input)
         {
             return new Attribute
             {
                 Name = nameof(ColumnAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(ColumnAttribute.Name),
                         Value = input.Name
                     },
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(ColumnAttribute.Type),
                         Value = input.DataType
@@ -120,13 +118,13 @@ namespace Paradigm.ORM.DbFirst.Translation
                 Name = nameof(RangeAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(RangeAttribute.MinValue),
                         Value = this.FormatValue(minValue)
                     },
 
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(RangeAttribute.MaxValue),
                         Value = this.FormatValue(maxValue)
@@ -135,14 +133,14 @@ namespace Paradigm.ORM.DbFirst.Translation
             };
         }
 
-        private static Attribute GetSizeAttribute(Column input)
+        private static Attribute GetSizeAttribute(IColumn input)
         {
             return new Attribute
             {
                 Name = nameof(SizeAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(SizeAttribute.MaxSize),
                         Value = input.MaxSize.ToString(),
@@ -152,20 +150,20 @@ namespace Paradigm.ORM.DbFirst.Translation
             };
         }
 
-        private static Attribute GetNumericAttribute(Column input)
+        private static Attribute GetNumericAttribute(IColumn input)
         {
             return new Attribute
             {
                 Name = nameof(NumericAttribute),
                 Parameters = new List<AttributeParameter>
                 {
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(NumericAttribute.Precision),
                         Value = input.Precision.ToString(),
                         IsNumeric = true
                     },
-                    new AttributeParameter
+                    new()
                     {
                         Name = nameof(NumericAttribute.Scale),
                         Value = input.Scale.ToString(),

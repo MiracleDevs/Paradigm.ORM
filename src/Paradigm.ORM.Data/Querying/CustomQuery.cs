@@ -95,7 +95,7 @@ namespace Paradigm.ORM.Data.Querying
                 for (var index = 0; index < parameters.Length; index++)
                 {
                     var oldName = $"@{index + 1}";
-                    var newName = formatProvider.GetParameterName($"p{(index + 1)}");
+                    var newName = formatProvider.GetParameterName($"p{index + 1}");
 
                     builder.Replace(oldName, newName);
 

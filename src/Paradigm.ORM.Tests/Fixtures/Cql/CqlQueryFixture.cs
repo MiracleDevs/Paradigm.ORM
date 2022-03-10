@@ -74,7 +74,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                 CreatedDate = new DateTime(2017, 4, 12),
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Id = 1,
                         ParentId = 1,
@@ -98,7 +98,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                 CreatedDate = new DateTime(2017, 6, 21),
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Id=2,
                         ParentId=2,
@@ -107,7 +107,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                         Amount = 100.25m,
                         CreatedDate = new DateTime(2017, 6, 22),
                     },
-                    new SingleKeyChildTable
+                    new()
                     {
                         Id=3,
                         ParentId=2,

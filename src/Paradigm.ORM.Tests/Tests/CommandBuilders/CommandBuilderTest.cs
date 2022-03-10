@@ -74,7 +74,7 @@ namespace Paradigm.ORM.Tests.Tests.CommandBuilders
 
             var selectCommand = commandBuilderFactory.CreateSelectOneCommandBuilder(tableDescription);
 
-            var command = (fixtureType == typeof(CqlCommandBuilderFixture))
+            var command = fixtureType == typeof(CqlCommandBuilderFixture)
                 ? selectCommand.GetCommand(723, 23, DateTimeOffset.Now)
                 : selectCommand.GetCommand(723, 23);
 

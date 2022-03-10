@@ -69,12 +69,6 @@ namespace Paradigm.ORM.DbFirst.Configuration
                    this.Views.FirstOrDefault(x => x.Name == toTableName);
         }
 
-        public TableConfiguration GetTableConfiguration(Constraint constraint)
-        {
-            return this.Tables.FirstOrDefault(x => x.Name == constraint.FromTableName) ??
-                   this.Views.FirstOrDefault(x => x.Name == constraint.FromTableName);
-        }
-
         public StoredProcedureConfiguration GetStoredProcedureConfiguration(StoredProcedure storedProcedure)
         {
             return this.StoredProcedures.FirstOrDefault(x => x.Name == storedProcedure.Name);

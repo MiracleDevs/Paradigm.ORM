@@ -35,38 +35,19 @@ namespace Paradigm.ORM.Data.MySql
         /// </remarks>
         public object GetMaxValue(string dataType)
         {
-            switch (dataType.ToLower())
+            return dataType.ToLower() switch
             {
-                case "tinyint":
-                    return 127;
-
-                case "smallint":
-                    return 32767;
-
-                case "mediumint":
-                    return 8388607;
-
-                case "int":
-                    return 2147483647;
-
-                case "bigint":
-                    return 9223372036854775807;
-
-                case "date":
-                    return new DateTime(9999, 12, 31);
-
-                case "datetime":
-                    return new DateTime(9999, 12, 31, 23, 59, 59);
-
-                case "timestamp":
-                    return new DateTime(2038, 01, 19, 03, 14, 07);
-
-                case "time":
-                    return new TimeSpan(838, 59, 59);
-
-                default:
-                    return null;
-            }
+                "tinyint" => 127,
+                "smallint" => 32767,
+                "mediumint" => 8388607,
+                "int" => 2147483647,
+                "bigint" => 9223372036854775807,
+                "date" => new DateTime(9999, 12, 31),
+                "datetime" => new DateTime(9999, 12, 31, 23, 59, 59),
+                "timestamp" => new DateTime(2038, 01, 19, 03, 14, 07),
+                "time" => new TimeSpan(838, 59, 59),
+                _ => null
+            };
         }
 
         /// <summary>
@@ -82,38 +63,19 @@ namespace Paradigm.ORM.Data.MySql
         /// </remarks>
         public object GetMinValue(string dataType)
         {
-            switch (dataType.ToLower())
+            return dataType.ToLower() switch
             {
-                case "tinyint":
-                    return -128;
-
-                case "smallint":
-                    return -32768;
-
-                case "mediumint":
-                    return -8388608;
-
-                case "int":
-                    return -2147483648;
-
-                case "bigint":
-                    return -9223372036854775808;
-
-                case "date":
-                    return new DateTime(1000, 01, 01);
-
-                case "datetime":
-                    return new DateTime(1000, 01, 01, 00, 00, 00);
-
-                case "timestamp":
-                    return new DateTime(1970, 01, 01, 00, 00, 01);
-
-                case "time":
-                    return new TimeSpan(-838, 59, 59);
-
-                default:
-                    return null;
-            }
+                "tinyint" => -128,
+                "smallint" => -32768,
+                "mediumint" => -8388608,
+                "int" => -2147483648,
+                "bigint" => -9223372036854775808,
+                "date" => new DateTime(1000, 01, 01),
+                "datetime" => new DateTime(1000, 01, 01, 00, 00, 00),
+                "timestamp" => new DateTime(1970, 01, 01, 00, 00, 01),
+                "time" => new TimeSpan(-838, 59, 59),
+                _ => null
+            };
         }
     }
 }

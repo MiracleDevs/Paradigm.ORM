@@ -21,29 +21,16 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </remarks>
         public object GetMaxValue(string dataType)
         {
-            switch (dataType.ToLower())
+            return dataType.ToLower() switch
             {
-                case "tinyint":
-                    return 127;
-
-                case "smallint":
-                    return 32767;
-
-                case "int":
-                    return 2147483647;
-
-                case "bigint":
-                    return 9223372036854775807;
-
-                case "date":
-                    return new DateTime(9999, 12, 31);
-
-                case "time":
-                    return new TimeSpan(23, 59, 59);
-
-                default:
-                    return null;
-            }
+                "tinyint" => 127,
+                "smallint" => 32767,
+                "int" => 2147483647,
+                "bigint" => 9223372036854775807,
+                "date" => new DateTime(9999, 12, 31),
+                "time" => new TimeSpan(23, 59, 59),
+                _ => null
+            };
         }
 
         /// <summary>
@@ -59,29 +46,16 @@ namespace Paradigm.ORM.Data.Cassandra
         /// </remarks>
         public object GetMinValue(string dataType)
         {
-            switch (dataType.ToLower())
+            return dataType.ToLower() switch
             {
-                case "tinyint":
-                    return -128;
-
-                case "smallint":
-                    return -32768;
-
-                case "int":
-                    return -2147483648;
-
-                case "bigint":
-                    return -9223372036854775808;
-
-                case "date":
-                    return new DateTime(1970, 01, 01);
-
-                case "time":
-                    return new TimeSpan(0, 0, 0);
-
-                default:
-                    return null;
-            }
+                "tinyint" => -128,
+                "smallint" => -32768,
+                "int" => -2147483648,
+                "bigint" => -9223372036854775808,
+                "date" => new DateTime(1970, 01, 01),
+                "time" => new TimeSpan(0, 0, 0),
+                _ => null
+            };
         }
     }
 }

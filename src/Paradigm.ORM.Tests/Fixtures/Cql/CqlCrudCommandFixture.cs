@@ -84,7 +84,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
                 CreatedDate = DateTime.Now,
                 Childs = new List<SingleKeyChildTable>
                 {
-                    new SingleKeyChildTable
+                    new()
                     {
                         Name = "Test Child " + Guid.NewGuid(),
                         ParentId = 1,
