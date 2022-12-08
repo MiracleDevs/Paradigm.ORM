@@ -22,7 +22,7 @@
     <PackageReference Include="Paradigm.CodeGen.Input.Json.Models" Version="3.0.0" />
     <PackageReference Include="Paradigm.Core.Extensions" Version="3.0.0" />
     <PackageReference Include="Paradigm.Core.Mapping" Version="3.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="System.Runtime.Serialization.Formatters" Version="4.3.0" />
   </ItemGroup>
 
