@@ -16,7 +16,7 @@ namespace Paradigm.ORM.DbPublisher.Logging
 
         public void Error(string text)
         {
-            Write("ERROR: " + text + Environment.NewLine, ConsoleColor.Red, ConsoleColor.Black);
+            Write("ERROR: " + text + Environment.NewLine, ConsoleColor.Red, ConsoleColor.Black, true);
         }
 
         public void Warning(string text)
@@ -29,7 +29,7 @@ namespace Paradigm.ORM.DbPublisher.Logging
             Write(text + Environment.NewLine, ConsoleColor.Green, ConsoleColor.Black);
         }
 
-        private static void Write(string text, ConsoleColor foreground, ConsoleColor background)
+        private static void Write(string text, ConsoleColor foreground, ConsoleColor background, bool error = false)
         {
             var oldForeground = Console.ForegroundColor;
             var oldBackground = Console.BackgroundColor;
@@ -37,7 +37,10 @@ namespace Paradigm.ORM.DbPublisher.Logging
             Console.ForegroundColor = foreground;
             Console.BackgroundColor = background;
 
-            Console.Write(text);
+            if (!error)
+                Console.Write(text);
+            else
+                Console.Error.Write(text);
 
             Console.ForegroundColor = oldForeground;
             Console.BackgroundColor = oldBackground;

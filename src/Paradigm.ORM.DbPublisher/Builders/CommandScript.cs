@@ -1,6 +1,6 @@
 namespace Paradigm.ORM.DbPublisher.Builders
 {
-    public class Script
+    public class CommandScript
     {
         /// <summary>
         /// Gets the name.
@@ -27,12 +27,12 @@ namespace Paradigm.ORM.DbPublisher.Builders
         public bool IgnoreErrors { get; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Script"/> class.
+        /// Initializes a new instance of the <see cref="CommandScript"/> class.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <param name="content">The content.</param>
         /// <param name="ignoreErrors">if set to <c>true</c> [ignore errors].</param>
-        public Script(string name, string content, bool ignoreErrors)
+        public CommandScript(string name, string content, bool ignoreErrors)
         {
             Name = name;
             Content = content;

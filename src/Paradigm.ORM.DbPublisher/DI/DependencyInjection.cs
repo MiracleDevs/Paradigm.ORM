@@ -15,8 +15,8 @@ namespace Paradigm.ORM.DbPublisher.DI
 
             builder.RegisterInstance(ConnectorBuilder.Build(configuration));
             builder.RegisterInstance<ILoggingService>(new ConsoleLoggingService());
-            builder.Register<IScriptBuilder, ScriptBuilder>();
-            builder.Register<IScriptRunner, ScriptRunner>();
+            builder.Register<ICommandScriptBuilder, CommandScriptBuilder>();
+            builder.Register<ICommandScriptRunner, CommandScriptRunner>();
 
             return builder.Build();
         }

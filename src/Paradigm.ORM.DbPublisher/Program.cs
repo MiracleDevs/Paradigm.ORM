@@ -25,6 +25,7 @@ namespace Paradigm.ORM.DbPublisher
         {
             LoggingService = new ConsoleLoggingService();
             var started = DateTime.Now;
+            var failed = false;
 
             LoggingService.Notice("------------------------------------------------------------------------------------------------------");
             LoggingService.Notice("Miracle Devs - Paradigm.ORM");
@@ -46,6 +47,7 @@ namespace Paradigm.ORM.DbPublisher
             catch (Exception ex)
             {
                 LoggingService.Error(ex.Message);
+                failed = true;
             }
 
             var ended = DateTime.Now;
@@ -57,6 +59,7 @@ namespace Paradigm.ORM.DbPublisher
 #if DEBUG
             Console.ReadKey();
 #endif
+            Environment.Exit(failed ? 1 : 0);
         }
 
         private static int Execute(string configurationFileName, bool verbose, string watch)
@@ -141,8 +144,8 @@ namespace Paradigm.ORM.DbPublisher
         {
             try
             {
-                var builder = container.Resolve<IScriptBuilder>();
-                var runner = container.Resolve<IScriptRunner>();
+                var builder = container.Resolve<ICommandScriptBuilder>();
+                var runner = container.Resolve<ICommandScriptRunner>();
                 var scripts = GetConfigurationFiles(configurationFileName, publishConfiguration, verbose).ToList();
 
                 LoggingService.WriteLine($"{scripts.Count} script files discovered.");
@@ -158,7 +161,7 @@ namespace Paradigm.ORM.DbPublisher
 
                 if (publishConfiguration.GenerateScript)
                 {
-                    builder.SaveScript(outputFileName, verbose);
+                    builder.SaveCommandScript(outputFileName, verbose);
 
                     if (verbose)
                     {

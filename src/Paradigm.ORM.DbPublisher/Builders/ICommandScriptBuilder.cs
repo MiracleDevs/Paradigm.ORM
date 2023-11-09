@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Paradigm.ORM.DbPublisher.Builders
 {
-    public interface IScriptBuilder
+    public interface ICommandScriptBuilder
     {
         /// <summary>
         /// Gets the scripts.
@@ -10,7 +10,7 @@ namespace Paradigm.ORM.DbPublisher.Builders
         /// <value>
         /// The scripts.
         /// </value>
-        Dictionary<string, Script> Scripts { get; }
+        Dictionary<string, IEnumerable<CommandScript>> CommandScripts { get; }
 
         /// <summary>
         /// Builds the specified file names.
@@ -23,13 +23,13 @@ namespace Paradigm.ORM.DbPublisher.Builders
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <param name="verbose">if set to <c>true</c> [verbose].</param>
-        void SaveScript(string fileName, bool verbose);
+        void SaveCommandScript(string fileName, bool verbose);
 
         /// <summary>
         /// Gets the script.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns></returns>
-        Script GetScript(string fileName);
+        IEnumerable<CommandScript> GetCommandScript(string fileName);
     }
 }

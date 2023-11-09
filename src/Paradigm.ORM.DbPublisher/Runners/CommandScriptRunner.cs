@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Paradigm.ORM.Data.Database;
@@ -9,7 +10,7 @@ using Paradigm.ORM.DbPublisher.Logging;
 
 namespace Paradigm.ORM.DbPublisher.Runners
 {
-    public class ScriptRunner: IScriptRunner
+    public class CommandScriptRunner : ICommandScriptRunner
     {
         #region Properties
 
@@ -26,10 +27,10 @@ namespace Paradigm.ORM.DbPublisher.Runners
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScriptRunner"/> class.
+        /// Initializes a new instance of the <see cref="CommandScriptRunner"/> class.
         /// </summary>
         /// <param name="serviceProvider">The service provider.</param>
-        public ScriptRunner(IServiceProvider serviceProvider)
+        public CommandScriptRunner(IServiceProvider serviceProvider)
         {
             this.ServiceProvider = serviceProvider;
         }
@@ -43,33 +44,36 @@ namespace Paradigm.ORM.DbPublisher.Runners
         /// </summary>
         /// <param name="scriptBuilder">The script builder.</param>
         /// <param name="verbose">if set to <c>true</c> [verbose].</param>
-        public async Task RunAsync(IScriptBuilder scriptBuilder, bool verbose)
+        public async Task RunAsync(ICommandScriptBuilder scriptBuilder, bool verbose)
         {
             var loggingService = this.ServiceProvider.GetRequiredService<ILoggingService>();
             var connector = this.ServiceProvider.GetRequiredService<IDatabaseConnector>();
 
             await connector.OpenAsync();
 
-            foreach (var scriptFileName in scriptBuilder.Scripts.Keys)
+            foreach (var scriptFileName in scriptBuilder.CommandScripts.Keys)
             {
                 try
                 {
+                    var commandScripts = scriptBuilder.GetCommandScript(scriptFileName);
+
                     if (verbose)
                     {
-                        loggingService.WriteLine($"Running script: {Path.GetFileName(scriptFileName)}");
+                        loggingService.WriteLine($"Running file '{Path.GetFileName(scriptFileName)}' with '{commandScripts.Count()}' command scripts");
                     }
 
-                    var script = scriptBuilder.GetScript(scriptFileName);
-
-                    try
+                    foreach (var commandScript in commandScripts)
                     {
-                        await connector.ExecuteNonQueryAsync(script.Content);
-                    }
-                    catch
-                    {
-                        if (!script.IgnoreErrors)
+                        try
                         {
-                            throw;
+                            await connector.ExecuteNonQueryAsync(commandScript.Content);
+                        }
+                        catch
+                        {
+                            if (!commandScript.IgnoreErrors)
+                            {
+                                throw;
+                            }
                         }
                     }
                 }

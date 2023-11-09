@@ -3,7 +3,7 @@ using Paradigm.ORM.DbPublisher.Builders;
 
 namespace Paradigm.ORM.DbPublisher.Runners
 {
-    public interface IScriptRunner
+    public interface ICommandScriptRunner
     {
         /// <summary>
         /// Runs the scripts.
@@ -11,6 +11,6 @@ namespace Paradigm.ORM.DbPublisher.Runners
         /// <param name="scriptBuilder">The script builder.</param>
         /// <param name="verbose">if set to <c>true</c> [verbose].</param>
         /// <returns></returns>
-        Task RunAsync(IScriptBuilder scriptBuilder, bool verbose);
+        Task RunAsync(ICommandScriptBuilder scriptBuilder, bool verbose);
     }
 }
