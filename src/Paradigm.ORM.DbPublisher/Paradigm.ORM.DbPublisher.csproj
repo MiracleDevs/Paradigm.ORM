@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <ApplicationIcon>dbpublisher.ico</ApplicationIcon>
     <OutputTypeEx>exe</OutputTypeEx>
