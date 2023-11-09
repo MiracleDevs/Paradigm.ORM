@@ -52,7 +52,5 @@ services:
     command:
       - --smp=4
       - --memory=4G
-    environment:
-      - CASSANDRA_KEYSPACE=test
     ports:
       - "9042:9042"

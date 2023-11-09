@@ -71,6 +71,13 @@ $ docker-compose down
 
 ## Change log
 
+Version `4.0.0`:
+- Updated projects to .net 7.0.
+- Updated dependencies to latest versions.
+- Updated how the scylla docker db is created, and tests executed.
+- **NEW**: Added a new `#go` directive to `DbPublisher` to allow multiple commands in one file. The application will separate the commands and execute individually.
+- **NEW**: DbPublisher will now exit with a non-zero value when errors are found during the process to allow for CI tests.
+
 Version `3.0.0`:
 - Updated projects to .net6.0.
 - Updated dependencies to latest versions.
