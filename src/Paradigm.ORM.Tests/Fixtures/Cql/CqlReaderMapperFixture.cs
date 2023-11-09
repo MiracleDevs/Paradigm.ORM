@@ -24,7 +24,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override void CreateDatabase()
         {
-            // We assume the database is created, we only create and drop the content of it
+            this.Connector.ExecuteNonQuery(@"CREATE KEYSPACE IF NOT EXISTS test WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};");
         }
 
         public override void DropDatabase()
@@ -63,25 +63,44 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
         {
             return new AllColumnsClass
             {
-                /* 01 */ Id = Guid.NewGuid(),
-                /* 02 */ Ascii = "simple ascii string.",
-                /* 03 */ BigInt = 0,
-                /* 04 */ Blob = File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\Mocks\\Data\\small_image.png"),
-                /* 05 */ Boolean = true,
-                /* 06 */ Date = new DateTime(2017, 10, 10),
-                /* 07 */ Decimal = 0,
-                /* 08 */ Double = 0,
-                /* 09 */ Float = 0,
-                /* 10 */ Inet = new IPAddress(new byte[] { 127, 0, 0, 1 }),
-                /* 11 */ Int = 0,
-                /* 12 */ SmallInt = 0,
-                /* 13 */ Text = "trying some text.",
-                /* 14 */ Time = new TimeSpan(10, 0, 0),
-                /* 15 */ Timestamp =new DateTime(2017, 10, 10, 12, 0, 0, 0),
-                /* 16 */ TimeUuid  = TimeUuid.NewId(DateTime.Now),
-                /* 17 */ TinyInt =  0,
-                /* 18 */ VarChar = "Text var char.",
-                /* 19 */ VarInt = new BigInteger(0)
+                /* 01 */
+                Id = Guid.NewGuid(),
+                /* 02 */
+                Ascii = "simple ascii string.",
+                /* 03 */
+                BigInt = 0,
+                /* 04 */
+                Blob = File.ReadAllBytes(Directory.GetCurrentDirectory() + "\\Mocks\\Data\\small_image.png"),
+                /* 05 */
+                Boolean = true,
+                /* 06 */
+                Date = new DateTime(2017, 10, 10),
+                /* 07 */
+                Decimal = 0,
+                /* 08 */
+                Double = 0,
+                /* 09 */
+                Float = 0,
+                /* 10 */
+                Inet = new IPAddress(new byte[] { 127, 0, 0, 1 }),
+                /* 11 */
+                Int = 0,
+                /* 12 */
+                SmallInt = 0,
+                /* 13 */
+                Text = "trying some text.",
+                /* 14 */
+                Time = new TimeSpan(10, 0, 0),
+                /* 15 */
+                Timestamp = new DateTime(2017, 10, 10, 12, 0, 0, 0),
+                /* 16 */
+                TimeUuid = TimeUuid.NewId(DateTime.Now),
+                /* 17 */
+                TinyInt = 0,
+                /* 18 */
+                VarChar = "Text var char.",
+                /* 19 */
+                VarInt = new BigInteger(0)
             };
         }
 

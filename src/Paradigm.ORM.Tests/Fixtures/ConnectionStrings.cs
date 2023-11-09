@@ -2,7 +2,7 @@
 {
     public class ConnectionStrings
     {
-        public const string Cql = "Contact Points=127.0.0.1;Port=9042;Default Keyspace=test;Username=root";
+        public const string Cql = "Contact Points=127.0.0.1;Port=9042;Username=root";
 
         public const string MySql = "Server=127.0.0.1;Database=test;User=root;Password=Paradigm_Test_1234;Connection Timeout=3600;Allow User Variables=True;POOLING=true";
 

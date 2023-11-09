@@ -21,7 +21,7 @@ namespace Paradigm.ORM.Tests.Fixtures.Cql
 
         public override void CreateDatabase()
         {
-            // We assume the database is created, we only create and drop the content of it
+            this.Connector.ExecuteNonQuery(@"CREATE KEYSPACE IF NOT EXISTS test WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 1};");
         }
 
         public override void DropDatabase()
