@@ -13,6 +13,7 @@ using Paradigm.ORM.Data.Exceptions;
 using Paradigm.ORM.Data.Extensions;
 using Paradigm.ORM.Data.Logging;
 using Paradigm.ORM.Data.PostgreSql.Converters;
+using Paradigm.ORM.Data.Database.Schema.Structure;
 
 namespace Paradigm.ORM.Data.PostgreSql
 {
@@ -204,6 +205,10 @@ namespace Paradigm.ORM.Data.PostgreSql
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
             // https://www.npgsql.org/doc/types/datetime.html
             // https://www.npgsql.org/doc/release-notes/6.0.html#timestamp-rationalization-and-improvements
+
+            /* TODO: Search for a better solution */
+            AppContext.SetSwitch("Npgsql.EnableStoredProcedureCompatMode", true);
+            // https://www.npgsql.org/doc/release-notes/7.0.html#commandtypestoredprocedure-now-invokes-procedures-instead-of-functions
         }
 
         /// <summary>
