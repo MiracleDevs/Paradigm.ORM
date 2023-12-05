@@ -17,6 +17,8 @@ namespace Paradigm.ORM.DbPublisher
 {
     internal class Program
     {
+        private const string EnvironmentConnectionStringKey = "Paradigm_ORM_ConnectionString";
+
         private static ILoggingService LoggingService { get; set; }
 
         private static PhysicalFileProvider FileProvider { get; set; }
@@ -82,6 +84,11 @@ namespace Paradigm.ORM.DbPublisher
             if (publishConfiguration == null)
             {
                 throw new Exception("Configuration file couldn't be opened");
+            }
+
+            if (Environment.GetEnvironmentVariable(EnvironmentConnectionStringKey) != null)
+            {
+                publishConfiguration.ConnectionString = Environment.GetEnvironmentVariable(EnvironmentConnectionStringKey);
             }
 
             var container = DependencyInjection.Register(publishConfiguration);
