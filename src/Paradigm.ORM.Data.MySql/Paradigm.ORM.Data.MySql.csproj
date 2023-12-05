@@ -14,6 +14,9 @@
         <Company>Miracle Devs</Company>
         <Version>4.0.1</Version>
         <Product>Paradigm.ORM</Product>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Paradigm;ORM;MySql;Database</PackageTags>
+        <Title>Paradigm ORM MySql Connector</Title>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +28,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\..\README.md">
+          <Pack>True</Pack>
+          <PackagePath>\</PackagePath>
+        </None>
         <None Include="icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 

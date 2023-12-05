@@ -5,7 +5,8 @@
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Copyright>Miracle Devs</Copyright>
         <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
-        <Description>Paradigm ORM data library.</Description>
+        <Description>Paradigm ORM data library. 
+This library contains the core agnostic elements, and it's implemented in every specific connector package.</Description>
         <PostBuildEvent></PostBuildEvent>
         <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
         <PackageIcon>icon.png</PackageIcon>
@@ -16,6 +17,9 @@
         <Company>Miracle Devs</Company>
         <Version>4.0.1</Version>
         <Product>Paradigm.ORM</Product>
+        <Title>Paradigm ORM Data</Title>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Paradigm;ORM;Database</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,6 +28,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\..\README.md">
+          <Pack>True</Pack>
+          <PackagePath>\</PackagePath>
+        </None>
         <None Include="icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 

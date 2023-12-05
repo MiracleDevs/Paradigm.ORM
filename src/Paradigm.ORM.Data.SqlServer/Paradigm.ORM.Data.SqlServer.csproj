@@ -14,6 +14,9 @@
         <RepositoryType>git</RepositoryType>
         <Version>4.0.1</Version>
         <Product>Paradigm.ORM</Product>
+        <Title>Paradigm ORM SqlServer Connector</Title>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageTags>Paradigm;ORM;SqlServer;TSQL;Database</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,6 +28,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include="..\..\README.md">
+          <Pack>True</Pack>
+          <PackagePath>\</PackagePath>
+        </None>
         <None Include="icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
