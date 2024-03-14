@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Description>Paradigm ORM Posgre Connector library.</Description>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageIcon>icon.png</PackageIcon>
@@ -11,7 +11,7 @@
         <Company>Miracle Devs</Company>
         <Copyright>Miracle Devs</Copyright>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>4.0.1</Version>
+        <Version>5.0.0</Version>
         <Product>Paradigm.ORM</Product>
         <Title>Paradigm ORM PostgreSql Connector</Title>
         <PackageReadmeFile>README.md</PackageReadmeFile>

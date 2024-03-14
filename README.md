@@ -67,6 +67,12 @@ $ docker-compose down
 
 ## Change log
 
+Version `5.0.0`:
+- Changed .NET Standard libraries to .NET 8.0.
+- Updated dependencies to latest versions.
+- Migrated SQL Server connector to use `Microsoft.Data.SqlClient` vs `System.Data.SqlClient`. This will bring a lot of new security options to connect to Azure Entra ID, and a lot of security fixes and validations.
+  > **IMPORTANT**: This is a breaking change. If you were using the SqlServer connector, your connection strings will probably require some updates, to use either one of several options provided within Azure, or to use proper certificates and encryption.
+
 Version `4.0.1`:
 
 - Updated dependencies to latest versions.

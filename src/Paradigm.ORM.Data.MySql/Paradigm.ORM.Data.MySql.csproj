@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <PackageProjectUrl>http://www.paradigm.net.co/</PackageProjectUrl>
         <Copyright>Miracle Devs</Copyright>
@@ -12,7 +12,7 @@
         <RepositoryType>git</RepositoryType>
         <Authors>Miracle Devs</Authors>
         <Company>Miracle Devs</Company>
-        <Version>4.0.1</Version>
+        <Version>5.0.0</Version>
         <Product>Paradigm.ORM</Product>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageTags>Paradigm;ORM;MySql;Database</PackageTags>
@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="MySqlConnector" Version="2.3.1" />
+        <PackageReference Include="MySqlConnector" Version="2.3.5" />
     </ItemGroup>
 
     <ItemGroup>

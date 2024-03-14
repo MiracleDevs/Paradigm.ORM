@@ -8,6 +8,6 @@
 
         public const string PSql = "Server=127.0.0.1;User Id=postgres;Password=Paradigm_Test_1234;Timeout=3;Database=test";
 
-        public const string MsSql = "Server=127.0.0.1;User=sa;Password=Paradigm_Test_1234;Connection Timeout=3600";
+        public const string MsSql = "Server=127.0.0.1;User=sa;Password=Paradigm_Test_1234;Connection Timeout=3600;Encrypt=false";
     }
 }
